@@ -67,6 +67,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ImportLibrary>..\..\lib\x86\$(TargetName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>..\..\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -85,6 +87,7 @@
     <ClInclude Include="..\..\include\KongEngine.h" />
     <ClInclude Include="..\..\include\KongMath.h" />
     <ClInclude Include="..\..\include\KongTypes.h" />
+    <ClInclude Include="..\..\include\Matrix4.h" />
     <ClInclude Include="..\..\include\SColor.h" />
     <ClInclude Include="..\..\include\SKongCreationParameters.h" />
   </ItemGroup>

@@ -68,5 +68,8 @@
     <ClInclude Include="..\..\include\KongEngine.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Matrix4.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
