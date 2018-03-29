@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Include">
+      <UniqueIdentifier>{e3acd9ff-5d54-4182-ad45-304af159ddb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine">
+      <UniqueIdentifier>{a0863a84-bd40-4cf8-9027-6f5f75b10d8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\video">
+      <UniqueIdentifier>{adc2976b-afd7-45b2-a138-4fa443e4dffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine\kong">
+      <UniqueIdentifier>{7f274f01-1870-4e00-bd91-b9f91891f358}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine\kong\device">
+      <UniqueIdentifier>{ed6428a6-d19c-4135-b020-157c4e43f962}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\core">
+      <UniqueIdentifier>{2c0699c9-7b26-4dff-8673-a4e69769c684}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="test.cpp">
+      <Filter>KongEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="CKongDeviceStub.cpp">
+      <Filter>KongEngine\kong\device</Filter>
+    </ClCompile>
+    <ClCompile Include="CKongDeviceWin32.cpp">
+      <Filter>KongEngine\kong\device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\KongEngine.cpp">
+      <Filter>KongEngine\kong</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\KongCompileConfig.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\KongDevice.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CKongDeviceStub.h">
+      <Filter>KongEngine\kong\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IVideoDriver.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\KongTypes.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SColor.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CKongDeviceWin32.h">
+      <Filter>KongEngine\kong\device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SKongCreationParameters.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Dimension2d.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\KongMath.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\KongEngine.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
