@@ -22,7 +22,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -46,9 +46,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>KONG_EXPORTS;_DEBUG;_WIN32;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\lib\x86</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -72,24 +75,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\include\KongEngine.cpp" />
     <ClCompile Include="CKongDeviceStub.cpp" />
     <ClCompile Include="CKongDeviceWin32.cpp" />
+    <ClCompile Include="KongEngine.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\Array.h" />
     <ClInclude Include="..\..\include\CKongDeviceStub.h" />
     <ClInclude Include="..\..\include\CKongDeviceWin32.h" />
+    <ClInclude Include="..\..\include\CMeshBuffer.h" />
     <ClInclude Include="..\..\include\Dimension2d.h" />
+    <ClInclude Include="..\..\include\IMeshBuffer.h" />
+    <ClInclude Include="..\..\include\ISceneNode.h" />
     <ClInclude Include="..\..\include\IVideoDriver.h" />
     <ClInclude Include="..\..\include\KongCompileConfig.h" />
     <ClInclude Include="..\..\include\KongDevice.h" />
     <ClInclude Include="..\..\include\KongEngine.h" />
     <ClInclude Include="..\..\include\KongMath.h" />
     <ClInclude Include="..\..\include\KongTypes.h" />
-    <ClInclude Include="..\..\include\Matrix4.h" />
+    <ClInclude Include="..\..\include\Matrix.h" />
+    <ClInclude Include="..\..\include\S3DVertex.h" />
     <ClInclude Include="..\..\include\SColor.h" />
     <ClInclude Include="..\..\include\SKongCreationParameters.h" />
+    <ClInclude Include="..\..\include\SMaterial.h" />
+    <ClInclude Include="..\..\include\Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

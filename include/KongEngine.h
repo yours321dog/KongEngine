@@ -9,6 +9,8 @@
 #include "KongTypes.h"
 #include "Dimension2d.h"
 #include "SKongCreationParameters.h"
+#include "Array.h"
+#include "S3DVertex.h"
 
 namespace kong
 {

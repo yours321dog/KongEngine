@@ -4,6 +4,7 @@
 #ifndef _SCOLOR_H_
 #define _SCOLOR_H_
 #include "KongTypes.h"
+#include "KongMath.h"
 
 namespace kong
 {
@@ -71,7 +72,7 @@ namespace kong
             //! Sets the blue component of the Color.
             /** \param b: Has to be a value between 0 and 255.
             0 means no blue, 255 means full blue. */
-            void setBlue(u32 b) { color_ = (b & 0xff) | (color_ & 0xffffff00); }
+            void SetBlue(u32 b) { color_ = (b & 0xff) | (color_ & 0xffffff00); }
 
             void Set(u32 col) { color_ = col; }
 
@@ -90,6 +91,25 @@ namespace kong
                 *++dest = static_cast<u8>(GetGreen());
                 *++dest = static_cast<u8>(GetBlue());
                 *++dest = static_cast<u8>(GetAlpha());
+            }
+
+            bool operator==(const SColor &other) const
+            {
+                return color_ == other.color_;
+            }
+
+            bool operator!=(const SColor &other) const
+            {
+                return color_ != other.color_;
+            }
+
+            void Interpolation(const SColor &clr1, const SColor &clr2, f32 t)
+            {
+                t = core::clamp(t, 0.f, 1.f);
+                SetAlpha(core::lerp(clr1.GetAlpha(), clr2.GetAlpha(), t));
+                SetRed(core::lerp(clr1.GetRed(), clr2.GetRed(), t));
+                SetGreen(core::lerp(clr1.GetGreen(), clr2.GetGreen(), t));
+                SetBlue(core::lerp(clr1.GetBlue(), clr2.GetBlue(), t));
             }
 
         private:

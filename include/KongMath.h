@@ -5,7 +5,7 @@
 #define _KONG_MATH_H_
 
 #include "KongTypes.h"
-#include <math.h>
+#include <cmath>
 
 #ifndef FLT_MAX
 #define FLT_MAX 3.402823466E+38F

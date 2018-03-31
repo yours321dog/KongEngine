@@ -19,6 +19,21 @@
     <Filter Include="Include\core">
       <UniqueIdentifier>{2c0699c9-7b26-4dff-8673-a4e69769c684}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KongEngine\video">
+      <UniqueIdentifier>{658e6d0f-9547-4460-9015-e620d40a7a7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine\video\OpenGL">
+      <UniqueIdentifier>{fd130f2b-e604-4217-9dcf-5a423850a09d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine\video\Null">
+      <UniqueIdentifier>{86d0f051-d2da-46d4-b576-106b3923cf4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine\scene">
+      <UniqueIdentifier>{31cf666a-9ca6-474d-99c0-56ebe87a2e0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\scene">
+      <UniqueIdentifier>{90b2fe73-9fe7-40ef-83dd-d4f6331c0468}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -30,8 +45,8 @@
     <ClCompile Include="CKongDeviceWin32.cpp">
       <Filter>KongEngine\kong\device</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\include\KongEngine.cpp">
-      <Filter>KongEngine\kong</Filter>
+    <ClCompile Include="KongEngine.cpp">
+      <Filter>KongEngine\kong\device</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,11 +80,32 @@
     <ClInclude Include="..\..\include\KongMath.h">
       <Filter>Include\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Matrix.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\KongEngine.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Matrix4.h">
+    <ClInclude Include="..\..\include\ISceneNode.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Array.h">
       <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Vector.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IMeshBuffer.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CMeshBuffer.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\S3DVertex.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SMaterial.h">
+      <Filter>Include\video</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
