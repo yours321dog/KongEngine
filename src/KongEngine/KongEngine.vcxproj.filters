@@ -98,14 +98,26 @@
     <ClInclude Include="..\..\include\IMeshBuffer.h">
       <Filter>Include\scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\CMeshBuffer.h">
-      <Filter>Include\video</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\S3DVertex.h">
       <Filter>Include\video</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\SMaterial.h">
       <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CMeshBuffer.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\List.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Allocator.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ISceneManager.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CSceneManager.h">
+      <Filter>KongEngine\scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

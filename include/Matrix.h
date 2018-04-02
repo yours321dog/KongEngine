@@ -5,6 +5,7 @@
 #define _MATRIX_H_
 
 #include "KongTypes.h"
+#include "Vector.h"
 
 namespace kong
 {
@@ -33,6 +34,7 @@ namespace kong
             void Translate(T x, T y, T z);
             void Scale(T x, T y, T z);
             void Rotate(T x, T y, T z, float theta);
+            void Rotate(T x, T y, T z);
             Matrix<T> Transpose();
 
             Matrix<T> Inverse();
@@ -238,6 +240,36 @@ namespace kong
             m_[0][3] = m_[1][3] = m_[2][3] = 0.0f;
             m_[3][0] = m_[3][1] = m_[3][2] = 0.0f;
             m_[3][3] = 1.0f;
+        }
+
+        template <typename T>
+        void Matrix<T>::Rotate(T x, T y, T z)
+        {
+            Identity();
+
+            const f64 cr = cos(x);
+            const f64 sr = sin(x);
+            const f64 cp = cos(y);
+            const f64 sp = sin(y);
+            const f64 cy = cos(z);
+            const f64 sy = sin(z);
+
+            m_[0][0] = (T)(cp*cy);
+            m_[1][0] = (T)(cp*sy);
+            m_[2][0] = (T)(-sp);
+
+            const f64 srsp = sr*sp;
+            const f64 crsp = cr*sp;
+
+            m_[0][1] = (T)(srsp*cy - cr*sy);
+            m_[1][1] = (T)(srsp*sy + cr*cy);
+            m_[2][1] = (T)(sr*cp);
+
+            m_[0][2] = (T)(crsp*cy + sr*sy);
+            m_[1][2] = (T)(crsp*sy - sr*cy);
+            m_[2][2] = (T)(cr*cp);
+
+            return *this;
         }
 
         template <typename T>

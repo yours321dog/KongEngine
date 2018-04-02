@@ -4,7 +4,7 @@
 #ifndef _I_VIDEO_DRIVER_H_
 #define _I_VIDEO_DRIVER_H_
 #include "SColor.h"
-#include "Matrix4.h"
+#include "Matrix.h"
 
 namespace kong
 {
@@ -80,7 +80,7 @@ namespace kong
             /** \param state Transformation type to be set, e.g. view,
             world, or projection.
             \param mat Matrix describing the transformation. */
-            virtual void setTransform(E_TRANSFORMATION_STATE state, const core::CMatrix4<f32>& mat) = 0;
+            virtual void setTransform(E_TRANSFORMATION_STATE state, const core::Matrixf& mat) = 0;
         };
     }
 }

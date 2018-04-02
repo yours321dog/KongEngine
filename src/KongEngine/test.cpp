@@ -68,10 +68,36 @@ void TestS3DVertex()
         tmp.color_.GetBlue());
 }
 
+void TestList()
+{
+    List<f32> list;
+    list.push_back(12.f);
+    list.push_front(1.3f);
+    list.push_back(32.f);
+    list.insert_after(list.begin(), 4.f);
+
+    List<f32>::Iterator it = list.begin();
+    for (; it != list.end(); ++it)
+    {
+        printf("%f\t", *it);
+    }
+    printf("\n");
+
+    list.clear();
+    list.push_back(12.5f);
+    it = list.begin();
+    for (; it != list.end(); ++it)
+    {
+        printf("%f\t", *it);
+    }
+    printf("\n");
+}
+
 int main()
 {
     //TestArray();
-    TestS3DVertex();
+    //TestS3DVertex();
+    TestList();
 
     system("pause");
     return 0;

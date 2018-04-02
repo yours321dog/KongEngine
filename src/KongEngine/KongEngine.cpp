@@ -43,4 +43,9 @@ namespace kong
 
         return dev;
     }
+
+    namespace video
+    {
+        SMaterial IdentityMaterial;
+    }
 } // end namespace kong

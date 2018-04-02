@@ -11,6 +11,8 @@
 #include "SKongCreationParameters.h"
 #include "Array.h"
 #include "S3DVertex.h"
+#include "List.h"
+#include "SMaterial.h"
 
 namespace kong
 {

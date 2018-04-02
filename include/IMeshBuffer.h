@@ -50,6 +50,14 @@ namespace kong
             //! Get amount of indices in this meshbuffer.
             /** \return Number of indices in this buffer. */
             virtual u32 GetIndexCount() const = 0;
+
+            //! Get the currently used ID for identification of changes.
+            /** This shouldn't be used for anything outside the VideoDriver. */
+            virtual u32 getChangedID_Vertex() const = 0;
+
+            //! Get the currently used ID for identification of changes.
+            /** This shouldn't be used for anything outside the VideoDriver. */
+            virtual u32 getChangedID_Index() const = 0;
         };
     } // end namespace scene
 } // end namespace kong

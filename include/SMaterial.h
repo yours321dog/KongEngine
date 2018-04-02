@@ -16,6 +16,9 @@ namespace kong
             SColor specular_color_;
             SColor emissive_color_;
         };
+
+        //! global const identity Material
+        KONG_API extern SMaterial IdentityMaterial;
     } // end namespace video
 } // end namespace kong
 

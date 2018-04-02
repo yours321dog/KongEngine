@@ -5,13 +5,17 @@
 #define _CMESHBUFFER_H_
 
 #include "IMeshBuffer.h"
+#include "Array.h"
 
 namespace kong
 {
     namespace scene
     {
+        template <class T>
         class CMeshBuffer : public IMeshBuffer
         {
+            CMeshBuffer();
+
             //! Get the material of this meshbuffer
             /** \return Material of this buffer. */
             virtual video::SMaterial& GetMaterial();
@@ -49,7 +53,72 @@ namespace kong
             //! Get amount of indices in this meshbuffer.
             /** \return Number of indices in this buffer. */
             virtual u32 GetIndexCount() const;
+
+            video::SMaterial material_;
+            core::Array<T>  vertices_;
+            core::Array<u16> indices_;
+
+            u32 changed_id_vertex_;
+            u32 changed_id_index;
+
+            // Bouding box of this meshbuffer
+            //core::aabbox3d<f32> BoundingBox;
         };
+
+        template <class T>
+        CMeshBuffer<T>::CMeshBuffer() 
+            : changed_id_vertex_(1), changed_id_index(1)
+        {
+
+        }
+
+        template <class T>
+        video::SMaterial& CMeshBuffer<T>::GetMaterial()
+        {
+            return material_;
+        }
+
+        template <class T>
+        const video::SMaterial& CMeshBuffer<T>::GetMaterial() const
+        {
+            return material_;
+        }
+
+        template <class T>
+        const void* CMeshBuffer<T>::GetVertices() const
+        {
+            return vertices_.ConstPointer();
+        }
+
+        template <class T>
+        void* CMeshBuffer<T>::GetVertices()
+        {
+            return vertices_.Pointer();
+        }
+
+        template <class T>
+        u32 CMeshBuffer<T>::GetVertexCount() const
+        {
+            return vertices_.Size();
+        }
+
+        template <class T>
+        const u16* CMeshBuffer<T>::GetIndices() const
+        {
+            return indices_.ConstPointer();
+        }
+
+        template <class T>
+        u16* CMeshBuffer<T>::GetIndices()
+        {
+            return indices_.Pointer();
+        }
+
+        template <class T>
+        u32 CMeshBuffer<T>::GetIndexCount() const
+        {
+            return indices_.Size();
+        }
     } // end namespace scene
 } // end namespace kong
 
