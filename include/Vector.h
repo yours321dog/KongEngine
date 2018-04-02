@@ -20,8 +20,8 @@ namespace kong
             Vector<T> operator+(const Vector<T>&) const;
             Vector<T> operator+(const T&) const;
             Vector<T> operator-(const Vector<T>&) const;
-            Vector<T> operator*(const float &) const;
-            Vector<T> operator/(const float &) const;
+            Vector<T> operator*(const f32 &) const;
+            Vector<T> operator/(const f32 &) const;
             Vector<T> operator-() const;
             bool operator==(const Vector<T> &) const;
             bool operator!=(const Vector<T> &) const;
@@ -41,7 +41,7 @@ namespace kong
             static T DotProduct(const Vector<T> v1, const Vector<T> v2);
             Vector<T> CrossProduct(const Vector<T> v1, const Vector<T> v2);
             static Vector<T> Multiply(const Vector<T> &v1, const Vector<T> &v2);
-            void Interpolation(const Vector<T> v1, const Vector<T> v2, float t);
+            void Interpolation(const Vector<T> v1, const Vector<T> v2, f32 t);
             void Normalize();
             void Zero();
 
@@ -128,7 +128,7 @@ namespace kong
         }
 
         template <typename T>
-        Vector<T> Vector<T>::operator*(const float& f) const
+        Vector<T> Vector<T>::operator*(const f32& f) const
         {
             Vector<T> tmp;
             tmp.x_ = x_ * f;
@@ -140,7 +140,7 @@ namespace kong
         }
 
         template <typename T>
-        Vector<T> Vector<T>::operator/(const float& f) const
+        Vector<T> Vector<T>::operator/(const f32& f) const
         {
             Vector<T> tmp;
             tmp.x_ = x_ / f;
@@ -302,7 +302,7 @@ namespace kong
 
 
         template <typename T>
-        void Vector<T>::Interpolation(const Vector<T> v1, const Vector<T> v2, float t)
+        void Vector<T>::Interpolation(const Vector<T> v1, const Vector<T> v2, f32 t)
         {
             x_ = lerp<T>(v1.x_, v2.x_, t);
             y_ = lerp<T>(v1.y_, v2.y_, t);

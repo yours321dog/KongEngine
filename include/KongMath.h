@@ -173,9 +173,9 @@ namespace kong
             return (a + tolerance >= b) && (a - tolerance <= b);
         }
 
-        union FloatIntUnion32
+        union f32IntUnion32
         {
-            FloatIntUnion32(float f1 = 0.0f) : f(f1) {}
+            f32IntUnion32(f32 f1 = 0.0f) : f(f1) {}
             // Portable sign-extraction
             bool sign() const { return (i >> 31) != 0; }
 
@@ -183,18 +183,18 @@ namespace kong
             kong::f32 f;
         };
 
-        //! We compare the difference in ULP's (spacing between floating-point numbers, aka ULP=1 means there exists no float between).
+        //! We compare the difference in ULP's (spacing between f32ing-point numbers, aka ULP=1 means there exists no f32 between).
         //\result true when numbers have a ULP <= maxUlpDiff AND have the same sign.
         inline bool equalsByUlp(f32 a, f32 b, int maxUlpDiff)
         {
             // Based on the ideas and code from Bruce Dawson on
-            // http://www.altdevblogaday.com/2012/02/22/comparing-floating-point-numbers-2012-edition/
-            // When floats are interpreted as integers the two nearest possible float numbers differ just
-            // by one integer number. Also works the other way round, an integer of 1 interpreted as float
-            // is for example the smallest possible float number.
+            // http://www.altdevblogaday.com/2012/02/22/comparing-f32ing-point-numbers-2012-edition/
+            // When f32s are interpreted as integers the two nearest possible f32 numbers differ just
+            // by one integer number. Also works the other way round, an integer of 1 interpreted as f32
+            // is for example the smallest possible f32 number.
 
-            FloatIntUnion32 fa(a);
-            FloatIntUnion32 fb(b);
+            f32IntUnion32 fa(a);
+            f32IntUnion32 fb(b);
 
             // Different signs, we could maybe get difference to 0, but so close to 0 using epsilons is better.
             if (fa.sign() != fb.sign())
@@ -302,7 +302,7 @@ namespace kong
         }
 
         /*
-        float IEEE-754 bit represenation
+        f32 IEEE-754 bit represenation
 
         0      0x00000000
         1.0    0x3f800000
@@ -314,7 +314,7 @@ namespace kong
         in general: number = (sign ? -1:1) * 2^(exponent) * 1.(mantissa bits)
         */
 
-        typedef union { u32 u; s32 s; f32 f; } inttofloat;
+        typedef union { u32 u; s32 s; f32 f; } inttof32;
 
 #define F32_AS_S32(f)		(*((s32 *) &(f)))
 #define F32_AS_U32(f)		(*((u32 *) &(f)))
@@ -326,22 +326,22 @@ namespace kong
 #define F32_EXPON_MANTISSA	0x7FFFFFFFU
 
         //! code is taken from IceFPU
-        //! Integer representation of a floating-point value.
+        //! Integer representation of a f32ing-point value.
 #ifdef IRRLICHT_FAST_MATH
 #define IR(x)                           ((u32&)(x))
 #else
-        inline u32 IR(f32 x) { inttofloat tmp; tmp.f = x; return tmp.u; }
+        inline u32 IR(f32 x) { inttof32 tmp; tmp.f = x; return tmp.u; }
 #endif
 
-        //! Absolute integer representation of a floating-point value
+        //! Absolute integer representation of a f32ing-point value
 #define AIR(x)				(IR(x)&0x7fffffff)
 
-        //! Floating-point representation of an integer value.
+        //! f32ing-point representation of an integer value.
 #ifdef IRRLICHT_FAST_MATH
 #define FR(x)                           ((f32&)(x))
 #else
-        inline f32 FR(u32 x) { inttofloat tmp; tmp.u = x; return tmp.f; }
-        inline f32 FR(s32 x) { inttofloat tmp; tmp.s = x; return tmp.f; }
+        inline f32 FR(u32 x) { inttof32 tmp; tmp.u = x; return tmp.f; }
+        inline f32 FR(s32 x) { inttof32 tmp; tmp.s = x; return tmp.f; }
 #endif
 
         //! integer representation of 1.0

@@ -15,6 +15,10 @@ namespace kong
             SColor diffuse_color_;
             SColor specular_color_;
             SColor emissive_color_;
+
+            f32 shininess_;
+
+            bool use_mip_maps_ : 1;
         };
 
         //! global const identity Material

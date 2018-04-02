@@ -22,6 +22,8 @@ namespace kong
         class ISceneNode
         {
         public:
+            virtual ~ISceneNode() = default;
+
             ISceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id = -1,
                 const core::Vector3Df &position = core::Vector3Df(0.f, 0.f, 0.f),
                 const core::Vector3Df &rotation = core::Vector3Df(0.f, 0.f, 0.f),
@@ -238,7 +240,7 @@ namespace kong
                     (*it)->setSceneManager(newManager);
             }
 
-            c8 name_[100];
+            c8 name_[100]{};
             core::Matrixf absolute_tranform_;
             core::Vector3Df relative_translation_;
             core::Vector3Df relative_totation_;

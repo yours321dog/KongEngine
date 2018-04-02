@@ -77,6 +77,9 @@
   <ItemGroup>
     <ClCompile Include="CKongDeviceStub.cpp" />
     <ClCompile Include="CKongDeviceWin32.cpp" />
+    <ClCompile Include="COrthogonalCameraSceneNode.cpp" />
+    <ClCompile Include="CPerspectiveCameraSceneNode.cpp" />
+    <ClCompile Include="CSceneManager.cpp" />
     <ClCompile Include="KongEngine.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
@@ -86,8 +89,11 @@
     <ClInclude Include="..\..\include\CKongDeviceStub.h" />
     <ClInclude Include="..\..\include\CKongDeviceWin32.h" />
     <ClInclude Include="..\..\include\CMeshBuffer.h" />
+    <ClInclude Include="..\..\include\COrthogonalCameraSceneNode.h" />
+    <ClInclude Include="..\..\include\CPerspectiveCameraSceneNode.h" />
     <ClInclude Include="..\..\include\CSceneManager.h" />
     <ClInclude Include="..\..\include\Dimension2d.h" />
+    <ClInclude Include="..\..\include\ICameraSceneNode.h" />
     <ClInclude Include="..\..\include\IMeshBuffer.h" />
     <ClInclude Include="..\..\include\ISceneManager.h" />
     <ClInclude Include="..\..\include\ISceneNode.h" />
@@ -104,6 +110,7 @@
     <ClInclude Include="..\..\include\SKongCreationParameters.h" />
     <ClInclude Include="..\..\include\SMaterial.h" />
     <ClInclude Include="..\..\include\Vector.h" />
+    <ClInclude Include="SViewFrustum.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

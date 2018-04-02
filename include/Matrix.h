@@ -33,7 +33,7 @@ namespace kong
 
             void Translate(T x, T y, T z);
             void Scale(T x, T y, T z);
-            void Rotate(T x, T y, T z, float theta);
+            void Rotate(T x, T y, T z, f32 theta);
             void Rotate(T x, T y, T z);
             Matrix<T> Transpose();
 
@@ -200,13 +200,13 @@ namespace kong
         }
 
         template <typename T>
-        void Matrix<T>::Rotate(T x, T y, T z, float theta)
+        void Matrix<T>::Rotate(T x, T y, T z, f32 theta)
         {
             Identity();
             Vector<T> n(x, y, z);
             //n.Normalize();
-            //float qsin = sin(theta);
-            //float qcos = cos(theta);
+            //f32 qsin = sin(theta);
+            //f32 qcos = cos(theta);
             //T nx = n.X();
             //T ny = n.Y();
             //T nz = n.Z();
@@ -220,10 +220,10 @@ namespace kong
             //m_[2][1] = ny * nz * (1 - qcos) + nx * qsin;
             //m_[2][2] = nz * nz * (1 - qcos) + qcos;
 
-            float qsin = (float)sin(theta * 0.5f);
-            float qcos = (float)cos(theta * 0.5f);
+            f32 qsin = (f32)sin(theta * 0.5f);
+            f32 qcos = (f32)cos(theta * 0.5f);
             Vector<T> vec(x, y, z, 1.0f);
-            float w = qcos;
+            f32 w = qcos;
             vec.Normalize();
             x = vec.x * qsin;
             y = vec.y * qsin;
@@ -305,7 +305,7 @@ namespace kong
         }
 
         typedef Matrix<int> Matrixi;
-        typedef Matrix<float> Matrixf;
+        typedef Matrix<f32> Matrixf;
 
         //! global const identity matrix
         KONG_API extern const Matrixf IdentityMatrix;

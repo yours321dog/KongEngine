@@ -34,6 +34,9 @@
     <Filter Include="Include\scene">
       <UniqueIdentifier>{90b2fe73-9fe7-40ef-83dd-d4f6331c0468}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KongEngine\scene\scenenode">
+      <UniqueIdentifier>{04d8ca89-6c17-4ebe-ac0f-0413745d528b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -47,6 +50,15 @@
     </ClCompile>
     <ClCompile Include="KongEngine.cpp">
       <Filter>KongEngine\kong\device</Filter>
+    </ClCompile>
+    <ClCompile Include="COrthogonalCameraSceneNode.cpp">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClCompile>
+    <ClCompile Include="CPerspectiveCameraSceneNode.cpp">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneManager.cpp">
+      <Filter>KongEngine\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +130,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\CSceneManager.h">
       <Filter>KongEngine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SViewFrustum.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ICameraSceneNode.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\COrthogonalCameraSceneNode.h">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CPerspectiveCameraSceneNode.h">
+      <Filter>KongEngine\scene\scenenode</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

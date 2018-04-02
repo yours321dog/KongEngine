@@ -99,11 +99,11 @@ namespace kong
 
 
 
-    //! 32 bit floating point variable.
-    /** This is a typedef for float, it ensures portability of the engine. */
+    //! 32 bit f32ing point variable.
+    /** This is a typedef for f32, it ensures portability of the engine. */
     typedef float				f32;
 
-    //! 64 bit floating point variable.
+    //! 64 bit f32ing point variable.
     /** This is a typedef for double, it ensures portability of the engine. */
     typedef double				f64;
 

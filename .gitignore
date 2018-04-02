@@ -58,3 +58,5 @@ Temporary Items
 *.sdf
 *.idb
 *.idb
+*.sdf
+src/KongEngine/Debug/vc120.idb

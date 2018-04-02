@@ -3,6 +3,7 @@
 
 #ifndef _ISCENEMANAGER_H_
 #define _ISCENEMANAGER_H_
+#include "ISceneNode.h"
 
 namespace kong
 {
