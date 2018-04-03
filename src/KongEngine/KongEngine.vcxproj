@@ -110,7 +110,6 @@
     <ClInclude Include="..\..\include\SKongCreationParameters.h" />
     <ClInclude Include="..\..\include\SMaterial.h" />
     <ClInclude Include="..\..\include\Vector.h" />
-    <ClInclude Include="SViewFrustum.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

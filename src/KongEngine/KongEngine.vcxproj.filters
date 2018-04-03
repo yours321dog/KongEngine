@@ -131,9 +131,6 @@
     <ClInclude Include="..\..\include\CSceneManager.h">
       <Filter>KongEngine\scene</Filter>
     </ClInclude>
-    <ClInclude Include="SViewFrustum.h">
-      <Filter>Include\scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\ICameraSceneNode.h">
       <Filter>Include\scene</Filter>
     </ClInclude>

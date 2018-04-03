@@ -13,5 +13,9 @@ namespace kong
 
 
         }
+
+        CSceneManager::~CSceneManager()
+        {
+        }
     } // end namespace scene
 } // end namespace kong

@@ -15,7 +15,7 @@ namespace kong
         class ISceneManager;
 
         //! Typedef for list of scene nodes
-        typedef core::List<ISceneNode*> ISceneNodeList;
+        //typedef core::List<ISceneNode*> ISceneNodeList;
         //! Typedef for list of scene node animators
         //typedef core::list<ISceneNodeAnimator*> ISceneNodeAnimatorList;
 
