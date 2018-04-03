@@ -13,6 +13,8 @@ namespace kong
     {
         class IMeshBuffer
         {
+        public:
+            virtual ~IMeshBuffer() = default;
             //! Get the material of this meshbuffer
             /** \return Material of this buffer. */
             virtual video::SMaterial& GetMaterial() = 0;
@@ -53,11 +55,11 @@ namespace kong
 
             //! Get the currently used ID for identification of changes.
             /** This shouldn't be used for anything outside the VideoDriver. */
-            virtual u32 getChangedID_Vertex() const = 0;
+            virtual u32 GetVertexChangedID() const = 0;
 
             //! Get the currently used ID for identification of changes.
             /** This shouldn't be used for anything outside the VideoDriver. */
-            virtual u32 getChangedID_Index() const = 0;
+            virtual u32 GetIndexChangedID() const = 0;
         };
     } // end namespace scene
 } // end namespace kong

@@ -24,14 +24,49 @@ namespace kong
             //! destructor
             virtual ~CSceneManager();
 
+            //! add cube scene node
+            virtual IMeshSceneNode* AddCubeSceneNode(f32 size = 10.0f, ISceneNode* parent = 0, s32 id = -1,
+                const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& rotation = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& scale = core::Vector3Df(1.0f, 1.0f, 1.0f));
+
+            //! add camera scene node
+            virtual ICameraSceneNode* AddCameraSceneNode(ISceneNode* parent = nullptr,
+                const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& lookat = core::Vector3Df(0, 0, 100),
+                s32 id = -1, bool make_active = true);
+
+            //! add a normal scene node
+            virtual ISceneNode* AddSceneNode(const char* scene_node_name, ISceneNode* parent = nullptr);
+
+            //! Sets the color of stencil buffers shadows drawn by the scene manager.
+            virtual void SetShadowColor(video::SColor color);
+
+            //! Returns the current color of shadows.
+            virtual video::SColor GetShadowColor() const;
+
+            //! Sets the currently active camera.
+            virtual void SetActiveCamera(ICameraSceneNode* camera);
+
+            //! Clears the whole scene. All scene nodes are removed.
+            virtual void Clear();
+
+            //! Removes all children of this scene node
+            virtual void RemoveAll();
+
         private:
             struct DefaultNodeEntry
             {
-                DefaultNodeEntry(ISceneNode* n) :
+                DefaultNodeEntry(ISceneNode* n = nullptr) :
                     node_(n), texture_value_(nullptr)
                 {
                     //if (n->GetMaterialCount())
                     //    TextureValue = (n->GetMaterial(0).GetTexture(0));
+                }
+
+                ~DefaultNodeEntry()
+                {
+                    delete node_;
                 }
 
                 bool operator < (const DefaultNodeEntry& other) const

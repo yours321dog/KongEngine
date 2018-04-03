@@ -10,6 +10,7 @@ namespace kong
     namespace scene
     {
         class ICameraSceneNode;
+        class IMeshSceneNode;
         class ISceneNode;
 
         class ISceneManager
@@ -18,21 +19,21 @@ namespace kong
             virtual ~ISceneManager() = default;
 
         private:
-            ////! Adds a cube scene node
-            ///** \param size: Size of the cube, uniformly in each dimension.
-            //\param parent: Parent of the scene node. Can be 0 if no parent.
-            //\param id: Id of the node. This id can be used to identify the scene node.
-            //\param position: Position of the space relative to its parent
-            //where the scene node will be placed.
-            //\param rotation: Initital rotation of the scene node.
-            //\param scale: Initial scale of the scene node.
-            //\return Pointer to the created test scene node. This
-            //pointer should not be dropped. See IReferenceCounted::drop()
-            //for more information. */
-            //virtual IMeshSceneNode* AddCubeSceneNode(f32 size = 10.0f, ISceneNode* parent = 0, s32 id = -1,
-            //    const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
-            //    const core::Vector3Df& rotation = core::Vector3Df(0, 0, 0),
-            //    const core::Vector3Df& scale = core::Vector3Df(1.0f, 1.0f, 1.0f)) = 0;
+            //! Adds a cube scene node
+            /** \param size: Size of the cube, uniformly in each dimension.
+            \param parent: Parent of the scene node. Can be 0 if no parent.
+            \param id: Id of the node. This id can be used to identify the scene node.
+            \param position: Position of the space relative to its parent
+            where the scene node will be placed.
+            \param rotation: Initital rotation of the scene node.
+            \param scale: Initial scale of the scene node.
+            \return Pointer to the created test scene node. This
+            pointer should not be dropped. See IReferenceCounted::drop()
+            for more information. */
+            virtual IMeshSceneNode* AddCubeSceneNode(f32 size = 10.0f, ISceneNode* parent = 0, s32 id = -1,
+                const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& rotation = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& scale = core::Vector3Df(1.0f, 1.0f, 1.0f)) = 0;
 
             //! Adds a camera scene node to the scene graph and sets it as active camera.
             /** This camera does not react on user input like for example the one created with
@@ -56,6 +57,11 @@ namespace kong
                 const core::Vector3Df& lookat = core::Vector3Df(0, 0, 100),
                 s32 id = -1, bool make_active = true) = 0;
 
+            //! Adds a scene node to the scene by name
+            /** \return Pointer to the scene node added by a factory
+            This pointer should not be dropped. See IReferenceCounted::drop() for more information. */
+            virtual ISceneNode* AddSceneNode(const char* scene_node_name, ISceneNode* parent = nullptr) = 0;
+
             //! Sets the currently active camera.
             /** The previous active camera will be deactivated.
             \param camera: The new camera which should be active. */
@@ -64,12 +70,19 @@ namespace kong
             //! Get the current color of shadows.
             virtual video::SColor GetShadowColor() const = 0;
 
+            //! Set the current color of shadows.
+            virtual void SetShadowColor(video::SColor color);
+
             //! Draws all the scene nodes.
             /** This can only be invoked between
             IVideoDriver::beginScene() and IVideoDriver::endScene(). Please note that
             the scene is not only drawn when calling this, but also animated
             by existing scene node animators, culling of scene nodes is done, etc. */
             virtual void DrawAll() = 0;
+
+            //! Clears the whole scene.
+            /** All scene nodes are removed. */
+            virtual void Clear() = 0;
         };
     }
 }

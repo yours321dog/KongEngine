@@ -14,6 +14,7 @@ namespace kong
         template <class T>
         class CMeshBuffer : public IMeshBuffer
         {
+        public:
             CMeshBuffer();
 
             //! Get the material of this meshbuffer
@@ -53,6 +54,14 @@ namespace kong
             //! Get amount of indices in this meshbuffer.
             /** \return Number of indices in this buffer. */
             virtual u32 GetIndexCount() const;
+
+            //! Get the currently used ID for identification of changes.
+            /** This shouldn't be used for anything outside the VideoDriver. */
+            virtual u32 GetVertexChangedID() const;
+
+            //! Get the currently used ID for identification of changes.
+            /** This shouldn't be used for anything outside the VideoDriver. */
+            virtual u32 GetIndexChangedID() const;
 
             video::SMaterial material_;
             core::Array<T>  vertices_;
@@ -118,6 +127,18 @@ namespace kong
         u32 CMeshBuffer<T>::GetIndexCount() const
         {
             return indices_.Size();
+        }
+
+        template <class T>
+        u32 CMeshBuffer<T>::GetVertexChangedID() const
+        {
+            return changed_id_vertex_;
+        }
+
+        template <class T>
+        u32 CMeshBuffer<T>::GetIndexChangedID() const
+        {
+            return changed_id_index;
         }
     } // end namespace scene
 } // end namespace kong

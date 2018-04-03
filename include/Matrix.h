@@ -268,8 +268,6 @@ namespace kong
             m_[0][2] = (T)(crsp*cy + sr*sy);
             m_[1][2] = (T)(crsp*sy - sr*cy);
             m_[2][2] = (T)(cr*cp);
-
-            return *this;
         }
 
         template <typename T>

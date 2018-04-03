@@ -28,6 +28,7 @@ namespace kong
             T &operator[](s32 i);
             T &operator[](s32 i) const;
             void SetAll(const T val);
+            void Clear();
 
             void PushBack(const T &val);
             void Insert(const T &val, u32 index = 0);
@@ -35,17 +36,19 @@ namespace kong
             T *Pointer();
             const T *ConstPointer() const;
 
+
         private:
             void Reallocted(u32 times = 2);
 
             u32 size_;
             u32 allocated_;
             T *data_;
+            bool free_when_destroy_;
         };
 
         template <typename T>
         Array<T>::Array() :
-            allocated_(32), size_(0)
+            size_(0), allocated_(32), free_when_destroy_(false)
         {
             data_ = new T[allocated_];
         }
@@ -64,6 +67,8 @@ namespace kong
             {
                 data_[i] = arr.data_[i];
             }
+
+            free_when_destroy_ = arr.free_when_destroy_;
         }
 
         template <typename T>
@@ -81,6 +86,7 @@ namespace kong
                 data_[i] = arr.data_[i];
             }
 
+            free_when_destroy_ = arr.free_when_destroy_;
             return *this;
         }
 
@@ -160,6 +166,12 @@ namespace kong
             {
                 data_[i] = val;
             }
+        }
+
+        template <typename T>
+        void Array<T>::Clear()
+        {
+            size_ = 0;
         }
 
         template <typename T>

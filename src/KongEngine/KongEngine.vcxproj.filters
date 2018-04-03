@@ -140,5 +140,14 @@
     <ClInclude Include="..\..\include\CPerspectiveCameraSceneNode.h">
       <Filter>KongEngine\scene\scenenode</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\SMesh.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IMesh.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IMeshSceneNode.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

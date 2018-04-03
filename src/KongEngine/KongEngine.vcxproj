@@ -94,7 +94,9 @@
     <ClInclude Include="..\..\include\CSceneManager.h" />
     <ClInclude Include="..\..\include\Dimension2d.h" />
     <ClInclude Include="..\..\include\ICameraSceneNode.h" />
+    <ClInclude Include="..\..\include\IMesh.h" />
     <ClInclude Include="..\..\include\IMeshBuffer.h" />
+    <ClInclude Include="..\..\include\IMeshSceneNode.h" />
     <ClInclude Include="..\..\include\ISceneManager.h" />
     <ClInclude Include="..\..\include\ISceneNode.h" />
     <ClInclude Include="..\..\include\IVideoDriver.h" />
@@ -109,6 +111,7 @@
     <ClInclude Include="..\..\include\SColor.h" />
     <ClInclude Include="..\..\include\SKongCreationParameters.h" />
     <ClInclude Include="..\..\include\SMaterial.h" />
+    <ClInclude Include="..\..\include\SMesh.h" />
     <ClInclude Include="..\..\include\Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

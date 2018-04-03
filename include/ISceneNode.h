@@ -240,7 +240,7 @@ namespace kong
                     (*it)->setSceneManager(newManager);
             }
 
-            c8 name_[100]{};
+            c8 name_[100];
             core::Matrixf absolute_tranform_;
             core::Vector3Df relative_translation_;
             core::Vector3Df relative_totation_;

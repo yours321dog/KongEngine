@@ -50,6 +50,11 @@ namespace kong
         class IVideoDriver
         {
         public:
+            //! Sets a material.
+            /** All 3d drawing functions will draw geometry using this material thereafter.
+            \param material: Material to be used from now on. */
+            virtual void SetMaterial(const SMaterial& material) = 0;
+
             //! Applications must call this method before performing any rendering.
             /** This method can clear the back- and the z-buffer.
             \param backBuffer Specifies if the back buffer should be
@@ -68,19 +73,19 @@ namespace kong
             rectangle of the area to be presented. Set to null to present
             everything. Note: not implemented in all devices.
             \return False if failed. */
-            virtual bool beginScene(bool back_buffer = true, bool z_buffer = true, SColor color = SColor(255, 0, 0, 0)) = 0;
+            virtual bool BeginScene(bool back_buffer = true, bool z_buffer = true, SColor color = SColor(255, 0, 0, 0)) = 0;
 
             //! Presents the rendered image to the screen.
             /** Applications must call this method after performing any
             rendering.
             \return False if failed and true if succeeded. */
-            virtual bool endScene() = 0;
+            virtual bool EndScene() = 0;
 
             //! Sets transformation matrices.
             /** \param state Transformation type to be set, e.g. view,
             world, or projection.
             \param mat Matrix describing the transformation. */
-            virtual void setTransform(E_TRANSFORMATION_STATE state, const core::Matrixf& mat) = 0;
+            virtual void SetTransform(E_TRANSFORMATION_STATE state, const core::Matrixf& mat) = 0;
         };
     }
 }
