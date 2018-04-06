@@ -37,6 +37,8 @@ namespace kong
             mesh buffer. */
             IMeshBuffer* GetMeshBuffer(const video::SMaterial &material) const override;
 
+            void AddMeshBuffer(IMeshBuffer *mesh_buffer);
+
             core::Array<IMeshBuffer *> mesh_buffer_;
         };
 
@@ -75,6 +77,14 @@ namespace kong
             }
 
             return nullptr;
+        }
+
+        inline void SMesh::AddMeshBuffer(IMeshBuffer* mesh_buffer)
+        {
+            if (mesh_buffer != nullptr)
+            {
+                mesh_buffer_.PushBack(mesh_buffer);
+            }
         }
     }
 }

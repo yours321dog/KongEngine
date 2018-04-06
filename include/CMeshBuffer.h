@@ -17,6 +17,8 @@ namespace kong
         public:
             CMeshBuffer();
 
+            virtual ~CMeshBuffer() = default;
+
             //! Get the material of this meshbuffer
             /** \return Material of this buffer. */
             virtual video::SMaterial& GetMaterial();
@@ -140,6 +142,9 @@ namespace kong
         {
             return changed_id_index;
         }
+
+        //! Standard meshbuffer
+        typedef CMeshBuffer<video::S3DVertex> SMeshBuffer;
     } // end namespace scene
 } // end namespace kong
 

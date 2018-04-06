@@ -33,6 +33,14 @@ namespace kong
             //! add camera scene node
             virtual ICameraSceneNode* AddCameraSceneNode(ISceneNode* parent = nullptr,
                 const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& up = core::Vector3Df(0, 1, 0),
+                const core::Vector3Df& lookat = core::Vector3Df(0, 0, 100),
+                s32 id = -1, bool make_active = true);
+
+            //! Adds a perspective camera scene node to the scene graph and sets it as active camera.
+            virtual ICameraSceneNode* AddPerspectiveCameraSceneNode(ISceneNode* parent = nullptr,
+                const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& up = core::Vector3Df(0, 1, 0),
                 const core::Vector3Df& lookat = core::Vector3Df(0, 0, 100),
                 s32 id = -1, bool make_active = true);
 
@@ -53,6 +61,11 @@ namespace kong
 
             //! Removes all children of this scene node
             virtual void RemoveAll();
+
+            //! Draws all the scene nodes.
+            virtual void DrawAll();
+
+            virtual video::IVideoDriver *GetVideoDriver() const;
 
         private:
             struct DefaultNodeEntry

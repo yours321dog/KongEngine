@@ -10,8 +10,11 @@ namespace kong
 {
     namespace scene
     {
+        class IMesh;
+
         class IMeshSceneNode : public ISceneNode
         {
+        public:
             //! Constructor
             /** Use setMesh() to set the mesh to display.
             */
@@ -21,7 +24,10 @@ namespace kong
             const core::Vector3Df& scale = core::Vector3Df(1, 1, 1))
             : ISceneNode(parent, mgr, id, position, rotation, scale) {}
 
+            //! Set a new mesh to display
+            virtual void SetMesh(IMesh *mesh) = 0;
 
+            virtual IMesh *GetMesh() = 0;
         };
     }
 }

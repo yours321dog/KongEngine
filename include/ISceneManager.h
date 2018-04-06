@@ -4,9 +4,18 @@
 #ifndef _ISCENEMANAGER_H_
 #define _ISCENEMANAGER_H_
 #include "ISceneNode.h"
+#include "IVideoDriver.h"
 
 namespace kong
 {
+    namespace video
+    {
+        class IVideoDriver;
+        class SMaterial;
+        //class IImage;
+        //class ITexture;
+    } // end namespace video
+
     namespace scene
     {
         class ICameraSceneNode;
@@ -18,7 +27,6 @@ namespace kong
         public:
             virtual ~ISceneManager() = default;
 
-        private:
             //! Adds a cube scene node
             /** \param size: Size of the cube, uniformly in each dimension.
             \param parent: Parent of the scene node. Can be 0 if no parent.
@@ -44,6 +52,7 @@ namespace kong
             control the direction that the camera looks by using setRotation() then call
             ICameraSceneNode::bindTargetAndRotation(true) on it.
             \param position: Position of the space relative to its parent where the camera will be placed.
+            \param up
             \param lookat: Position where the camera will look at. Also known as target.
             \param parent: Parent scene node of the camera. Can be null. If the parent moves,
             the camera will move too.
@@ -54,6 +63,31 @@ namespace kong
             This pointer should not be dropped. See IReferenceCounted::drop() for more information. */
             virtual ICameraSceneNode* AddCameraSceneNode(ISceneNode* parent = nullptr,
                 const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& up = core::Vector3Df(0, 1, 0),
+                const core::Vector3Df& lookat = core::Vector3Df(0, 0, 100),
+                s32 id = -1, bool make_active = true) = 0;
+
+            //! Adds a camera scene node to the scene graph and sets it as active camera.
+            /** This camera does not react on user input like for example the one created with
+            addCameraSceneNodeFPS(). If you want to move or animate it, use animators or the
+            ISceneNode::setPosition(), ICameraSceneNode::setTarget() etc methods.
+            By default, a camera's look at position (set with setTarget()) and its scene node
+            rotation (set with setRotation()) are independent. If you want to be able to
+            control the direction that the camera looks by using setRotation() then call
+            ICameraSceneNode::bindTargetAndRotation(true) on it.
+            \param position: Position of the space relative to its parent where the camera will be placed.
+            \param up
+            \param lookat: Position where the camera will look at. Also known as target.
+            \param parent: Parent scene node of the camera. Can be null. If the parent moves,
+            the camera will move too.
+            \param id: id of the camera. This id can be used to identify the camera.
+            \param makeActive Flag whether this camera should become the active one.
+            Make sure you always have one active camera.
+            \return Pointer to interface to camera if successful, otherwise 0.
+            This pointer should not be dropped. See IReferenceCounted::drop() for more information. */
+            virtual ICameraSceneNode* AddPerspectiveCameraSceneNode(ISceneNode* parent = nullptr,
+                const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& up = core::Vector3Df(0, 1, 0),
                 const core::Vector3Df& lookat = core::Vector3Df(0, 0, 100),
                 s32 id = -1, bool make_active = true) = 0;
 
@@ -71,7 +105,7 @@ namespace kong
             virtual video::SColor GetShadowColor() const = 0;
 
             //! Set the current color of shadows.
-            virtual void SetShadowColor(video::SColor color);
+            virtual void SetShadowColor(video::SColor color) = 0;
 
             //! Draws all the scene nodes.
             /** This can only be invoked between
@@ -83,6 +117,9 @@ namespace kong
             //! Clears the whole scene.
             /** All scene nodes are removed. */
             virtual void Clear() = 0;
+
+            //! Get video driver
+            virtual video::IVideoDriver *GetVideoDriver() const = 0;
         };
     }
 }

@@ -60,6 +60,12 @@
     <ClCompile Include="CSceneManager.cpp">
       <Filter>KongEngine\scene</Filter>
     </ClCompile>
+    <ClCompile Include="CCubeSceneNode.cpp">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLDriver.cpp">
+      <Filter>KongEngine\video\OpenGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\KongCompileConfig.h">
@@ -148,6 +154,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\IMeshSceneNode.h">
       <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CCubeSceneNode.h">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\COpenGLDriver.h">
+      <Filter>KongEngine\video\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

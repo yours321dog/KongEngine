@@ -77,18 +77,22 @@
   <ItemGroup>
     <ClCompile Include="CKongDeviceStub.cpp" />
     <ClCompile Include="CKongDeviceWin32.cpp" />
+    <ClCompile Include="COpenGLDriver.cpp" />
     <ClCompile Include="COrthogonalCameraSceneNode.cpp" />
     <ClCompile Include="CPerspectiveCameraSceneNode.cpp" />
     <ClCompile Include="CSceneManager.cpp" />
     <ClCompile Include="KongEngine.cpp" />
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="CCubeSceneNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Allocator.h" />
     <ClInclude Include="..\..\include\Array.h" />
+    <ClInclude Include="..\..\include\CCubeSceneNode.h" />
     <ClInclude Include="..\..\include\CKongDeviceStub.h" />
     <ClInclude Include="..\..\include\CKongDeviceWin32.h" />
     <ClInclude Include="..\..\include\CMeshBuffer.h" />
+    <ClInclude Include="..\..\include\COpenGLDriver.h" />
     <ClInclude Include="..\..\include\COrthogonalCameraSceneNode.h" />
     <ClInclude Include="..\..\include\CPerspectiveCameraSceneNode.h" />
     <ClInclude Include="..\..\include\CSceneManager.h" />

@@ -6,6 +6,7 @@
 
 #include "KongTypes.h"
 #include "SMaterial.h"
+#include "S3DVertex.h"
 
 namespace kong
 {

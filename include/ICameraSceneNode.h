@@ -6,15 +6,17 @@
 #include "Vector.h"
 #include "Matrix.h"
 
+#include "ISceneNode.h"
+
 namespace kong
 {
     namespace scene
     {
-        class ICameraSceneNode
+        class ICameraSceneNode : public ISceneNode
         {
         public:
-            ICameraSceneNode();
-            ICameraSceneNode(const core::Vector3Df& eye, const core::Vector3Df& up,
+            ICameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id = -1);
+            ICameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id, const core::Vector3Df& eye, const core::Vector3Df& up,
                 const core::Vector3Df& at, f32 zn = 1.f, f32 zf = 100.f);
             virtual ~ICameraSceneNode();
 
@@ -28,7 +30,7 @@ namespace kong
             core::Vector3Df ToEye(const core::Vector3Df &pos) const;
             core::Vector3Df GetEye() const;
             core::Vector3Df GetLookAt() const;
-            f32 GetZN() const;
+            f32 GetZn() const;
 
             virtual int GetCameraType() = 0;
 
@@ -43,6 +45,7 @@ namespace kong
             core::Matrixf project_;
             f32 zn_;
             f32 zf_;
+
         private:
             core::Matrixf view_;
             core::Vector3Df eye_;
@@ -52,16 +55,17 @@ namespace kong
             core::Vector3Df to_;
         };
 
-        inline ICameraSceneNode::ICameraSceneNode()
-            : zn_(0), zf_(0), eye_(0, 0, 0, 1), up_(0, 1, 0, 1),
+        inline ICameraSceneNode::ICameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id)
+            : ISceneNode(parent, mgr, id), zn_(0), zf_(0), eye_(0, 0, 0, 1), up_(0, 1, 0, 1),
             at_(0, 0, 1, 1), right_(1, 0, 0, 1), to_(0, 0, 1, 1)
         {
             view_.Identity();
         }
 
-        inline ICameraSceneNode::ICameraSceneNode(const core::Vector3Df& eye, const core::Vector3Df& up, 
+        inline ICameraSceneNode::ICameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id, 
+            const core::Vector3Df& eye, const core::Vector3Df& up,
             const core::Vector3Df &at, f32 zn, f32 zf)
-            : zn_(zn), zf_(zf), eye_(eye), up_(up), at_(at)
+            : ISceneNode(parent, mgr, id), zn_(zn), zf_(zf), eye_(eye), up_(up), at_(at)
         {
             up_.Normalize();
             to_ = at_ - eye_;
@@ -142,7 +146,7 @@ namespace kong
             return at_;
         }
 
-        inline f32 ICameraSceneNode::GetZN() const
+        inline f32 ICameraSceneNode::GetZn() const
         {
             return zn_;
         }

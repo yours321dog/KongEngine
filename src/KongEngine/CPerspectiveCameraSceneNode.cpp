@@ -8,15 +8,15 @@ namespace kong
 {
     namespace scene
     {
-        CPerspectiveCameraSceneNode::CPerspectiveCameraSceneNode(f32 fovy, f32 aspect, f32 zn, f32 zf)
-            : ICameraSceneNode(core::Vector3Df(0, 0, -1), core::Vector3Df(0, 1, 0), core::Vector3Df(0, 0, 0), zn, zf),
+        CPerspectiveCameraSceneNode::CPerspectiveCameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id, f32 fovy, f32 aspect, f32 zn, f32 zf)
+            : ICameraSceneNode(parent, mgr, id, core::Vector3Df(0, 0, -1), core::Vector3Df(0, 1, 0), core::Vector3Df(0, 0, 0), zn, zf),
             fovy_(fovy), aspect_(aspect)
         {
         }
 
-        CPerspectiveCameraSceneNode::CPerspectiveCameraSceneNode(core::Vector3Df eye, core::Vector3Df up,
+        CPerspectiveCameraSceneNode::CPerspectiveCameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id, core::Vector3Df eye, core::Vector3Df up,
             core::Vector3Df at, f32 fovy, f32 aspect, f32 zn, f32 zf)
-            : ICameraSceneNode(eye, up, at, zn, zf), fovy_(fovy), aspect_(aspect)
+            : ICameraSceneNode(parent, mgr, id, eye, up, at, zn, zf), fovy_(fovy), aspect_(aspect)
         {
         }
 
@@ -42,6 +42,10 @@ namespace kong
         int CPerspectiveCameraSceneNode::GetCameraType()
         {
             return PERSPECTIVE;
+        }
+
+        void CPerspectiveCameraSceneNode::Render()
+        {
         }
     }
 }

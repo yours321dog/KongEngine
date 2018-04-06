@@ -15,6 +15,9 @@ namespace kong
         class IMesh
         {
         public:
+            //! virtual deconstructor
+            virtual ~IMesh() = default;
+
             //! Get the amount of mesh buffers.
             /** \return Amount of mesh buffers (IMeshBuffer) in this mesh. */
             virtual u32 GetMeshBufferCount() const = 0;

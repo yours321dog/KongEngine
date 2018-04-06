@@ -7,14 +7,16 @@ namespace kong
 {
     namespace scene
     {
-        COrthogonalCameraSceneNode::COrthogonalCameraSceneNode(f32 height, f32 aspect, f32 zn, f32 zf)
-            :ICameraSceneNode(core::Vector3Df(0, 0, -1), core::Vector3Df(0, 1, 0), kong::core::Vector3Df(0, 0, 0), zn, zf),
+        COrthogonalCameraSceneNode::COrthogonalCameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id, f32 height, f32 aspect, f32 zn, f32 zf)
+            :ICameraSceneNode(parent, mgr, id, core::Vector3Df(0, 0, -1), core::Vector3Df(0, 1, 0), kong::core::Vector3Df(0, 0, 0), zn, zf),
             height_(height), aspect_(aspect)
         {
         }
 
-        COrthogonalCameraSceneNode::COrthogonalCameraSceneNode(core::Vector3Df eye, core::Vector3Df up,
+        COrthogonalCameraSceneNode::COrthogonalCameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id, core::Vector3Df eye, core::Vector3Df up,
             core::Vector3Df at, f32 height, f32 aspect, f32 zn, f32 zf)
+            : ICameraSceneNode(parent, mgr, id, eye, up, at, zn, zf),
+            height_(height), aspect_(aspect)
         {
         }
 
