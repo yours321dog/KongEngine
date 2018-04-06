@@ -4,6 +4,8 @@
 #ifndef _C_KONG_DEVICE_WIN32_H_
 #define _C_KONG_DEVICE_WIN32_H_
 
+#include "KongCompileConfig.h"
+
 #include "CKongDeviceStub.h"
 #include "SKongCreationParameters.h"
 
@@ -34,6 +36,9 @@ namespace kong
         void ScreenDispatch();
 
     protected:
+        //! create the driver
+        void CreateVideo();
+
         int screen_w, screen_h;
         int screen_mx, screen_my, screen_mb;
         HWND screen_handle;

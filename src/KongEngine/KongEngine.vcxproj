@@ -71,7 +71,7 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ImportLibrary>..\..\lib\x86\$(TargetName).lib</ImportLibrary>
       <AdditionalLibraryDirectories>..\..\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -113,6 +113,7 @@
     <ClInclude Include="..\..\include\Matrix.h" />
     <ClInclude Include="..\..\include\S3DVertex.h" />
     <ClInclude Include="..\..\include\SColor.h" />
+    <ClInclude Include="..\..\include\SExposedVideoData.h" />
     <ClInclude Include="..\..\include\SKongCreationParameters.h" />
     <ClInclude Include="..\..\include\SMaterial.h" />
     <ClInclude Include="..\..\include\SMesh.h" />

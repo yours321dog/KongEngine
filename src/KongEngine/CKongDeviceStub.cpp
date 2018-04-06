@@ -4,7 +4,7 @@
 #include "CKongDeviceStub.h"
 
 kong::CKongDeviceStub::CKongDeviceStub(const SKongCreationParameters &param)
-    : CreationParams(param), close_(false)
+    : create_params_(param), close_(false)
 {
 }
 

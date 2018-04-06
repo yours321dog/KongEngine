@@ -93,12 +93,28 @@ void TestList()
     printf("\n");
 }
 
+void TestWindow()
+{
+    KongDevice *device = CreateDevice(Dimension2d<u32>(640, 480), 16,
+        false, false, false);
+
+    if (!device)
+    {
+        return ;
+    }
+
+    while (device->run())
+    {
+    }
+}
+
 int main()
 {
     //TestArray();
     //TestS3DVertex();
-    TestList();
+    //TestList();
+    TestWindow();
 
-    system("pause");
+    //system("pause");
     return 0;
 }

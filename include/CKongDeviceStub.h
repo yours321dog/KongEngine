@@ -5,6 +5,7 @@
 #define _C_KONG_DEVICE_STUB_H_
 #include "KongDevice.h"
 #include "SKongCreationParameters.h"
+#include "IVideoDriver.h"
 
 namespace kong
 {
@@ -20,8 +21,10 @@ namespace kong
         virtual ~CKongDeviceStub();
 
     protected:
-        SKongCreationParameters CreationParams;
+        SKongCreationParameters create_params_;
         bool close_;
+
+        video::IVideoDriver *video_driver_;
     };
 
 } // end namespace kong

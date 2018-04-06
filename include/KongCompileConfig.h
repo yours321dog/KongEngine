@@ -49,4 +49,13 @@
 
 #endif // _KONG_WINDOWS_API_
 
+
+//! Define _IRR_COMPILE_WITH_OPENGL_ to compile the Irrlicht engine with OpenGL.
+/** If you do not wish the engine to be compiled with OpenGL, comment this
+define out. */
+#define _KONG_COMPILE_WITH_OPENGL_
+#ifdef NO_KONG_COMPILE_WITH_OPENGL_
+#undef _KONG_COMPILE_WITH_OPENGL_
+#endif
+
 #endif

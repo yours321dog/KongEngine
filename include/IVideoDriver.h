@@ -10,6 +10,8 @@ namespace kong
 {
     namespace video
     {
+        class SMaterial;
+
         //! enumeration for geometry transformation states
         enum E_TRANSFORMATION_STATE
         {

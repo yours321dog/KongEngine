@@ -108,7 +108,7 @@ namespace kong
     typedef double				f64;
 
 
-} // end namespace irr
+} // end namespace kong
 
 
 #include <wchar.h>
@@ -142,7 +142,7 @@ typedef unsigned short wchar_t;
 #endif // microsoft compiler
 #endif // _KONG_WINDOWS_API_
 
-namespace irr
+namespace kong
 {
 
     //! Type name for character type used by the file system.
@@ -159,7 +159,7 @@ namespace irr
 #define _KONG_TEXT(X) X
 #endif
 
-} // end namespace irr
+} // end namespace kong
 
 //! define a break macro for debugging.
 #if defined(_DEBUG)
@@ -239,8 +239,8 @@ Compiler version defines: VC6.0 : 1200, VC7.0 : 1300, VC7.1 : 1310, VC8.0 : 1400
 /** some compilers can create those by directly writing the
 code like 'code', but some generate warnings so we use this macro here */
 #define MAKE_KONG_ID(c0, c1, c2, c3) \
-        ((irr::u32)(irr::u8)(c0) | ((irr::u32)(irr::u8)(c1) << 8) | \
-        ((irr::u32)(irr::u8)(c2) << 16) | ((irr::u32)(irr::u8)(c3) << 24 ))
+        ((kong::u32)(kong::u8)(c0) | ((kong::u32)(kong::u8)(c1) << 8) | \
+        ((kong::u32)(kong::u8)(c2) << 16) | ((kong::u32)(kong::u8)(c3) << 24 ))
 
 #if defined(__BORLANDC__) || defined (__BCPLUSPLUS__)
 #define _strcmpi(a,b) strcmpi(a,b)

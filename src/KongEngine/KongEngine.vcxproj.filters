@@ -161,5 +161,8 @@
     <ClInclude Include="..\..\include\COpenGLDriver.h">
       <Filter>KongEngine\video\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\SExposedVideoData.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
