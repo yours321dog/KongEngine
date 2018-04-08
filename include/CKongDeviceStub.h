@@ -21,10 +21,13 @@ namespace kong
         virtual ~CKongDeviceStub();
 
     protected:
+        void CreateScene();
+
         SKongCreationParameters create_params_;
         bool close_;
 
         video::IVideoDriver *video_driver_;
+        scene::ISceneManager* scene_manager_;
     };
 
 } // end namespace kong

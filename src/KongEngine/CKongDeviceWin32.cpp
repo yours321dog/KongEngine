@@ -116,7 +116,7 @@ namespace kong
         : CKongDeviceStub(param)
     {
         // Create a window to test antialiasing support
-        const kong::fschar_t* ClassName = __TEXT("GLCKongDeviceWin32");
+        const kong::fschar_t* ClassName = __TEXT("CKongDeviceWin32");
         HINSTANCE lhInstance = GetModuleHandle(0);
 
         // Register Class
@@ -178,6 +178,14 @@ namespace kong
         MoveWindow(temporary_wnd, windowLeft, windowTop, realWidth, realHeight, TRUE);
 
         screen_handle = temporary_wnd;
+
+        CreateVideo();
+
+        if (video_driver_ != nullptr)
+        {
+            CreateScene();
+        }
+
         return;
     }
 
@@ -195,6 +203,16 @@ namespace kong
         }
 
         return !close_;
+    }
+
+    video::IVideoDriver* CKongDeviceWin32::GetVideoDriver()
+    {
+        return video_driver_;
+    }
+
+    scene::ISceneManager* CKongDeviceWin32::GetSceneManager()
+    {
+        return scene_manager_;
     }
 
     void CKongDeviceWin32::ScreenClose()

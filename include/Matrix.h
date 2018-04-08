@@ -15,14 +15,22 @@ namespace kong
         class Matrix
         {
         public:
+            enum INIT_TYPE
+            {
+                ZERO,
+                IDENTITY
+            };
+
+
             Matrix(T m[4][4]);
-            Matrix();
+            Matrix(u32 init_type = ZERO);
             Matrix(const Matrix &);
 
             void Zero();
             void Identity();
 
             T &operator()(int, int);
+            const T&operator()(int, int) const;
             Matrix<T> &operator=(const Matrix<T>&);
             Matrix<T> operator+(const Matrix<T>&);
             Matrix<T> operator-(const Matrix<T>&);
@@ -35,18 +43,31 @@ namespace kong
             void Scale(T x, T y, T z);
             void Rotate(T x, T y, T z, f32 theta);
             void Rotate(T x, T y, T z);
-            Matrix<T> Transpose();
+            Matrix<T> Transpose() const;
 
-            Matrix<T> Inverse();
+            Matrix<T> Inverse() const;
+
+            Vector3Df GetTranslation() const;
+
+            const T *Pointer() const;
+
+            T *Pointer();
 
         private:
-            T m_[4][4];
+            T m_[16];
         };
 
         template <typename T>
-        Matrix<T>::Matrix()
+        Matrix<T>::Matrix(u32 init_type)
         {
-            Zero();
+            if (init_type == IDENTITY)
+            {
+                Identity();
+            }
+            else
+            {
+                Zero();
+            }
         }
 
         template <typename T>
@@ -56,7 +77,7 @@ namespace kong
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    m_[i][j] = m[i][j];
+                    m_[i * 4 + j] = m[i * 4 + j];
                 }
             }
         }
@@ -68,7 +89,7 @@ namespace kong
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    m_[i][j] = m.m_[i][j];
+                    m_[i * 4 + j] = m.m_[i * 4 + j];
                 }
             }
         }
@@ -80,7 +101,7 @@ namespace kong
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    m_[i][j] = m.m_[i][j];
+                    m_[i * 4 + j] = m.m_[i * 4 + j];
                 }
             }
             return *this;
@@ -94,7 +115,7 @@ namespace kong
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    tmp.m_[i][j] = m_[i][j] + m.m_[i][j];
+                    tmp.m_[i * 4 + j] = m_[i * 4 + j] + m.m_[i * 4 + j];
                 }
             }
             return tmp;
@@ -108,7 +129,7 @@ namespace kong
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    tmp.m_[i][j] = m_[i][j] - m.m_[i][j];
+                    tmp.m_[i * 4 + j] = m_[i * 4 + j] - m.m_[i * 4 + j];
                 }
             }
             return tmp;
@@ -122,7 +143,8 @@ namespace kong
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    tmp.m_[i][j] = m_[i][0] * m.m_[0][j] + m_[i][1] * m.m_[1][j] + m_[i][2] * m.m_[2][j] + m_[i][3] * m.m_[3][j];
+                    tmp.m_[i * 4 + j] = m_[i * 4 + 0] * m.m_[0 * 4 + j] + m_[i * 4 + 1] * m.m_[1 * 4 + j]
+                        + m_[i * 4 + 2] * m.m_[2 * 4 + j] + m_[i * 4 + 3] * m.m_[3 * 4 + j];
                 }
             }
             return tmp;
@@ -136,7 +158,7 @@ namespace kong
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    tmp.m_[i][j] = m_[i][j] * scale;
+                    tmp.m_[i * 4 + j] = m_[i * 4 + j] * scale;
                 }
             }
             return tmp;
@@ -149,7 +171,7 @@ namespace kong
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    m_[i][j] = T(0);
+                    m_[i * 4 + j] = T(0);
                 }
             }
         }
@@ -157,17 +179,20 @@ namespace kong
         template <typename T>
         void Matrix<T>::Identity()
         {
-            m_[0][0] = m_[1][1] = m_[2][2] = m_[3][3] = T(1);
-            m_[0][1] = m_[0][2] = m_[0][3] = T(0);
-            m_[1][0] = m_[1][2] = m_[1][3] = T(0);
-            m_[2][0] = m_[2][1] = m_[2][3] = T(0);
-            m_[3][0] = m_[3][1] = m_[3][2] = T(0);
+            Zero();
+            m_[0] = m_[5] = m_[10] = m_[15] = T(1);
         }
 
         template <typename T>
         T& Matrix<T>::operator()(int i, int j)
         {
-            return m_[i][j];
+            return m_[i * 4 + j];
+        }
+
+        template <typename T>
+        const T& Matrix<T>::operator()(int i, int j) const
+        {
+            return m_[i * 4 + j];
         }
 
         template <typename T>
@@ -176,7 +201,7 @@ namespace kong
             Vector<T> tmp;
             for (int i = 0; i < 4; i++)
             {
-                tmp(i) = vec(0) * m_[0][i] + vec(1) * m_[1][i] + vec(2) * m_[2][i] + vec(3) * m_[3][i];
+                tmp(i) = vec(0) * m_[0 * 4 + i] + vec(1) * m_[1 * 4 + i] + vec(2) * m_[2 * 4 + i] + vec(3) * m_[3 * 4 + i];
             }
             return tmp;
         }
@@ -185,18 +210,18 @@ namespace kong
         void Matrix<T>::Translate(T x, T y, T z)
         {
             Identity();
-            m_[3][0] = x;
-            m_[3][1] = y;
-            m_[3][2] = z;
+            m_[3 * 4 + 0] = x;
+            m_[3 * 4 + 1] = y;
+            m_[3 * 4 + 2] = z;
         }
 
         template <typename T>
         void Matrix<T>::Scale(T x, T y, T z)
         {
             Identity();
-            m_[0][0] = x;
-            m_[1][1] = y;
-            m_[2][2] = z;
+            m_[0] = x;
+            m_[5] = y;
+            m_[10] = z;
         }
 
         template <typename T>
@@ -228,18 +253,18 @@ namespace kong
             x = vec.x * qsin;
             y = vec.y * qsin;
             z = vec.z * qsin;
-            m_[0][0] = 1 - 2 * y * y - 2 * z * z;
-            m_[1][0] = 2 * x * y - 2 * w * z;
-            m_[2][0] = 2 * x * z + 2 * w * y;
-            m_[0][1] = 2 * x * y + 2 * w * z;
-            m_[1][1] = 1 - 2 * x * x - 2 * z * z;
-            m_[2][1] = 2 * y * z - 2 * w * x;
-            m_[0][2] = 2 * x * z - 2 * w * y;
-            m_[1][2] = 2 * y * z + 2 * w * x;
-            m_[2][2] = 1 - 2 * x * x - 2 * y * y;
-            m_[0][3] = m_[1][3] = m_[2][3] = 0.0f;
-            m_[3][0] = m_[3][1] = m_[3][2] = 0.0f;
-            m_[3][3] = 1.0f;
+            m_[0 * 4 + 0] = 1 - 2 * y * y - 2 * z * z;
+            m_[1 * 4 + 0] = 2 * x * y - 2 * w * z;
+            m_[2 * 4 + 0] = 2 * x * z + 2 * w * y;
+            m_[0 * 4 + 1] = 2 * x * y + 2 * w * z;
+            m_[1 * 4 + 1] = 1 - 2 * x * x - 2 * z * z;
+            m_[2 * 4 + 1] = 2 * y * z - 2 * w * x;
+            m_[0 * 4 + 2] = 2 * x * z - 2 * w * y;
+            m_[1 * 4 + 2] = 2 * y * z + 2 * w * x;
+            m_[2 * 4 + 2] = 1 - 2 * x * x - 2 * y * y;
+            m_[0 * 4 + 3] = m_[1 * 4 + 3] = m_[2 * 4 + 3] = 0.0f;
+            m_[3 * 4 + 0] = m_[3 * 4 + 1] = m_[3 * 4 + 2] = 0.0f;
+            m_[3 * 4 + 3] = 1.0f;
         }
 
         template <typename T>
@@ -254,38 +279,38 @@ namespace kong
             const f64 cy = cos(z);
             const f64 sy = sin(z);
 
-            m_[0][0] = (T)(cp*cy);
-            m_[1][0] = (T)(cp*sy);
-            m_[2][0] = (T)(-sp);
+            m_[0 * 4 + 0] = static_cast<T>(cp * cy);
+            m_[1 * 4 + 0] = static_cast<T>(cp * sy);
+            m_[2 * 4 + 0] = static_cast<T>(-sp);
 
             const f64 srsp = sr*sp;
             const f64 crsp = cr*sp;
 
-            m_[0][1] = (T)(srsp*cy - cr*sy);
-            m_[1][1] = (T)(srsp*sy + cr*cy);
-            m_[2][1] = (T)(sr*cp);
+            m_[0 * 4 + 1] = static_cast<T>(srsp * cy - cr * sy);
+            m_[1 * 4 + 1] = static_cast<T>(srsp * sy + cr * cy);
+            m_[2 * 4 + 1] = static_cast<T>(sr * cp);
 
-            m_[0][2] = (T)(crsp*cy + sr*sy);
-            m_[1][2] = (T)(crsp*sy - sr*cy);
-            m_[2][2] = (T)(cr*cp);
+            m_[0 * 4 + 2] = static_cast<T>(crsp * cy + sr * sy);
+            m_[1 * 4 + 2] = static_cast<T>(crsp * sy - sr * cy);
+            m_[2 * 4 + 2] = static_cast<T>(cr * cp);
         }
 
         template <typename T>
-        Matrix<T> Matrix<T>::Transpose()
+        Matrix<T> Matrix<T>::Transpose() const
         {
             Matrix<T> tmp;
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    tmp.m_[i][j] = m_[j][i];
+                    tmp.m_[i * 4 + j] = m_[j * 4 + i];
                 }
             }
             return tmp;
         }
 
         template <typename T>
-        Matrix<T> Matrix<T>::Inverse()
+        Matrix<T> Matrix<T>::Inverse() const
         {
             Matrix<T> tmp;
             tmp.Identity();
@@ -293,20 +318,38 @@ namespace kong
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    tmp.m_[i][j] = m_[j][i];
+                    tmp.m_[i * 4 + j] = m_[j * 4 + i];
                 }
             }
-            tmp.m_[3][0] = -m_[3][0];
-            tmp.m_[3][1] = -m_[3][1];
-            tmp.m_[3][2] = -m_[3][2];
+            tmp.m_[3 * 4 + 0] = -m_[3 * 4 + 0];
+            tmp.m_[3 * 4 + 1] = -m_[3 * 4 + 1];
+            tmp.m_[3 * 4 + 2] = -m_[3 * 4 + 2];
             return tmp;
+        }
+
+        template <typename T>
+        Vector3Df Matrix<T>::GetTranslation() const
+        {
+            return Vector3Df(m_[3 * 4 + 0], m_[3 * 4 + 1], m_[3 * 4 + 2]);
+        }
+
+        template <typename T>
+        const T* Matrix<T>::Pointer() const
+        {
+            return static_cast<const T*>(m_);
+        }
+
+        template <typename T>
+        T* Matrix<T>::Pointer()
+        {
+            return static_cast<T*>(m_);
         }
 
         typedef Matrix<int> Matrixi;
         typedef Matrix<f32> Matrixf;
 
         //! global const identity matrix
-        KONG_API extern const Matrixf IdentityMatrix;
+        KONG_API extern const Matrixf identity_matrix;
     } // end namespace core
 } // end namespace kong
 

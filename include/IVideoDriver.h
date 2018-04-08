@@ -8,6 +8,15 @@
 
 namespace kong
 {
+    namespace scene
+    {
+        class IMeshBuffer;
+        class IMesh;
+        //class IMeshManipulator;
+        class ISceneNode;
+    } // end namespace scene
+
+
     namespace video
     {
         class SMaterial;
@@ -88,6 +97,28 @@ namespace kong
             world, or projection.
             \param mat Matrix describing the transformation. */
             virtual void SetTransform(E_TRANSFORMATION_STATE state, const core::Matrixf& mat) = 0;
+
+            //! Draws a 3d line.
+            /** For some implementations, this method simply calls
+            drawVertexPrimitiveList for some triangles.
+            Note that the line is drawn using the current transformation
+            matrix and material. So if you need to draw the 3D line
+            independently of the current transformation, use
+            \code
+            driver->setMaterial(someMaterial);
+            driver->setTransform(video::ETS_WORLD, core::IdentityMatrix);
+            \endcode
+            for some properly set up material before drawing the line.
+            Some drivers support line thickness set in the material.
+            \param start Start of the 3d line.
+            \param end End of the 3d line.
+            \param color Color of the line. */
+            virtual void Draw3DLine(const core::Vector3Df& start,
+                const core::Vector3Df& end, SColor color = SColor(255, 255, 255, 255)) = 0;
+
+            //! Draws a mesh buffer
+            /** \param mb Buffer to draw */
+            virtual void DrawMeshBuffer(const scene::IMeshBuffer* mb) = 0;
         };
     }
 }

@@ -62,7 +62,21 @@ namespace kong
             \param mat Matrix describing the transformation. */
             virtual void SetTransform(E_TRANSFORMATION_STATE state, const core::Matrixf& mat);
 
+            //! Draws a 3d line.
+            void Draw3DLine(const core::Vector3Df& start,
+                const core::Vector3Df& end, SColor color = SColor(255, 255, 255, 255)) override;
+
+            //! Draws a mesh buffer
+            void DrawMeshBuffer(const scene::IMeshBuffer* mesh_buffer) override;
         private:
+            //! enumeration for rendering modes such as 2d and 3d for minizing the switching of renderStates.
+            enum E_RENDER_MODE
+            {
+                ERM_NONE = 0,	// no render state has been set yet.
+                ERM_2D,		// 2d drawing rendermode
+                ERM_3D		// 3d rendering mode
+            };
+
             //! clears the zbuffer and color buffer
             void ClearBuffers(bool back_buffer, bool z_buffer, bool stencil_buffer, SColor color);
 
@@ -75,6 +89,7 @@ namespace kong
 #endif
 #endif
             SKongCreationParameters params_;
+            core::Matrixf matrices_[ETS_COUNT];
         };
     } // end namespace video
 } // end namespace kong

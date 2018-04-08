@@ -45,20 +45,9 @@ namespace kong
             void Normalize();
             void Zero();
 
-            T &x = x_;
-            T &y = y_;
-            T &z = z_;
-            T &w = w_;
+            void Set(T x, T y, T z);
 
-            T &r = x_;
-            T &g = y_;
-            T &b = z_;
-            T &a = w_;
-
-            T &u = x_;
-            T &v = y_;
-
-        private:
+        //private:
             T x_;
             T y_;
             T z_;
@@ -308,7 +297,7 @@ namespace kong
             y_ = lerp<T>(v1.y_, v2.y_, t);
             z_ = lerp<T>(v1.z_, v2.z_, t);
             //w_ = T(1);
-            w_ = lerp<T>(v1.w, v2.w, t);
+            w_ = lerp<T>(v1.w_, v2.w_, t);
         }
 
         template <typename T>
@@ -331,6 +320,14 @@ namespace kong
             y_ = 0.f;
             z_ = 0.f;
             w_ = T(1);
+        }
+
+        template <typename T>
+        void Vector<T>::Set(T x, T y, T z)
+        {
+            x_ = x;
+            y_ = y;
+            z_ = z;
         }
 
         typedef Vector<f32> Vector2Df;

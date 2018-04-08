@@ -22,6 +22,52 @@ namespace kong
         class IMeshSceneNode;
         class ISceneNode;
 
+        //! Enumeration for render passes.
+        /** A parameter passed to the registerNodeForRendering() method of the ISceneManager,
+        specifying when the node wants to be drawn in relation to the other nodes. */
+        enum E_SCENE_NODE_RENDER_PASS
+        {
+            //! No pass currently active
+            ESNRP_NONE = 0,
+
+            //! Camera pass. The active view is set up here. The very first pass.
+            ESNRP_CAMERA = 1,
+
+            //! In this pass, lights are transformed into camera space and added to the driver
+            ESNRP_LIGHT = 2,
+
+            //! This is used for sky boxes.
+            ESNRP_SKY_BOX = 4,
+
+            //! All normal objects can use this for registering themselves.
+            /** This value will never be returned by
+            ISceneManager::getSceneNodeRenderPass(). The scene manager
+            will determine by itself if an object is transparent or solid
+            and register the object as SNRT_TRANSPARENT or SNRT_SOLD
+            automatically if you call registerNodeForRendering with this
+            value (which is default). Note that it will register the node
+            only as ONE type. If your scene node has both solid and
+            transparent material types register it twice (one time as
+            SNRT_SOLID, the other time as SNRT_TRANSPARENT) and in the
+            render() method call getSceneNodeRenderPass() to find out the
+            current render pass and render only the corresponding parts of
+            the node. */
+            ESNRP_AUTOMATIC = 24,
+
+            //! Solid scene nodes or special scene nodes without materials.
+            ESNRP_SOLID = 8,
+
+            //! Transparent scene nodes, drawn after solid nodes. They are sorted from back to front and drawn in that order.
+            ESNRP_TRANSPARENT = 16,
+
+            //! Transparent effect scene nodes, drawn after Transparent nodes. They are sorted from back to front and drawn in that order.
+            ESNRP_TRANSPARENT_EFFECT = 32,
+
+            //! Drawn after the solid nodes, before the transparent nodes, the time for drawing shadow volumes
+            ESNRP_SHADOW = 64
+        };
+
+
         class ISceneManager
         {
         public:
@@ -38,7 +84,7 @@ namespace kong
             \return Pointer to the created test scene node. This
             pointer should not be dropped. See IReferenceCounted::drop()
             for more information. */
-            virtual IMeshSceneNode* AddCubeSceneNode(f32 size = 10.0f, ISceneNode* parent = 0, s32 id = -1,
+            virtual IMeshSceneNode* AddCubeSceneNode(f32 size = 10.0f, ISceneNode* parent = nullptr, s32 id = -1,
                 const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
                 const core::Vector3Df& rotation = core::Vector3Df(0, 0, 0),
                 const core::Vector3Df& scale = core::Vector3Df(1.0f, 1.0f, 1.0f)) = 0;
@@ -101,6 +147,9 @@ namespace kong
             \param camera: The new camera which should be active. */
             virtual void SetActiveCamera(ICameraSceneNode* camera) = 0;
 
+            //! Sets the currently active camera.
+            virtual ICameraSceneNode *GetActiveCamera() = 0;
+
             //! Get the current color of shadows.
             virtual video::SColor GetShadowColor() const = 0;
 
@@ -120,6 +169,18 @@ namespace kong
 
             //! Get video driver
             virtual video::IVideoDriver *GetVideoDriver() const = 0;
+
+            //! Registers a node for rendering it at a specific time.
+            /** This method should only be used by SceneNodes when they get a
+            ISceneNode::OnRegisterSceneNode() call.
+            \param node: Node to register for drawing. Usually scene nodes would set 'this'
+            as parameter here because they want to be drawn.
+            \param pass: Specifies when the node wants to be drawn in relation to the other nodes.
+            For example, if the node is a shadow, it usually wants to be drawn after all other nodes
+            and will use ESNRP_SHADOW for this. See scene::E_SCENE_NODE_RENDER_PASS for details.
+            \return scene will be rendered ( passed culling ) */
+            virtual u32 RegisterNodeForRendering(ISceneNode* node,
+                E_SCENE_NODE_RENDER_PASS pass = ESNRP_AUTOMATIC) = 0;
         };
     }
 }

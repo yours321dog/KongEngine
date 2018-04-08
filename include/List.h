@@ -24,7 +24,7 @@ namespace kong
             //! List element node with pointer to previous and next element in the list.
             struct SKListNode
             {
-                SKListNode(const T& e) : Next(0), Prev(0), Element(e) {}
+                SKListNode(const T& e) : Next(nullptr), Prev(nullptr), Element(e) {}
 
                 SKListNode* Next;
                 SKListNode* Prev;
@@ -38,7 +38,7 @@ namespace kong
             class Iterator
             {
             public:
-                Iterator() : Current(0) {}
+                Iterator() : Current(nullptr) {}
 
                 Iterator& operator ++()    { Current = Current->Next; return *this; }
                 Iterator& operator --()    { Current = Current->Prev; return *this; }
@@ -134,11 +134,11 @@ namespace kong
 
             //! Default constructor for empty list.
             List()
-                : first_(0), last_(0), size_(0) {}
+                : first_(nullptr), last_(nullptr), size_(0) {}
 
 
             //! Copy constructor.
-            List(const List<T>& other) : first_(0), last_(0), size_(0)
+            List(const List<T>& other) : first_(nullptr), last_(nullptr), size_(0)
             {
                 *this = other;
             }
@@ -238,7 +238,7 @@ namespace kong
 
                 ++size_;
 
-                if (first_ == 0)
+                if (first_ == nullptr)
                 {
                     last_ = node;
                     first_ = node;

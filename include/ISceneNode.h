@@ -39,6 +39,32 @@ namespace kong
                 UpdateAbsolutePosition();
             }
 
+            //! This method is called just before the rendering process of the whole scene.
+            /** Nodes may register themselves in the render pipeline during this call,
+            precalculate the geometry which should be renderered, and prevent their
+            children from being able to register themselves if they are clipped by simply
+            not calling their OnRegisterSceneNode method.
+            If you are implementing your own scene node, you should overwrite this method
+            with an implementation code looking like this:
+            \code
+            if (IsVisible)
+            SceneManager->registerNodeForRendering(this);
+
+            ISceneNode::OnRegisterSceneNode();
+            \endcode
+            */
+            virtual void OnRegisterSceneNode()
+            {
+                if (is_visible_)
+                {
+                    core::List<ISceneNode*>::Iterator it = children_.begin();
+                    for (; it != children_.end(); ++it)
+                    {
+                        (*it)->OnRegisterSceneNode();
+                    }
+                }
+            }
+
             //! Adds a child to this scene node.
             /** If the scene node already has a parent it is first removed
             from the other parent.
@@ -49,7 +75,7 @@ namespace kong
                 {
                     // Change scene manager?
                     if (scene_manager_ != child->scene_manager_)
-                        child->setSceneManager(scene_manager_);
+                        child->SetSceneManager(scene_manager_);
 
                     //child->grab();
                     child->Remove(); // remove from old parent
@@ -124,13 +150,13 @@ namespace kong
             virtual core::Matrixf GetRelativeTransformation() const
             {
                 core::Matrixf mat;
-                mat.Rotate(relative_translation_.x, relative_totation_.y, relative_totation_.z);
-                mat.Translate(relative_translation_.x, relative_translation_.y, relative_translation_.z);
+                mat.Rotate(relative_translation_.x_, relative_totation_.y_, relative_totation_.z_);
+                mat.Translate(relative_translation_.x_, relative_translation_.y_, relative_translation_.z_);
 
                 if (relative_scale_ != core::Vector3Df(1.f, 1.f, 1.f))
                 {
                     core::Matrixf smat;
-                    smat.Scale(relative_scale_.x, relative_scale_.y, relative_scale_.z);
+                    smat.Scale(relative_scale_.x_, relative_scale_.y_, relative_scale_.z_);
                     mat = mat * smat;
                 }
 
@@ -145,7 +171,7 @@ namespace kong
                 if (parent_)
                 {
                     absolute_tranform_ =
-                        parent_->GetRelativeTransformation() * GetAbsoluteTransformation();
+                        GetRelativeTransformation() * parent_->GetAbsoluteTransformation();
                 }
                 else
                     absolute_tranform_ = GetRelativeTransformation();
@@ -228,16 +254,30 @@ namespace kong
                 return 0;
             }
 
+            //! Gets the absolute position of the node in world coordinates.
+            /** If you want the position of the node relative to its parent,
+            use getPosition() instead.
+            NOTE: For speed reasons the absolute position is not
+            automatically recalculated on each change of the relative
+            position or by a position change of an parent. Instead the
+            update usually happens once per frame in OnAnimate. You can enforce
+            an update with updateAbsolutePosition().
+            \return The current absolute position of the scene node (updated on last call of updateAbsolutePosition). */
+            virtual core::Vector3Df GetAbsolutePosition() const
+            {
+                return absolute_tranform_.GetTranslation();
+            }
+
         protected:
             //! Sets the new scene manager for this node and all children.
             //! Called by addChild when moving nodes between scene managers
-            void setSceneManager(ISceneManager* newManager)
+            void SetSceneManager(ISceneManager* new_manager)
             {
-                scene_manager_ = newManager;
+                scene_manager_ = new_manager;
 
                 core::List<ISceneNode*>::Iterator it = children_.begin();
                 for (; it != children_.end(); ++it)
-                    (*it)->setSceneManager(newManager);
+                    (*it)->SetSceneManager(new_manager);
             }
 
             c8 name_[100];

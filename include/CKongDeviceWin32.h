@@ -31,6 +31,11 @@ namespace kong
 
         virtual bool run();
 
+        virtual video::IVideoDriver* GetVideoDriver();
+
+        //! Provides access to the scene manager.
+        scene::ISceneManager* GetSceneManager() override;
+
         void ScreenClose();
 
         void ScreenDispatch();

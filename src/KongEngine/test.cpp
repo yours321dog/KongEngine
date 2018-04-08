@@ -2,10 +2,12 @@
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
+#include "ISceneManager.h"
 
 using namespace kong;
 using namespace core;
 using namespace video;
+using namespace scene;
 
 void TestArray()
 {
@@ -61,9 +63,9 @@ void TestS3DVertex()
     std::cout << (vtx1 == vtx2) << std::endl;
 
     S3DVertex tmp = vtx1.GetInterpolated(vtx2, 0.1f);
-    printf("pos : %f, %f, %f\n", tmp.pos_.x, tmp.pos_.y, tmp.pos_.z);
-    printf("normal : %f, %f, %f\n", tmp.normal_.x, tmp.normal_.y, tmp.normal_.z);
-    printf("texcoord : %f, %f, %f\n", tmp.texcoord_.x, tmp.texcoord_.y, tmp.texcoord_.z);
+    printf("pos : %f, %f, %f\n", tmp.pos_.x_, tmp.pos_.y_, tmp.pos_.z_);
+    printf("normal : %f, %f, %f\n", tmp.normal_.x_, tmp.normal_.y_, tmp.normal_.z_);
+    printf("texcoord : %f, %f, %f\n", tmp.texcoord_.x_, tmp.texcoord_.y_, tmp.texcoord_.z_);
     printf("color : %d, %d, %d, %d\n", tmp.color_.GetAlpha(), tmp.color_.GetRed(), tmp.color_.GetGreen(),
         tmp.color_.GetBlue());
 }
@@ -98,6 +100,12 @@ void TestWindow()
     KongDevice *device = CreateDevice(Dimension2d<u32>(640, 480), 16,
         false, false, false);
 
+    IVideoDriver *driver = device->GetVideoDriver();
+    ISceneManager *smr = device->GetSceneManager();
+
+    smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -3.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
+    smr->AddCubeSceneNode(1.f, nullptr, -1, Vector3Df(0.0f, 0.5f, 0.0f));
+
     if (!device)
     {
         return ;
@@ -105,6 +113,12 @@ void TestWindow()
 
     while (device->run())
     {
+        driver->BeginScene();
+
+        //driver->Draw3DLine(Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
+        smr->DrawAll();
+
+        driver->EndScene();
     }
 }
 

@@ -7,6 +7,7 @@
 #include "Matrix.h"
 
 #include "ISceneNode.h"
+#include "ISceneManager.h"
 
 namespace kong
 {
@@ -33,6 +34,12 @@ namespace kong
             f32 GetZn() const;
 
             virtual int GetCameraType() = 0;
+
+            // register node
+            void OnRegisterSceneNode() override;
+
+            // render camera node
+            void Render() override;
 
             enum CAMERA_TYPE
             {
@@ -149,6 +156,28 @@ namespace kong
         inline f32 ICameraSceneNode::GetZn() const
         {
             return zn_;
+        }
+
+        inline void ICameraSceneNode::OnRegisterSceneNode()
+        {
+            if (scene_manager_->GetActiveCamera() == this)
+                scene_manager_->RegisterNodeForRendering(this, ESNRP_CAMERA);
+
+            ISceneNode::OnRegisterSceneNode();
+        }
+
+        inline void ICameraSceneNode::Render()
+        {
+            UpdateViewTransform();
+            UpdateProjectTransform();
+
+            video::IVideoDriver *driver = scene_manager_->GetVideoDriver();
+
+            if (driver != nullptr)
+            {
+                driver->SetTransform(video::ETS_PROJECTION, project_);
+                driver->SetTransform(video::ETS_VIEW, view_);
+            }
         }
     }
 }

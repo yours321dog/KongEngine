@@ -34,8 +34,12 @@ namespace kong
             float fax = 1.f / tan(fovy_ / 180 * core::PI / 2);
             project_(0, 0) = fax / aspect_;
             project_(1, 1) = fax;
-            project_(2, 2) = zf_ / (zf_ - zn_);
-            project_(3, 2) = zf_ * zn_ / (zn_ - zf_);
+            //project_(2, 2) = zf_ / (zf_ - zn_);
+            //project_(3, 2) = zf_ * zn_ / (zn_ - zf_);
+            //project_(2, 3) = 1;
+
+            project_(2, 2) = (zf_ + zn_) / (zf_ - zn_);
+            project_(3, 2) = 2.f * zf_ * zn_ / (zn_ - zf_);
             project_(2, 3) = 1;
         }
 
@@ -44,8 +48,8 @@ namespace kong
             return PERSPECTIVE;
         }
 
-        void CPerspectiveCameraSceneNode::Render()
-        {
-        }
+        //void CPerspectiveCameraSceneNode::Render()
+        //{
+        //}
     }
 }

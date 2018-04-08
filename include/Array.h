@@ -22,6 +22,8 @@ namespace kong
 
             void Resize(u32 size);
 
+            void Reallocate(u32 allocated);
+
             u32 Size() const;
             bool Empty() const;
             
@@ -105,6 +107,15 @@ namespace kong
             }
 
             size_ = size;
+        }
+
+        template <typename T>
+        void Array<T>::Reallocate(u32 allocated)
+        {
+            if (allocated_ < allocated)
+            {
+                Reallocted(allocated / allocated_ + (allocated % allocated_ > 0));
+            }
         }
 
         template <typename T>

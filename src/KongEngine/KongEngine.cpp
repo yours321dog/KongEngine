@@ -44,6 +44,11 @@ namespace kong
         return dev;
     }
 
+    namespace core
+    {
+        const Matrixf identity_matrix(Matrixf::IDENTITY);
+    }
+
     namespace video
     {
         SMaterial IdentityMaterial;

@@ -25,7 +25,7 @@ namespace kong
             virtual ~CSceneManager();
 
             //! add cube scene node
-            virtual IMeshSceneNode* AddCubeSceneNode(f32 size = 10.0f, ISceneNode* parent = 0, s32 id = -1,
+            virtual IMeshSceneNode* AddCubeSceneNode(f32 size = 10.0f, ISceneNode* parent = nullptr, s32 id = -1,
                 const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
                 const core::Vector3Df& rotation = core::Vector3Df(0, 0, 0),
                 const core::Vector3Df& scale = core::Vector3Df(1.0f, 1.0f, 1.0f));
@@ -56,8 +56,14 @@ namespace kong
             //! Sets the currently active camera.
             virtual void SetActiveCamera(ICameraSceneNode* camera);
 
+            //! Get the currently active camera.
+            virtual ICameraSceneNode *GetActiveCamera();
+
             //! Clears the whole scene. All scene nodes are removed.
             virtual void Clear();
+
+            //! renders the node.
+            virtual void Render();
 
             //! Removes all children of this scene node
             virtual void RemoveAll();
@@ -66,6 +72,9 @@ namespace kong
             virtual void DrawAll();
 
             virtual video::IVideoDriver *GetVideoDriver() const;
+
+            //! Registers a node for rendering it at a specific time.
+            virtual u32 RegisterNodeForRendering(ISceneNode* node, E_SCENE_NODE_RENDER_PASS pass = ESNRP_AUTOMATIC);
 
         private:
             struct DefaultNodeEntry
@@ -79,7 +88,7 @@ namespace kong
 
                 ~DefaultNodeEntry()
                 {
-                    delete node_;
+                    //delete node_;
                 }
 
                 bool operator < (const DefaultNodeEntry& other) const

@@ -33,6 +33,9 @@ namespace kong
 
             IMesh *GetMesh() override;
 
+            // register node
+            void OnRegisterSceneNode() override;
+
         private:
             void GenerateMesh();
 
