@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CFileSystem.cpp" />
     <ClCompile Include="CKongDeviceStub.cpp" />
     <ClCompile Include="CKongDeviceWin32.cpp" />
     <ClCompile Include="COpenGLDriver.cpp" />
@@ -90,6 +91,7 @@
     <ClInclude Include="..\..\include\Allocator.h" />
     <ClInclude Include="..\..\include\Array.h" />
     <ClInclude Include="..\..\include\CCubeSceneNode.h" />
+    <ClInclude Include="..\..\include\CFileSystem.h" />
     <ClInclude Include="..\..\include\CKongDeviceStub.h" />
     <ClInclude Include="..\..\include\CKongDeviceWin32.h" />
     <ClInclude Include="..\..\include\CMeshBuffer.h" />
@@ -99,12 +101,15 @@
     <ClInclude Include="..\..\include\CSceneManager.h" />
     <ClInclude Include="..\..\include\Dimension2d.h" />
     <ClInclude Include="..\..\include\ICameraSceneNode.h" />
+    <ClInclude Include="..\..\include\IEventReceiver.h" />
+    <ClInclude Include="..\..\include\IFileSystem.h" />
     <ClInclude Include="..\..\include\IMesh.h" />
     <ClInclude Include="..\..\include\IMeshBuffer.h" />
     <ClInclude Include="..\..\include\IMeshSceneNode.h" />
     <ClInclude Include="..\..\include\ISceneManager.h" />
     <ClInclude Include="..\..\include\ISceneNode.h" />
     <ClInclude Include="..\..\include\IVideoDriver.h" />
+    <ClInclude Include="..\..\include\Keycodes.h" />
     <ClInclude Include="..\..\include\KongCompileConfig.h" />
     <ClInclude Include="..\..\include\KongDevice.h" />
     <ClInclude Include="..\..\include\KongEngine.h" />

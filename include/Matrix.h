@@ -209,7 +209,7 @@ namespace kong
         template <typename T>
         void Matrix<T>::Translate(T x, T y, T z)
         {
-            Identity();
+            //Identity();
             m_[3 * 4 + 0] = x;
             m_[3 * 4 + 1] = y;
             m_[3 * 4 + 2] = z;
@@ -218,7 +218,7 @@ namespace kong
         template <typename T>
         void Matrix<T>::Scale(T x, T y, T z)
         {
-            Identity();
+            //Identity();
             m_[0] = x;
             m_[5] = y;
             m_[10] = z;
@@ -227,7 +227,7 @@ namespace kong
         template <typename T>
         void Matrix<T>::Rotate(T x, T y, T z, f32 theta)
         {
-            Identity();
+            //Identity();
             Vector<T> n(x, y, z);
             //n.Normalize();
             //f32 qsin = sin(theta);
@@ -270,7 +270,7 @@ namespace kong
         template <typename T>
         void Matrix<T>::Rotate(T x, T y, T z)
         {
-            Identity();
+            //Identity();
 
             const f64 cr = cos(x);
             const f64 sr = sin(x);

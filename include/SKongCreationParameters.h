@@ -9,11 +9,14 @@
 
 namespace kong
 {
+    class IEventReceiver;
+
     class SKongCreationParameters
     {
     public:
         SKongCreationParameters() :
-            window_size_(core::Dimension2d<u32>(800, 600)), fullscreen_(false), color_bits_(24), z_buffer_bits_(32), stencil_buffer_(true), window_id_(nullptr)
+            window_size_(core::Dimension2d<u32>(800, 600)), fullscreen_(false), color_bits_(24), z_buffer_bits_(32), stencil_buffer_(true),
+            window_id_(nullptr), event_receiver_(nullptr)
         {
         }
 
@@ -25,6 +28,7 @@ namespace kong
             z_buffer_bits_ = other.z_buffer_bits_;
             stencil_buffer_ = other.stencil_buffer_;
             window_id_ = other.window_id_;
+            event_receiver_ = other.event_receiver_;
         }
 
         SKongCreationParameters &operator=(const SKongCreationParameters &other)
@@ -35,6 +39,7 @@ namespace kong
             z_buffer_bits_ = other.z_buffer_bits_;
             stencil_buffer_ = other.stencil_buffer_;
             window_id_ = other.window_id_;
+            event_receiver_ = other.event_receiver_;
             return *this;
         }
 
@@ -55,6 +60,9 @@ namespace kong
 
         // window id
         void *window_id_;
+
+        //! A user created event receiver.
+        IEventReceiver* event_receiver_;
     };
 }
 

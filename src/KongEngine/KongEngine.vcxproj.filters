@@ -37,6 +37,12 @@
     <Filter Include="KongEngine\scene\scenenode">
       <UniqueIdentifier>{04d8ca89-6c17-4ebe-ac0f-0413745d528b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\io">
+      <UniqueIdentifier>{5ec46c5b-8814-4de8-b810-b53faa9902e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine\io">
+      <UniqueIdentifier>{bad835ea-170e-498c-8e09-d22c570de13f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -65,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="COpenGLDriver.cpp">
       <Filter>KongEngine\video\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="CFileSystem.cpp">
+      <Filter>KongEngine\io</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +172,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\SExposedVideoData.h">
       <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Keycodes.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IEventReceiver.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IFileSystem.h">
+      <Filter>Include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CFileSystem.h">
+      <Filter>KongEngine\io</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

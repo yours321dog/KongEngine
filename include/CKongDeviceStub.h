@@ -6,6 +6,7 @@
 #include "KongDevice.h"
 #include "SKongCreationParameters.h"
 #include "IVideoDriver.h"
+#include "IEventReceiver.h"
 
 namespace kong
 {
@@ -20,6 +21,9 @@ namespace kong
 
         virtual ~CKongDeviceStub();
 
+        // handle event
+        bool PostEventFromUser(const SEvent &post_event) const;
+
     protected:
         void CreateScene();
 
@@ -28,6 +32,7 @@ namespace kong
 
         video::IVideoDriver *video_driver_;
         scene::ISceneManager* scene_manager_;
+        IEventReceiver *user_receiver_;
     };
 
 } // end namespace kong

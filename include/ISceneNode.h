@@ -28,7 +28,7 @@ namespace kong
                 const core::Vector3Df &position = core::Vector3Df(0.f, 0.f, 0.f),
                 const core::Vector3Df &rotation = core::Vector3Df(0.f, 0.f, 0.f),
                 const core::Vector3Df &scale = core::Vector3Df(1.f, 1.f, 1.f))
-                : relative_translation_(position), relative_totation_(rotation), relative_scale_(scale),
+                : relative_translation_(position), relative_rotation_(rotation), relative_scale_(scale),
                 parent_(nullptr), id_(id), scene_manager_(mgr), is_visible_(true)
             {
                 if (parent != nullptr)
@@ -149,13 +149,13 @@ namespace kong
             \return The relative transformation matrix. */
             virtual core::Matrixf GetRelativeTransformation() const
             {
-                core::Matrixf mat;
-                mat.Rotate(relative_translation_.x_, relative_totation_.y_, relative_totation_.z_);
+                core::Matrixf mat(core::Matrixf::IDENTITY);
+                mat.Rotate(relative_rotation_.x_, relative_rotation_.y_, relative_rotation_.z_);
                 mat.Translate(relative_translation_.x_, relative_translation_.y_, relative_translation_.z_);
 
                 if (relative_scale_ != core::Vector3Df(1.f, 1.f, 1.f))
                 {
-                    core::Matrixf smat;
+                    core::Matrixf smat(core::Matrixf::IDENTITY);
                     smat.Scale(relative_scale_.x_, relative_scale_.y_, relative_scale_.z_);
                     mat = mat * smat;
                 }
@@ -254,6 +254,63 @@ namespace kong
                 return 0;
             }
 
+            //! Gets the scale of the scene node relative to its parent.
+            /** This is the scale of this node relative to its parent.
+            If you want the absolute scale, use
+            getAbsoluteTransformation().getScale()
+            \return The scale of the scene node. */
+            virtual const core::Vector3Df& GetScale() const
+            {
+                return relative_scale_;
+            }
+
+
+            //! Sets the relative scale of the scene node.
+            /** \param scale New scale of the node, relative to its parent. */
+            virtual void SetScale(const core::Vector3Df& scale)
+            {
+                relative_scale_ = scale;
+            }
+
+
+            //! Gets the rotation of the node relative to its parent.
+            /** Note that this is the relative rotation of the node.
+            If you want the absolute rotation, use
+            getAbsoluteTransformation().getRotation()
+            \return Current relative rotation of the scene node. */
+            virtual const core::Vector3Df& GetRotation() const
+            {
+                return relative_rotation_;
+            }
+
+
+            //! Sets the rotation of the node relative to its parent.
+            /** This only modifies the relative rotation of the node.
+            \param rotation New rotation of the node in degrees. */
+            virtual void SetRotation(const core::Vector3Df& rotation)
+            {
+                relative_rotation_ = rotation;
+            }
+
+
+            //! Gets the position of the node relative to its parent.
+            /** Note that the position is relative to the parent. If you want
+            the position in world coordinates, use getAbsolutePosition() instead.
+            \return The current position of the node relative to the parent. */
+            virtual const core::Vector3Df& GetPosition() const
+            {
+                return relative_translation_;
+            }
+
+
+            //! Sets the position of the node relative to its parent.
+            /** Note that the position is relative to the parent.
+            \param newpos New relative position of the scene node. */
+            virtual void SetPosition(const core::Vector3Df& newpos)
+            {
+                relative_translation_ = newpos;
+            }
+
             //! Gets the absolute position of the node in world coordinates.
             /** If you want the position of the node relative to its parent,
             use getPosition() instead.
@@ -267,6 +324,43 @@ namespace kong
             {
                 return absolute_tranform_.GetTranslation();
             }
+
+            //! OnAnimate() is called just before rendering the whole scene.
+            /** Nodes may calculate or store animations here, and may do other useful things,
+            depending on what they are. Also, OnAnimate() should be called for all
+            child scene nodes here. This method will be called once per frame, independent
+            of whether the scene node is visible or not.
+            \param timeMs Current time in milliseconds. */
+            virtual void OnAnimate(u32 timeMs)
+            {
+                if (is_visible_)
+                {
+                    //// animate this node with all animators
+
+                    //ISceneNodeAnimatorList::Iterator ait = Animators.begin();
+                    //while (ait != Animators.end())
+                    //{
+                    //    // continue to the next node before calling animateNode()
+                    //    // so that the animator may remove itself from the scene
+                    //    // node without the iterator becoming invalid
+                    //    ISceneNodeAnimator* anim = *ait;
+                    //    ++ait;
+                    //    anim->animateNode(this, timeMs);
+                    //}
+
+                    // update absolute position
+                    UpdateAbsolutePosition();
+
+                    // perform the post render process on all children
+
+                    core::List<ISceneNode*>::Iterator it = children_.begin();
+                    for (; it != children_.end(); ++it)
+                    {
+                        (*it)->OnAnimate(timeMs);
+                    }
+                }
+            }
+
 
         protected:
             //! Sets the new scene manager for this node and all children.
@@ -283,7 +377,7 @@ namespace kong
             c8 name_[100];
             core::Matrixf absolute_tranform_;
             core::Vector3Df relative_translation_;
-            core::Vector3Df relative_totation_;
+            core::Vector3Df relative_rotation_;
             core::Vector3Df relative_scale_;
 
             ISceneNode *parent_;

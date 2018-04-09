@@ -31,7 +31,7 @@ namespace kong
         void CPerspectiveCameraSceneNode::UpdateProjectTransform()
         {
             project_.Zero();
-            float fax = 1.f / tan(fovy_ / 180 * core::PI / 2);
+            float fax = 1.f / tan(fovy_ / 180.f * core::PI / 2.f);
             project_(0, 0) = fax / aspect_;
             project_(1, 1) = fax;
             //project_(2, 2) = zf_ / (zf_ - zn_);

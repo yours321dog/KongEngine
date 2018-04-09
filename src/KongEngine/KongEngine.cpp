@@ -23,10 +23,12 @@ namespace kong
         u32 bits,
         bool fullscreen,
         bool stencilbuffer,
-        bool vsync)
+        bool vsync,
+        IEventReceiver *receiver)
     {
         SKongCreationParameters param;
         param.window_size_ = window_size;
+        param.event_receiver_ = receiver;
 
         return CreateDeviceEx(param);
     }

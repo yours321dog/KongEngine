@@ -24,6 +24,8 @@ namespace kong
             const core::Vector3Df& scale = core::Vector3Df(1, 1, 1))
             : ISceneNode(parent, mgr, id, position, rotation, scale) {}
 
+            virtual ~IMeshSceneNode() = default;
+
             //! Set a new mesh to display
             virtual void SetMesh(IMesh *mesh) = 0;
 

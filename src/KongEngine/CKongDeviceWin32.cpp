@@ -1,16 +1,130 @@
 // Copyright (C) 2018 Lyu Luan
 // This file is part of the "Kong Engine".
 
+#include "IEventReceiver.h"
+#include "List.h"
 int screen_exit = 0;
 
 #include "CKongDeviceWin32.h"
 // win32 event handler
-LRESULT CALLBACK screen_events(HWND hWnd, UINT msg,
+
+
+namespace
+{
+    struct SEnvMapper
+    {
+        HWND hWnd;
+        kong::CKongDeviceWin32* irrDev;
+    };
+    kong::core::List<SEnvMapper> EnvMap;
+
+    HKL KEYBOARD_INPUT_HKL = 0;
+    unsigned int KEYBOARD_INPUT_CODEPAGE = 1252;
+}
+
+SEnvMapper* GetEnvMapperFromHWnd(HWND hWnd)
+{
+    kong::core::List<SEnvMapper>::Iterator it = EnvMap.begin();
+    for (; it != EnvMap.end(); ++it)
+        if ((*it).hWnd == hWnd)
+            return &(*it);
+
+    return nullptr;
+}
+
+
+kong::CKongDeviceWin32* GetDeviceFromHWnd(HWND hWnd)
+{
+    kong::core::List<SEnvMapper>::Iterator it = EnvMap.begin();
+    for (; it != EnvMap.end(); ++it)
+        if ((*it).hWnd == hWnd)
+            return (*it).irrDev;
+
+    return nullptr;
+}
+
+
+LRESULT CALLBACK ScreenEvents(HWND hWnd, UINT msg,
     WPARAM wParam, LPARAM lParam)
 {
+    kong::SEvent event;
+    kong::CKongDeviceWin32* dev = nullptr;
+
     switch (msg) {
-    case WM_CLOSE: screen_exit = 1; break;
-    default: return DefWindowProc(hWnd, msg, wParam, lParam);
+    case WM_SYSKEYDOWN:
+    case WM_SYSKEYUP:
+    case WM_KEYDOWN:
+    case WM_KEYUP:
+    {
+        BYTE allKeys[256];
+
+        event.EventType = kong::EET_KEY_INPUT_EVENT;
+        event.KeyInput.Key = static_cast<kong::EKEY_CODE>(wParam);
+        event.KeyInput.PressedDown = (msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN);
+
+        const UINT MY_MAPVK_VSC_TO_VK_EX = 3; // MAPVK_VSC_TO_VK_EX should be in SDK according to MSDN, but isn't in mine.
+        if (event.KeyInput.Key == kong::KEY_SHIFT)
+        {
+            // this will fail on systems before windows NT/2000/XP, not sure _what_ will return there instead.
+            event.KeyInput.Key = (kong::EKEY_CODE)MapVirtualKey(((lParam >> 16) & 255), MY_MAPVK_VSC_TO_VK_EX);
+        }
+        if (event.KeyInput.Key == kong::KEY_CONTROL)
+        {
+            event.KeyInput.Key = (kong::EKEY_CODE)MapVirtualKey(((lParam >> 16) & 255), MY_MAPVK_VSC_TO_VK_EX);
+            // some keyboards will just return LEFT for both - left and right keys. So also check extend bit.
+            if (lParam & 0x1000000)
+                event.KeyInput.Key = kong::KEY_RCONTROL;
+        }
+        if (event.KeyInput.Key == kong::KEY_MENU)
+        {
+            event.KeyInput.Key = (kong::EKEY_CODE)MapVirtualKey(((lParam >> 16) & 255), MY_MAPVK_VSC_TO_VK_EX);
+            if (lParam & 0x1000000)
+                event.KeyInput.Key = kong::KEY_RMENU;
+        }
+
+        GetKeyboardState(allKeys);
+
+        event.KeyInput.Shift = ((allKeys[VK_SHIFT] & 0x80) != 0);
+        event.KeyInput.Control = ((allKeys[VK_CONTROL] & 0x80) != 0);
+
+        //// Handle unicode and deadkeys in a way that works since Windows 95 and nt4.0
+        //// Using ToUnicode instead would be shorter, but would to my knowledge not run on 95 and 98.
+        //WORD keyChars[2];
+        //UINT scanCode = HIWORD(lParam);
+        //int conversionResult = ToAsciiEx(wParam, scanCode, allKeys, keyChars, 0, KEYBOARD_INPUT_HKL);
+        //if (conversionResult == 1)
+        //{
+        //    WORD unicodeChar;
+        //    MultiByteToWideChar(
+        //        KEYBOARD_INPUT_CODEPAGE,
+        //        MB_PRECOMPOSED, // default
+        //        (LPCSTR)keyChars,
+        //        sizeof(keyChars),
+        //        (WCHAR*)&unicodeChar,
+        //        1);
+        //    event.KeyInput.Char = unicodeChar;
+        //}
+        //else
+        //    event.KeyInput.Char = 0;
+
+        // allow composing characters like '@' with Alt Gr on non-US keyboards
+        if ((allKeys[VK_MENU] & 0x80) != 0)
+            event.KeyInput.Control = 0;
+
+        dev = GetDeviceFromHWnd(hWnd);
+        if (dev)
+            dev->PostEventFromUser(event);
+
+        if (msg == WM_SYSKEYDOWN || msg == WM_SYSKEYUP)
+            return DefWindowProc(hWnd, msg, wParam, lParam);
+        else
+            return 0;
+    }
+    case WM_CLOSE: 
+        screen_exit = 1; 
+        break;
+    default: 
+        return DefWindowProc(hWnd, msg, wParam, lParam);
     }
     return 0;
 }
@@ -40,78 +154,6 @@ namespace kong
 
 namespace kong
 {
-
-    //CKongDeviceWin32::CKongDeviceWin32(const SKongCreationParameters &param)
-    //    : CKongDeviceStub(param)
-    //{
-    //    screen_w = 0;
-    //    screen_h = 0;
-    //    screen_exit = 0;
-    //    screen_mx = 0;
-    //    screen_my = 0;
-    //    screen_mb = 0;
-    //    screen_handle = NULL;
-    //    screen_dc = NULL;
-    //    screen_hb = NULL;
-    //    screen_ob = NULL;
-    //    screen_fb = NULL;
-    //    screen_pitch = 0;
-
-    //    s32 w = param.window_size_.width_;
-    //    s32 h = param.window_size_.height_;
-
-    //    WNDCLASS wc = { CS_BYTEALIGNCLIENT, (WNDPROC)screen_events, 0, 0, 0,
-    //        NULL, NULL, NULL, NULL, __TEXT("SCREEN3.1415926") };
-    //    BITMAPINFO bi = { { sizeof(BITMAPINFOHEADER), w, -h, 1, 32, BI_RGB,
-    //        w * h * 4, 0, 0, 0, 0 } };
-    //    RECT rect = { 0, 0, w, h };
-    //    int wx, wy, sx, sy;
-    //    LPVOID ptr;
-    //    HDC hDC;
-
-    //    ScreenClose();
-
-    //    wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-    //    wc.hInstance = GetModuleHandle(NULL);
-    //    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    //    if (!RegisterClass(&wc)) return;
-
-    //    screen_handle = CreateWindow(__TEXT("SCREEN3.1415926"), __TEXT("AAAA"),
-    //        WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
-    //        0, 0, 0, 0, NULL, NULL, wc.hInstance, NULL);
-    //    if (screen_handle == NULL) return;
-
-    //    screen_exit = 0;
-    //    hDC = GetDC(screen_handle);
-    //    screen_dc = CreateCompatibleDC(hDC);
-    //    ReleaseDC(screen_handle, hDC);
-
-    //    screen_hb = CreateDIBSection(screen_dc, &bi, DIB_RGB_COLORS, &ptr, 0, 0);
-    //    if (screen_hb == NULL) return;
-
-    //    screen_ob = (HBITMAP)SelectObject(screen_dc, screen_hb);
-    //    screen_fb = (unsigned char*)ptr;
-    //    screen_w = w;
-    //    screen_h = h;
-    //    screen_pitch = w * 4;
-
-    //    AdjustWindowRect(&rect, GetWindowLong(screen_handle, GWL_STYLE), 0);
-    //    wx = rect.right - rect.left;
-    //    wy = rect.bottom - rect.top;
-    //    sx = (GetSystemMetrics(SM_CXSCREEN) - wx) / 2;
-    //    sy = (GetSystemMetrics(SM_CYSCREEN) - wy) / 2;
-    //    if (sy < 0) sy = 0;
-    //    SetWindowPos(screen_handle, NULL, sx, sy, wx, wy, (SWP_NOCOPYBITS | SWP_NOZORDER | SWP_SHOWWINDOW));
-    //    SetForegroundWindow(screen_handle);
-
-    //    ShowWindow(screen_handle, SW_NORMAL);
-    //    ScreenDispatch();
-
-    //    memset(screen_fb, 0, w * h * 4);
-
-    //    return;
-    //}
-
     CKongDeviceWin32::CKongDeviceWin32(const SKongCreationParameters &param)
         : CKongDeviceStub(param)
     {
@@ -124,7 +166,7 @@ namespace kong
         wcex.cbSize = sizeof(WNDCLASSEX);
         wcex.style = CS_HREDRAW | CS_VREDRAW;
         //wcex.lpfnWndProc = static_cast<WNDPROC>(DefWindowProc);
-        wcex.lpfnWndProc = static_cast<WNDPROC>(screen_events);
+        wcex.lpfnWndProc = static_cast<WNDPROC>(ScreenEvents);
         wcex.cbClsExtra = 0;
         wcex.cbWndExtra = 0;
         wcex.hInstance = lhInstance;
@@ -185,6 +227,11 @@ namespace kong
         {
             CreateScene();
         }
+
+        SEnvMapper em;
+        em.irrDev = this;
+        em.hWnd = temporary_wnd;
+        EnvMap.push_back(em);
 
         return;
     }

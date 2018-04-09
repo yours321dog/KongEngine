@@ -95,25 +95,79 @@ void TestList()
     printf("\n");
 }
 
+class MyEventReceiver : public IEventReceiver
+{
+public:
+    // This is the one method that we have to implement
+    virtual bool OnEvent(const SEvent& event)
+    {
+        // Remember whether each key is down or up
+        if (event.EventType == kong::EET_KEY_INPUT_EVENT)
+            KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
+
+        return false;
+    }
+
+    // This is used to check whether a key is being held down
+    virtual bool IsKeyDown(EKEY_CODE keyCode) const
+    {
+        return KeyIsDown[keyCode];
+    }
+
+    MyEventReceiver()
+    {
+        for (u32 i = 0; i<KEY_KEY_CODES_COUNT; ++i)
+            KeyIsDown[i] = false;
+    }
+
+private:
+    // We use this array to store the current state of each key
+    bool KeyIsDown[KEY_KEY_CODES_COUNT];
+};
+
 void TestWindow()
 {
+    MyEventReceiver receiver;
+
     KongDevice *device = CreateDevice(Dimension2d<u32>(640, 480), 16,
-        false, false, false);
+        false, false, false, &receiver);
+
+    if (!device)
+    {
+        return;
+    }
 
     IVideoDriver *driver = device->GetVideoDriver();
     ISceneManager *smr = device->GetSceneManager();
 
-    smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -3.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
-    smr->AddCubeSceneNode(1.f, nullptr, -1, Vector3Df(0.0f, 0.5f, 0.0f));
+    smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -2.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
+    ISceneNode *node = smr->AddCubeSceneNode(1.f, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f));
 
-    if (!device)
-    {
-        return ;
-    }
+    Vector3Df node_pos(0.f, 0.f, 0.f);
+    f32 movement = 0.05;
 
     while (device->run())
     {
         driver->BeginScene();
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_W))
+        {
+            node_pos.y_ += movement;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_S))
+        {
+            node_pos.y_ -= movement;
+        }
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_A))
+        {
+            node_pos.x_ -= movement;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_D))
+        {
+            node_pos.x_ += movement;
+        }
+        node->SetPosition(node_pos);
 
         //driver->Draw3DLine(Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
         smr->DrawAll();
@@ -122,13 +176,26 @@ void TestWindow()
     }
 }
 
+void TestReplace()
+{
+    std::string str1("abcdefabdef");
+    int idx = 0;
+    while ((idx = str1.find('a')) >= 0)
+    {
+        str1.replace(idx, 1, "s");
+    }
+
+    std::cout << str1.c_str() << std::endl;
+}
+
 int main()
 {
     //TestArray();
     //TestS3DVertex();
     //TestList();
-    TestWindow();
+    //TestWindow();
+    TestReplace();
 
-    //system("pause");
+    system("pause");
     return 0;
 }

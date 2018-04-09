@@ -197,24 +197,6 @@ namespace kong
             glTexCoordPointer(2, GL_FLOAT, sizeof(S3DVertex), &(static_cast<const S3DVertex*>(vertices))[0].texcoord_);
             glVertexPointer(3, GL_FLOAT, sizeof(S3DVertex), &(static_cast<const S3DVertex*>(vertices))[0].pos_);
 
-            //const void *pos_ptr = &(static_cast<const S3DVertex*>(vertices))[0].pos_;
-            //printf("size : %d\n", sizeof(S3DVertex));
-            //for (u32 i = 0; i < 24; i++)
-            //{
-            //    u32 off = sizeof(S3DVertex)* i / 4;
-            //    printf("%f\t%f\t%f\n", (static_cast<const f32 *>(pos_ptr))[off + 0], static_cast<const f32 *>(pos_ptr)[off + 1],
-            //        static_cast<const f32 *>(pos_ptr)[off + 2]);
-            //}
-
-            //printf("\n", sizeof(S3DVertex));
-            //for (int i = 0; i < 24; i++)
-            //{
-            //    u32 off = sizeof(S3DVertex)* i;
-            //    printf("%f\t%f\t%f\n", (static_cast<const S3DVertex*>(vertices))[i].pos_.x_, (static_cast<const S3DVertex*>(vertices))[i].pos_.y_,
-            //        (static_cast<const S3DVertex*>(vertices))[i].pos_.z_);
-            //}
-
-            //glDrawArrays(GL_POINTS, 0, 24);
             glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_SHORT, indices);
 
             glDisableClientState(GL_COLOR_ARRAY);
@@ -231,6 +213,7 @@ namespace kong
             {
                 const f32 inv = 1.f / 255.f;
                 glClearColor(color.GetRed() * inv, color.GetGreen() * inv, color.GetBlue() * inv, color.GetAlpha() * inv);
+                mask |= GL_COLOR_BUFFER_BIT;
             }
 
             if (z_buffer)
@@ -244,6 +227,8 @@ namespace kong
 
             if (mask)
                 glClear(mask);
+
+            glEnable(GL_DEPTH_TEST);
         }
     } // end namespace video
 } // end namespace kong

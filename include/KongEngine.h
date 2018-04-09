@@ -4,6 +4,9 @@
 #ifndef _KONG_ENGINE_H_
 #define _KONG_ENGINE_H_
 
+#include "IEventReceiver.h"
+#include "IMeshSceneNode.h"
+#include "ISceneNode.h"
 #include "KongCompileConfig.h"
 #include "KongDevice.h"
 #include "KongTypes.h"
@@ -22,7 +25,8 @@ namespace kong
         u32 bits = 16,
         bool fullscreen = false,
         bool stencilbuffer = false,
-        bool vsync = false);
+        bool vsync = false,
+        IEventReceiver *receiver = nullptr);
 
     extern "C" KONG_API KongDevice* KONGCALLCONV CreateDeviceEx(
         const SKongCreationParameters& parameters);

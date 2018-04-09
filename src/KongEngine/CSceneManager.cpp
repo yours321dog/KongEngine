@@ -68,7 +68,7 @@ namespace kong
                 parent = this;
             }
 
-            ICameraSceneNode *node = new CPerspectiveCameraSceneNode(parent, this, id, position, up, lookat);
+            ICameraSceneNode *node = new CPerspectiveCameraSceneNode(parent, this, id, position, up, lookat, 90);
 
             if (make_active)
             {
@@ -133,6 +133,9 @@ namespace kong
             driver_->SetTransform(video::ETS_PROJECTION, core::identity_matrix);
             driver_->SetTransform(video::ETS_VIEW, core::identity_matrix);
             driver_->SetTransform(video::ETS_WORLD, core::identity_matrix);
+
+            // do animations and other stuff.
+            OnAnimate(0);
 
             /*!
             First Scene Node for prerendering should be the active camera
