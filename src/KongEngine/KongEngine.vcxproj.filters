@@ -75,6 +75,15 @@
     <ClCompile Include="CFileSystem.cpp">
       <Filter>KongEngine\io</Filter>
     </ClCompile>
+    <ClCompile Include="CReadFile.cpp">
+      <Filter>KongEngine\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CWriteFile.cpp">
+      <Filter>KongEngine\io</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLShaderHelper.cpp">
+      <Filter>KongEngine\video\OpenGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\KongCompileConfig.h">
@@ -182,8 +191,29 @@
     <ClInclude Include="..\..\include\IFileSystem.h">
       <Filter>Include\io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\SPath.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IReadFile.h">
+      <Filter>Include\io</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\CFileSystem.h">
       <Filter>KongEngine\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IWriteFile.h">
+      <Filter>Include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CReadFile.h">
+      <Filter>KongEngine\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CWriteFile.h">
+      <Filter>KongEngine\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\COpenGLShaderHelper.h">
+      <Filter>KongEngine\video\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IShaderHelper.h">
+      <Filter>Include\video</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

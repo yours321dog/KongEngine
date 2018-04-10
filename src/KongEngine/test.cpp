@@ -3,11 +3,13 @@
 #include <cstdio>
 #include <iostream>
 #include "ISceneManager.h"
+#include "CFileSystem.h"
 
 using namespace kong;
 using namespace core;
 using namespace video;
 using namespace scene;
+using namespace io;
 
 void TestArray()
 {
@@ -93,6 +95,26 @@ void TestList()
         printf("%f\t", *it);
     }
     printf("\n");
+}
+
+void TestFileSystem()
+{
+    IFileSystem *file_sm = new CFileSystem();
+    IReadFile *read_file = file_sm->CreateAndOpenFile("E:\\tmp\\test.txt");
+    
+    char *vals = new char[read_file->GetSize() + 1];
+    vals[read_file->GetSize()] = 0;
+
+    read_file->Read(vals, read_file->GetSize());
+
+    std::cout << vals << std::endl;
+
+    IWriteFile *write_file = file_sm->CreateAndWriteFile("E:\\tmp\\test_write.txt");
+    write_file->Write(vals, read_file->GetSize());
+
+    delete[] vals;
+    delete read_file;
+    delete file_sm;
 }
 
 class MyEventReceiver : public IEventReceiver
@@ -188,14 +210,22 @@ void TestReplace()
     std::cout << str1.c_str() << std::endl;
 }
 
+void TestFindLastOf()
+{
+    std::string str("c:ad\\dd");
+    const std::size_t found = str.find_last_of("/\\");
+    std::cout << found << "   " << str.substr(0, found).c_str() << std::endl;
+}
+
 int main()
 {
     //TestArray();
     //TestS3DVertex();
     //TestList();
     //TestWindow();
-    TestReplace();
-
+    //TestReplace();
+    //TestFindLastOf();
+    TestFileSystem();
     system("pause");
     return 0;
 }

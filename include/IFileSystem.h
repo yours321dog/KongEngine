@@ -3,16 +3,14 @@
 
 #ifndef _IFILESYSTEM_H_
 #define _IFILESYSTEM_H_
-#include <string>
 
+#include "SPath.h"
 #include "KongTypes.h"
 
 namespace kong
 {
     namespace io
     {
-        typedef std::string path;
-
         class IReadFile;
         class IWriteFile;
 
@@ -21,13 +19,12 @@ namespace kong
         public:
             virtual ~IFileSystem() = default;
 
-        private:
             //! Opens a file for read access.
             /** \param filename: Name of file to open.
             \return Pointer to the created file interface.
             The returned pointer should be dropped when no longer needed.
             See IReferenceCounted::drop() for more information. */
-            virtual IReadFile* CreateAndOpenFile(const path filename) = 0;
+            virtual IReadFile* CreateAndOpenFile(const SPath &filename) = 0;
 
             //! Creates an IReadFile interface for accessing memory like a file.
             /** This allows you to use a pointer to memory where an IReadFile is requested.
@@ -40,7 +37,7 @@ namespace kong
             The returned pointer should be dropped when no longer needed.
             See IReferenceCounted::drop() for more information.
             */
-            virtual IReadFile* CreateMemoryReadFile(void* memory, s32 len, const path fileName, bool deleteMemoryWhenDropped = false) = 0;
+            virtual IReadFile* CreateMemoryReadFile(void* memory, s32 len, const SPath &fileName, bool deleteMemoryWhenDropped = false) = 0;
 
             //! Opens a file for write access.
             /** \param filename: Name of file to open.
@@ -50,17 +47,24 @@ namespace kong
             file could not created or opened for writing.
             The returned pointer should be dropped when no longer needed.
             See IReferenceCounted::drop() for more information. */
-            virtual IWriteFile* CreateAndWriteFile(const path filename, bool append = false) = 0;
+            virtual IWriteFile* CreateAndWriteFile(const SPath &filename, bool append = false) = 0;
 
             //! Converts a relative path to an absolute (unique) path, resolving symbolic links if required
             /** \param filename Possibly relative file or directory name to query.
             \result Absolute filename which points to the same file. */
-            virtual path getAbsolutePath(const path& filename) const = 0;
+            virtual SPath GetAbsolutePath(const SPath& filename) const = 0;
 
             //! Get the directory a file is located in.
             /** \param filename: The file to get the directory from.
             \return String containing the directory of the file. */
-            virtual path getFileDir(const path& filename) const = 0;
+            virtual SPath GetFileDir(const SPath& filename) const = 0;
+
+            //! Get the base part of a filename, i.e. the name without the directory part.
+            /** If no directory is prefixed, the full name is returned.
+            \param filename: The file to get the basename from
+            \param keepExtension True if filename with extension is returned otherwise everything
+            after the final '.' is removed as well. */
+            virtual SPath GetFileBasename(const SPath& filename, bool keepExtension = true) const = 0;
         };
     }
 }

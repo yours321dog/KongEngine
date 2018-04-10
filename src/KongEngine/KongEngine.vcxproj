@@ -80,9 +80,12 @@
     <ClCompile Include="CKongDeviceStub.cpp" />
     <ClCompile Include="CKongDeviceWin32.cpp" />
     <ClCompile Include="COpenGLDriver.cpp" />
+    <ClCompile Include="COpenGLShaderHelper.cpp" />
     <ClCompile Include="COrthogonalCameraSceneNode.cpp" />
     <ClCompile Include="CPerspectiveCameraSceneNode.cpp" />
+    <ClCompile Include="CReadFile.cpp" />
     <ClCompile Include="CSceneManager.cpp" />
+    <ClCompile Include="CWriteFile.cpp" />
     <ClCompile Include="KongEngine.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="CCubeSceneNode.cpp" />
@@ -98,7 +101,9 @@
     <ClInclude Include="..\..\include\COpenGLDriver.h" />
     <ClInclude Include="..\..\include\COrthogonalCameraSceneNode.h" />
     <ClInclude Include="..\..\include\CPerspectiveCameraSceneNode.h" />
+    <ClInclude Include="..\..\include\CReadFile.h" />
     <ClInclude Include="..\..\include\CSceneManager.h" />
+    <ClInclude Include="..\..\include\CWriteFile.h" />
     <ClInclude Include="..\..\include\Dimension2d.h" />
     <ClInclude Include="..\..\include\ICameraSceneNode.h" />
     <ClInclude Include="..\..\include\IEventReceiver.h" />
@@ -106,9 +111,12 @@
     <ClInclude Include="..\..\include\IMesh.h" />
     <ClInclude Include="..\..\include\IMeshBuffer.h" />
     <ClInclude Include="..\..\include\IMeshSceneNode.h" />
+    <ClInclude Include="..\..\include\IReadFile.h" />
     <ClInclude Include="..\..\include\ISceneManager.h" />
     <ClInclude Include="..\..\include\ISceneNode.h" />
+    <ClInclude Include="..\..\include\IShaderHelper.h" />
     <ClInclude Include="..\..\include\IVideoDriver.h" />
+    <ClInclude Include="..\..\include\IWriteFile.h" />
     <ClInclude Include="..\..\include\Keycodes.h" />
     <ClInclude Include="..\..\include\KongCompileConfig.h" />
     <ClInclude Include="..\..\include\KongDevice.h" />
@@ -117,12 +125,14 @@
     <ClInclude Include="..\..\include\KongTypes.h" />
     <ClInclude Include="..\..\include\List.h" />
     <ClInclude Include="..\..\include\Matrix.h" />
+    <ClInclude Include="..\..\include\COpenGLShaderHelper.h" />
     <ClInclude Include="..\..\include\S3DVertex.h" />
     <ClInclude Include="..\..\include\SColor.h" />
     <ClInclude Include="..\..\include\SExposedVideoData.h" />
     <ClInclude Include="..\..\include\SKongCreationParameters.h" />
     <ClInclude Include="..\..\include\SMaterial.h" />
     <ClInclude Include="..\..\include\SMesh.h" />
+    <ClInclude Include="..\..\include\SPath.h" />
     <ClInclude Include="..\..\include\Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

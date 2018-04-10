@@ -2,17 +2,30 @@
 // This file is part of the "Kong Engine".
 
 #include "CFileSystem.h"
+#include "IReadFile.h"
+#include "IWriteFile.h"
 
 namespace kong
 {
     namespace io
     {
-        IReadFile* CFileSystem::CreateAndOpenFile(const path filename)
+        IReadFile* CFileSystem::CreateAndOpenFile(const SPath &filename)
+        {
+            return CreateReadFile(filename);
+        }
+
+        IReadFile* CFileSystem::CreateMemoryReadFile(void* memory, s32 len, const SPath& fileName,
+            bool deleteMemoryWhenDropped)
         {
             return nullptr;
         }
 
-        path CFileSystem::getAbsolutePath(const path& filename) const
+        IWriteFile* CFileSystem::CreateAndWriteFile(const SPath& filename, bool append)
+        {
+            return CreateWriteFile(filename, append);
+        }
+
+        SPath CFileSystem::GetAbsolutePath(const SPath& filename) const
         {
 #if defined(_KONG_WINDOWS_CE_PLATFORM_)
             return filename;
@@ -56,6 +69,37 @@ namespace kong
 #else
             return io::path(filename);
 #endif
+        }
+
+        SPath CFileSystem::GetFileDir(const SPath& filename) const
+        {
+            // find last forward or backslash
+            const u32 last_slash = filename.find_last_of("/\\");
+
+            if (static_cast<u32>(last_slash) < filename.size())
+                return filename.substr(0, last_slash);
+            else
+                return _KONG_TEXT(".");
+        }
+
+        SPath CFileSystem::GetFileBasename(const SPath& filename, bool keepExtension) const
+        {
+            // find last forward or backslash
+            const u32 last_slash = filename.find_last_of("/\\");
+
+            if (static_cast<u32>(last_slash) < filename.size())
+            {
+                const u32 last_ext = filename.find_last_of('.');
+
+                if (keepExtension || last_ext < last_slash)
+                {
+                    return filename.substr(last_slash + 1);
+                }
+
+                return filename.substr(last_slash + 1, last_ext - last_slash);
+            }
+            else
+                return _KONG_TEXT(" ");
         }
     } // end namespace io
 } // end namespace kong

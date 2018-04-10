@@ -4,17 +4,20 @@
 #ifndef _KONG_ENGINE_H_
 #define _KONG_ENGINE_H_
 
+#include "Array.h"
+#include "Dimension2d.h"
 #include "IEventReceiver.h"
+#include "IFileSystem.h"
 #include "IMeshSceneNode.h"
+#include "IReadFile.h"
 #include "ISceneNode.h"
+#include "IWriteFile.h"
 #include "KongCompileConfig.h"
 #include "KongDevice.h"
 #include "KongTypes.h"
-#include "Dimension2d.h"
-#include "SKongCreationParameters.h"
-#include "Array.h"
-#include "S3DVertex.h"
 #include "List.h"
+#include "S3DVertex.h"
+#include "SKongCreationParameters.h"
 #include "SMaterial.h"
 
 namespace kong
