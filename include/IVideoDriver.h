@@ -61,6 +61,8 @@ namespace kong
         class IVideoDriver
         {
         public:
+            virtual ~IVideoDriver() = default;
+
             //! Sets a material.
             /** All 3d drawing functions will draw geometry using this material thereafter.
             \param material: Material to be used from now on. */

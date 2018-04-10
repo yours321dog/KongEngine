@@ -6,14 +6,13 @@
 #include "GL/gl.h"
 //#include "GL/glew.h"
 #include "IMeshBuffer.h"
-#include <cstdio>
 
 namespace kong
 {
     namespace video
     {
-        COpenGLDriver::COpenGLDriver(const SKongCreationParameters& params, CKongDeviceWin32* device)
-            : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device), params_(params)
+        COpenGLDriver::COpenGLDriver(const SKongCreationParameters& params, io::IFileSystem* io, CKongDeviceWin32* device)
+            : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device), params_(params), io_(io)
         {
         }
 
@@ -239,9 +238,9 @@ namespace kong
     {
 #ifdef _KONG_COMPILE_WITH_OPENGL_
         IVideoDriver* CreateOpenGLDriver(const kong::SKongCreationParameters& params,
-            /*io::IFileSystem* io,*/ CKongDeviceWin32* device)
+            io::IFileSystem* io, CKongDeviceWin32* device)
         {
-            COpenGLDriver *driver = new COpenGLDriver(params, device);
+            COpenGLDriver *driver = new COpenGLDriver(params, io, device);
 #ifdef _KONG_COMPILE_WITH_OPENGL_
             if (!driver->InitDriver(device))
             {

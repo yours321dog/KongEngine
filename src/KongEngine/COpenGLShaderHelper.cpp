@@ -11,14 +11,39 @@ namespace kong
 {
     namespace video
     {
-        COpengGLShaderHelper::COpengGLShaderHelper(io::IFileSystem* file_system, const io::SPath& vertex_path,
+        COpenGLShaderHelper::COpenGLShaderHelper(io::IFileSystem* file_system, const io::SPath& vertex_path,
             const io::SPath& fragment_path)
             : id_(0), file_system_(file_system)
         {
             InitShader(vertex_path, fragment_path);
         }
 
-        void COpengGLShaderHelper::InitShader(const io::SPath& vertex_path, const io::SPath& fragment_path)
+        void COpenGLShaderHelper::Use()
+        {
+            glUseProgram(id_);
+        }
+
+        void COpenGLShaderHelper::SetBool(const std::string& name, bool value) const
+        {
+            glUniform1i(glGetUniformLocation(id_, name.c_str()), static_cast<s32>(value));
+        }
+
+        void COpenGLShaderHelper::SetInt(const std::string& name, s32 value) const
+        {
+            glUniform1i(glGetUniformLocation(id_, name.c_str()), value);
+        }
+
+        void COpenGLShaderHelper::SetFloat(const std::string& name, f32 value) const
+        {
+            glUniform1i(glGetUniformLocation(id_, name.c_str()), value);
+        }
+
+        void COpenGLShaderHelper::SetMatrix4(const std::string& name, const core::Matrixf& mat) const
+        {
+            glUniformMatrix4fv(glGetUniformLocation(id_, name.c_str()), 1, GL_FALSE, mat.Pointer());
+        }
+
+        void COpenGLShaderHelper::InitShader(const io::SPath& vertex_path, const io::SPath& fragment_path)
         {
             // 1. read shader files
             std::string vertex_code;
@@ -35,15 +60,15 @@ namespace kong
             vs_code[vs_file->GetSize()] = '\0';
             fs_code[fs_file->GetSize()] = '\0';
 
-            // 2. 编译着色器
+            // 2. compile shaders
             s32 success;
             c8 infoLog[512];
 
-            // 顶点着色器
+            // vertex shader
             const u32 vertex = glCreateShader(GL_VERTEX_SHADER);
             glShaderSource(vertex, 1, &vs_code, nullptr);
             glCompileShader(vertex);
-            // 打印编译错误（如果有的话）
+            // check shader result
             glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
             if (!success)
             {
@@ -51,11 +76,11 @@ namespace kong
                 std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
             };
 
-            // 片段着色器也类似
+            // fragment shader
             const u32 fragment = glCreateShader(GL_FRAGMENT_SHADER);
             glShaderSource(fragment, 1, &fs_code, nullptr);
             glCompileShader(fragment);
-            // 打印编译错误（如果有的话）
+            // check shader result
             glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
             if (!success)
             {
@@ -63,12 +88,12 @@ namespace kong
                 std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
             };
 
-            // 着色器程序
+            // link shaders
             id_ = glCreateProgram();
             glAttachShader(id_, vertex);
             glAttachShader(id_, fragment);
             glLinkProgram(id_);
-            // 打印连接错误（如果有的话）
+            // check link result
             glGetProgramiv(id_, GL_LINK_STATUS, &success);
             if (!success)
             {
@@ -76,7 +101,7 @@ namespace kong
                 std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
             }
 
-            // 删除着色器，它们已经链接到我们的程序中了，已经不再需要了
+            // delete shaders
             glDeleteShader(vertex);
             glDeleteShader(fragment);
 

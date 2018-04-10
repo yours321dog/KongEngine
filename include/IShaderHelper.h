@@ -6,6 +6,7 @@
 
 #include <string>
 #include "KongTypes.h"
+#include "Matrix.h"
 
 namespace kong
 {
@@ -23,6 +24,7 @@ namespace kong
             virtual void SetBool(const std::string &name, bool value) const = 0;
             virtual void SetInt(const std::string &name, s32 value) const = 0;
             virtual void SetFloat(const std::string &name, f32 value) const = 0;
+            virtual void SetMatrix4(const std::string &name, const core::Matrixf &mat) const = 0;
         };
     } // end namespace video
 } // end namespace kong

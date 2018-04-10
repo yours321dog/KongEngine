@@ -43,6 +43,12 @@
     <Filter Include="KongEngine\io">
       <UniqueIdentifier>{bad835ea-170e-498c-8e09-d22c570de13f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KongEngine\video\OpenGL\shaders">
+      <UniqueIdentifier>{be02520e-b59c-4ab5-846b-696c1cfc1e38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine\video\Buring Video">
+      <UniqueIdentifier>{6ef5e153-4b2f-4826-8d5b-843b01b69742}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -83,6 +89,15 @@
     </ClCompile>
     <ClCompile Include="COpenGLShaderHelper.cpp">
       <Filter>KongEngine\video\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLShaderDriver.cpp">
+      <Filter>KongEngine\video\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="CImage.cpp">
+      <Filter>KongEngine\video\Null</Filter>
+    </ClCompile>
+    <ClCompile Include="CColorConverter.cpp">
+      <Filter>KongEngine\video\Null</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -215,5 +230,43 @@
     <ClInclude Include="..\..\include\IShaderHelper.h">
       <Filter>Include\video</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Map.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\COpenGLShaderDriver.h">
+      <Filter>KongEngine\video\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IImageLoader.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IImage.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Rect.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Position2D.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CImage.h">
+      <Filter>KongEngine\video\Null</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CBlit.h">
+      <Filter>KongEngine\video\Buring Video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SoftwareDriver2_helper.h">
+      <Filter>KongEngine\video\Buring Video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CColorConverter.h">
+      <Filter>KongEngine\video\Null</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\base.fs">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
+    <None Include="shaders\base.vs">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

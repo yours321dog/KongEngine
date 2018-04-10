@@ -101,5 +101,12 @@ namespace kong
             else
                 return _KONG_TEXT(" ");
         }
+
+        //! creates a filesystem which is able to open files from the ordinary file system,
+        //! and out of zipfiles, which are able to be added to the filesystem.
+        IFileSystem* CreateFileSystem()
+        {
+            return new CFileSystem();
+        }
     } // end namespace io
 } // end namespace kong

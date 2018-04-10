@@ -15,6 +15,7 @@ namespace kong
     kong::CKongDeviceStub::CKongDeviceStub(const SKongCreationParameters &param)
         : create_params_(param), close_(false), video_driver_(nullptr), scene_manager_(nullptr), user_receiver_(param.event_receiver_)
     {
+        file_system_ = io::CreateFileSystem();
     }
 
     kong::CKongDeviceStub::~CKongDeviceStub()

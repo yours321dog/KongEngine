@@ -163,7 +163,7 @@ void TestWindow()
     ISceneManager *smr = device->GetSceneManager();
 
     smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -2.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
-    ISceneNode *node = smr->AddCubeSceneNode(1.f, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f));
+    ISceneNode *node = smr->AddCubeSceneNode(1.f, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
 
     Vector3Df node_pos(0.f, 0.f, 0.f);
     f32 movement = 0.05;
@@ -188,6 +188,15 @@ void TestWindow()
         else if (receiver.IsKeyDown(kong::KEY_KEY_D))
         {
             node_pos.x_ += movement;
+        }
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_Q))
+        {
+            node_pos.z_ -= movement;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_E))
+        {
+            node_pos.z_ += movement;
         }
         node->SetPosition(node_pos);
 
@@ -222,10 +231,10 @@ int main()
     //TestArray();
     //TestS3DVertex();
     //TestList();
-    //TestWindow();
+    TestWindow();
     //TestReplace();
     //TestFindLastOf();
-    TestFileSystem();
+    //TestFileSystem();
     system("pause");
     return 0;
 }

@@ -7,9 +7,15 @@
 #include "SKongCreationParameters.h"
 #include "IVideoDriver.h"
 #include "IEventReceiver.h"
+#include "IFileSystem.h"
 
 namespace kong
 {
+    namespace io
+    {
+        IFileSystem* CreateFileSystem();
+    }
+
     namespace video
     {
         //IVideoDriver *CreateNullDriver(io::IFileSystem *io, const core::Vector2D<u32> &screen_size);
@@ -33,6 +39,8 @@ namespace kong
         video::IVideoDriver *video_driver_;
         scene::ISceneManager* scene_manager_;
         IEventReceiver *user_receiver_;
+
+        io::IFileSystem *file_system_;
     };
 
 } // end namespace kong

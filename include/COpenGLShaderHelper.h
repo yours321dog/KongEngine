@@ -12,11 +12,11 @@ namespace kong
 {
     namespace video
     {
-        class COpengGLShaderHelper : IShaderHelper
+        class COpenGLShaderHelper : IShaderHelper
         {
         public:
             // constructor
-            COpengGLShaderHelper(io::IFileSystem *file_system, const io::SPath &vertex_path, const io::SPath &fragment_path);
+            COpenGLShaderHelper(io::IFileSystem *file_system, const io::SPath &vertex_path, const io::SPath &fragment_path);
 
             // activate the shader
             void Use() override;
@@ -24,7 +24,8 @@ namespace kong
             // uniform set functions
             void SetBool(const std::string &name, bool value) const override;
             void SetInt(const std::string &name, s32 value) const override;
-            void SetFloat(const std::string &name, float value) const override;
+            void SetFloat(const std::string &name, f32 value) const override;
+            void SetMatrix4(const std::string &name, const core::Matrixf &mat) const override;
 
         private:
             void InitShader(const io::SPath &vertex_path, const io::SPath &fragment_path);
