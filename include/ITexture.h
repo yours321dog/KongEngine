@@ -125,12 +125,12 @@ namespace kong
             \return Returns a pointer to the pixel data. The format of the pixel can
             be determined by using getColorFormat(). 0 is returned, if
             the texture cannot be locked. */
-            virtual void* lock(E_TEXTURE_LOCK_MODE mode = ETLM_READ_WRITE, u32 mipmapLevel = 0) = 0;
+            virtual void* Lock(E_TEXTURE_LOCK_MODE mode = ETLM_READ_WRITE, u32 mipmapLevel = 0) = 0;
 
             //! Unlock function. Must be called after a lock() to the texture.
             /** One should avoid to call unlock more than once before another lock.
             The last locked mip level will be unlocked. */
-            virtual void unlock() = 0;
+            virtual void Unlock() = 0;
 
             //! Get original size of the texture.
             /** The texture is usually scaled, if it was created with an unoptimal
@@ -140,28 +140,28 @@ namespace kong
             exact size of the original texture. Use ITexture::getSize() if you want
             to know the real size it has now stored in the system.
             \return The original size of the texture. */
-            virtual const core::Dimension2d<u32>& getOriginalSize() const = 0;
+            virtual const core::Dimension2d<u32>& GetOriginalSize() const = 0;
 
             //! Get dimension (=size) of the texture.
             /** \return The size of the texture. */
-            virtual const core::Dimension2d<u32>& getSize() const = 0;
+            virtual const core::Dimension2d<u32>& GetSize() const = 0;
 
             //! Get driver type of texture.
             /** This is the driver, which created the texture. This method is used
             internally by the video devices, to check, if they may use a texture
             because textures may be incompatible between different devices.
             \return Driver type of texture. */
-            virtual E_DRIVER_TYPE getDriverType() const = 0;
+            virtual E_DRIVER_TYPE GetDriverType() const = 0;
 
             //! Get the color format of texture.
             /** \return The color format of texture. */
-            virtual ECOLOR_FORMAT getColorFormat() const = 0;
+            virtual ECOLOR_FORMAT GetColorFormat() const = 0;
 
             //! Get pitch of the main texture (in bytes).
             /** The pitch is the amount of bytes used for a row of pixels in a
             texture.
             \return Pitch of texture in bytes. */
-            virtual u32 getPitch() const = 0;
+            virtual u32 GetPitch() const = 0;
 
             //! Check whether the texture has MipMaps
             /** \return True if texture has MipMaps, else false. */
@@ -169,7 +169,7 @@ namespace kong
 
             //! Returns if the texture has an alpha channel
             virtual bool hasAlpha() const {
-                return getColorFormat() == video::ECF_A8R8G8B8 || getColorFormat() == video::ECF_A1R5G5B5;
+                return GetColorFormat() == video::ECF_A8R8G8B8 || GetColorFormat() == video::ECF_A1R5G5B5;
             }
 
             //! Regenerates the mip map levels of the texture.
@@ -179,7 +179,7 @@ namespace kong
             data. The data has to be a continuous pixel data for all mipmaps until
             1x1 pixel. Each mipmap has to be half the width and height of the previous
             level. At least one pixel will be always kept.*/
-            virtual void regenerateMipMapLevels(void* mipmapData = 0) = 0;
+            virtual void RegenerateMipMapLevels(void* mipmapData = 0) = 0;
 
             //! Check whether the texture is a render target
             /** Render targets can be set as such in the video driver, in order to

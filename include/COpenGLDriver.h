@@ -9,6 +9,8 @@
 #include <Windows.h>
 #include "SKongCreationParameters.h"
 #include "IFileSystem.h"
+#include "Array.h"
+#include "IImageLoader.h"
 
 
 namespace kong
@@ -47,6 +49,41 @@ namespace kong
 
             //! Draws a mesh buffer
             void DrawMeshBuffer(const scene::IMeshBuffer* mesh_buffer) override;
+
+            //! Creates an empty software image.
+            IImage* CreateImage(ECOLOR_FORMAT format, const core::Dimension2d<u32>& size) override;
+
+            //! Creates a software image by converting it to given format from another image.
+            IImage* CreateImage(ECOLOR_FORMAT format, IImage *imageToCopy) override;
+
+            //! Creates a software image from a file.
+            IImage* CreateImageFromFile(const io::path& filename) override;
+
+            //! Creates a software image from a file.
+            IImage* CreateImageFromFile(io::IReadFile* file) override;
+
+            //! Check if the image is already loaded.
+            ITexture* FindTexture(const io::path& filename) override;
+
+            //! Get access to a named texture.
+            ITexture* GetTexture(const io::path& filename) override;
+
+            //! Get access to a named texture.
+            ITexture* GetTexture(io::IReadFile* file) override;
+
+            //! Creates an empty texture of specified size.
+            ITexture* AddTexture(const core::Dimension2d<u32>& size,
+                const io::path& name, ECOLOR_FORMAT format = ECF_A8R8G8B8) override;
+
+            //! Creates a texture from an IImage.
+            ITexture* AddTexture(const io::path& name, IImage* image, void* mipmapData = nullptr) override;
+
+            //! returns a device dependent texture from a software surface (IImage)
+            //! THIS METHOD HAS TO BE OVERRIDDEN BY DERIVED DRIVERS WITH OWN TEXTURES
+            virtual video::ITexture* createDeviceDependentTexture(IImage* surface, const io::path& name, void* mipmapData = nullptr);
+
+            //! adds a surface, not loaded or created by the Irrlicht Engine
+            void AddTexture(video::ITexture* surface);
         protected:
             //! enumeration for rendering modes such as 2d and 3d for minizing the switching of renderStates.
             enum E_RENDER_MODE
@@ -56,8 +93,39 @@ namespace kong
                 ERM_3D		// 3d rendering mode
             };
 
+            struct SSurface
+            {
+                video::ITexture* Surface;
+
+                bool operator < (const SSurface& other) const
+                {
+                    return Surface->getName() < other.Surface->getName();
+                }
+            };
+
+            struct SDummyTexture : public ITexture
+            {
+                SDummyTexture(const io::path& name) : ITexture(name), size(0, 0) {};
+
+                virtual void* Lock(E_TEXTURE_LOCK_MODE mode = ETLM_READ_WRITE, u32 mipmapLevel = 0) { return 0; };
+                virtual void Unlock(){}
+                virtual const core::Dimension2d<u32>& GetOriginalSize() const { return size; }
+                virtual const core::Dimension2d<u32>& GetSize() const { return size; }
+                virtual E_DRIVER_TYPE GetDriverType() const { return video::EDT_NULL; }
+                virtual ECOLOR_FORMAT GetColorFormat() const { return video::ECF_A1R5G5B5; };
+                virtual u32 GetPitch() const { return 0; }
+                virtual void RegenerateMipMapLevels(void* mipmapData = nullptr) {};
+                core::Dimension2d<u32> size;
+            };
+
+            core::Array<SSurface> textures_;
+            core::Array<video::IImageLoader*> SurfaceLoader;
+
             //! clears the zbuffer and color buffer
             void ClearBuffers(bool back_buffer, bool z_buffer, bool stencil_buffer, SColor color);
+
+            //! opens the file and loads it into the surface
+            video::ITexture* LoadTextureFromFile(io::IReadFile* file, const io::path& hashName = "");
 
 #ifdef _KONG_WINDOWS_API_
             HDC hdc_; // Private GDI Device Context

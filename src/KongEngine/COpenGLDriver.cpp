@@ -6,6 +6,9 @@
 #include "GL/gl.h"
 //#include "GL/glew.h"
 #include "IMeshBuffer.h"
+#include "CImage.h"
+#include "COpenGLTexture.h"
+#include "IReadFile.h"
 
 namespace kong
 {
@@ -204,6 +207,94 @@ namespace kong
             glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         }
 
+        IImage* COpenGLDriver::CreateImage(ECOLOR_FORMAT format, const core::Dimension2d<u32>& size)
+        {
+            if (IImage::IsRenderTargetOnlyFormat(format))
+            {
+                //os::Printer::log("Could not create IImage, format only supported for render target textures.", ELL_WARNING);
+                return nullptr;
+            }
+
+            return new CImage(format, size);
+        }
+
+        IImage* COpenGLDriver::CreateImage(ECOLOR_FORMAT format, IImage* imageToCopy)
+        {
+            //os::Printer::log("Deprecated method, please create an empty image instead and use copyTo().", ELL_WARNING);
+            if (IImage::IsRenderTargetOnlyFormat(format))
+            {
+                //os::Printer::log("Could not create IImage, format only supported for render target textures.", ELL_WARNING);
+                return nullptr;
+            }
+
+            CImage* tmp = new CImage(format, imageToCopy->GetDimension());
+            imageToCopy->CopyTo(tmp);
+            return tmp;
+        }
+
+        //! Creates a software image from a file.
+        IImage* COpenGLDriver::CreateImageFromFile(const io::path& filename)
+        {
+            if (!filename.size())
+                return 0;
+
+            IImage* image = 0;
+            io::IReadFile* file = io_->CreateAndOpenFile(filename);
+
+            if (file)
+            {
+                image = CreateImageFromFile(file);
+                delete file;
+            }
+            else
+            {
+                //os::Printer::log("Could not open file of image", filename, ELL_WARNING);
+            }
+
+            return image;
+        }
+
+
+        //! Creates a software image from a file.
+        IImage* COpenGLDriver::CreateImageFromFile(io::IReadFile* file)
+        {
+            if (!file)
+                return 0;
+
+            IImage* image = 0;
+
+            s32 i;
+
+            // try to load file based on file extension
+            for (i = SurfaceLoader.Size() - 1; i >= 0; --i)
+            {
+                if (SurfaceLoader[i]->IsALoadableFileExtension(file->GetFileName()))
+                {
+                    // reset file position which might have changed due to previous loadImage calls
+                    file->Seek(0);
+                    image = SurfaceLoader[i]->LoadImage(file);
+                    if (image)
+                        return image;
+                }
+            }
+
+            // try to load file based on what is in it
+            for (i = SurfaceLoader.Size() - 1; i >= 0; --i)
+            {
+                // dito
+                file->Seek(0);
+                if (SurfaceLoader[i]->IsALoadableFileFormat(file))
+                {
+                    file->Seek(0);
+                    image = SurfaceLoader[i]->LoadImage(file);
+                    if (image)
+                        return image;
+                }
+            }
+
+            return 0; // failed to load
+        }
+
         void COpenGLDriver::ClearBuffers(bool back_buffer, bool z_buffer, bool stencil_buffer, SColor color)
         {
             GLbitfield mask = 0;
@@ -228,6 +319,187 @@ namespace kong
                 glClear(mask);
 
             glEnable(GL_DEPTH_TEST);
+        }
+
+        video::ITexture* COpenGLDriver::LoadTextureFromFile(io::IReadFile* file, const io::path& hashName)
+        {
+            ITexture* texture = 0;
+            IImage* image = CreateImageFromFile(file);
+
+            if (image)
+            {
+                // create texture from surface
+                texture = createDeviceDependentTexture(image, hashName.size() ? hashName : file->GetFileName());
+                //os::Printer::log("Loaded texture", file->getFileName());
+                //image->drop();
+                delete image;
+            }
+
+            return texture;
+        }
+
+        //! looks if the image is already loaded
+        video::ITexture* COpenGLDriver::FindTexture(const io::path& filename)
+        {
+            SSurface s;
+            SDummyTexture dummy(filename);
+            s.Surface = &dummy;
+
+            s32 index = textures_.BinarySearch(s);
+            if (index != -1)
+                return textures_[index].Surface;
+
+            return 0;
+        }
+
+        //! loads a Texture
+        ITexture* COpenGLDriver::GetTexture(const io::path& filename)
+        {
+            // Identify textures by their absolute filenames if possible.
+            const io::path absolutePath = io_->GetAbsolutePath(filename);
+
+            ITexture* texture = FindTexture(absolutePath);
+            if (texture)
+                return texture;
+
+            // Then try the raw filename, which might be in an Archive
+            texture = FindTexture(filename);
+            if (texture)
+                return texture;
+
+            // Now try to open the file using the complete path.
+            io::IReadFile* file = io_->CreateAndOpenFile(absolutePath);
+
+            if (!file)
+            {
+                // Try to open it using the raw filename.
+                file = io_->CreateAndOpenFile(filename);
+            }
+
+            if (file)
+            {
+                // Re-check name for actual archive names
+                texture = FindTexture(file->GetFileName());
+                if (texture)
+                {
+                    delete file;
+                    return texture;
+                }
+
+                texture = LoadTextureFromFile(file);
+                delete file;
+
+                if (texture)
+                {
+                    AddTexture(texture);
+                    //texture->drop(); // drop it because we created it, one grab too much
+                }
+                else
+                {
+                    //os::Printer::log("Could not load texture", filename, ELL_ERROR);
+                }
+                return texture;
+            }
+            else
+            {
+                //os::Printer::log("Could not open file of texture", filename, ELL_WARNING);
+                return 0;
+            }
+        }
+
+
+        //! loads a Texture
+        ITexture* COpenGLDriver::GetTexture(io::IReadFile* file)
+        {
+            ITexture* texture = 0;
+
+            if (file)
+            {
+                texture = FindTexture(file->GetFileName());
+
+                if (texture)
+                    return texture;
+
+                texture = LoadTextureFromFile(file);
+
+                if (texture)
+                {
+                    AddTexture(texture);
+                    //texture->drop(); // drop it because we created it, one grab too much
+                }
+
+                if (!texture)
+                {
+                    //os::Printer::log("Could not load texture", file->getFileName(), ELL_WARNING);
+                }
+            }
+
+            return texture;
+        }
+
+        //! Creates a texture from a loaded IImage.
+        ITexture* COpenGLDriver::AddTexture(const io::path& name, IImage* image, void* mipmapData)
+        {
+            if (0 == name.size() || !image)
+                return nullptr;
+
+            ITexture* t = createDeviceDependentTexture(image, name, mipmapData);
+            if (t)
+            {
+                AddTexture(t);
+                //t->drop();
+            }
+            return t;
+        }
+
+        video::ITexture* COpenGLDriver::createDeviceDependentTexture(IImage* surface, const io::path& name, void* mipmapData)
+        {
+            return new COpenGLTexture(surface, name, mipmapData, this);
+        }
+
+        //! creates a Texture
+        ITexture* COpenGLDriver::AddTexture(const core::Dimension2d<u32>& size,
+            const io::path& name, ECOLOR_FORMAT format)
+        {
+            if (IImage::IsRenderTargetOnlyFormat(format))
+            {
+                //os::Printer::log("Could not create ITexture, format only supported for render target textures.", ELL_WARNING);
+                return 0;
+            }
+
+            if (0 == name.size())
+                return 0;
+
+            IImage* image = new CImage(format, size);
+            ITexture* t = createDeviceDependentTexture(image, name);
+            //image->drop();
+            delete image;
+            AddTexture(t);
+
+            //if (t)
+            //    t->drop();
+
+            return t;
+        }
+
+        //! adds a surface, not loaded or created by the Irrlicht Engine
+        void COpenGLDriver::AddTexture(video::ITexture* texture)
+        {
+            if (texture)
+            {
+                SSurface s;
+                s.Surface = texture;
+                //texture->grab();
+
+                textures_.PushBack(s);
+
+                // the new texture is now at the end of the texture list. when searching for
+                // the next new texture, the texture array will be sorted and the index of this texture
+                // will be changed. to let the order be more consistent to the user, sort
+                // the textures now already although this isn't necessary:
+
+                textures_.Sort();
+            }
         }
     } // end namespace video
 } // end namespace kong

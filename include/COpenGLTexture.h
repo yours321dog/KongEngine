@@ -57,25 +57,25 @@ namespace kong
             virtual ~COpenGLTexture();
 
             //! lock function
-            virtual void* lock(E_TEXTURE_LOCK_MODE mode = ETLM_READ_WRITE, u32 mipmapLevel = 0);
+            virtual void* Lock(E_TEXTURE_LOCK_MODE mode = ETLM_READ_WRITE, u32 mipmapLevel = 0);
 
             //! unlock function
-            virtual void unlock();
+            virtual void Unlock();
 
             //! Returns original size of the texture (image).
-            virtual const core::Dimension2d<u32>& getOriginalSize() const;
+            virtual const core::Dimension2d<u32>& GetOriginalSize() const;
 
             //! Returns size of the texture.
-            virtual const core::Dimension2d<u32>& getSize() const;
+            virtual const core::Dimension2d<u32>& GetSize() const;
 
             //! returns driver type of texture (=the driver, that created it)
-            virtual E_DRIVER_TYPE getDriverType() const;
+            virtual E_DRIVER_TYPE GetDriverType() const;
 
             //! returns color format of texture
-            virtual ECOLOR_FORMAT getColorFormat() const;
+            virtual ECOLOR_FORMAT GetColorFormat() const;
 
             //! returns pitch of texture (in bytes)
-            virtual u32 getPitch() const;
+            virtual u32 GetPitch() const;
 
             //! return open gl texture name
             GLuint getOpenGLTextureName() const;
@@ -86,7 +86,7 @@ namespace kong
             //! Regenerates the mip map levels of the texture.
             /** Useful after locking and modifying the texture
             \param mipmapData Pointer to raw mipmap data, including all necessary mip levels, in the same format as the main texture image. If not set the mipmaps are derived from the main image. */
-            virtual void regenerateMipMapLevels(void* mipmapData = 0);
+            virtual void RegenerateMipMapLevels(void* mipmapData = 0);
 
             //! Is it a render target?
             virtual bool isRenderTarget() const;
@@ -122,24 +122,24 @@ namespace kong
             /** \param newTexture True if method is called for a newly created texture for the first time. Otherwise call with false to improve memory handling.
             \param mipmapData Pointer to raw mipmap data, including all necessary mip levels, in the same format as the main texture image.
             \param mipLevel If set to non-zero, only that specific miplevel is updated, using the MipImage member. */
-            void uploadTexture(bool newTexture = false, void* mipmapData = 0, u32 mipLevel = 0);
+            void UploadTexture(bool newTexture = false, void* mipmapData = 0, u32 mipLevel = 0);
 
-            core::Dimension2d<u32> ImageSize;
-            core::Dimension2d<u32> TextureSize;
+            core::Dimension2d<u32> image_size_;
+            core::Dimension2d<u32> texture_size_;
             ECOLOR_FORMAT ColorFormat;
-            COpenGLDriver* Driver;
-            IImage* Image;
+            COpenGLDriver* driver_;
+            IImage* image_;
             IImage* MipImage;
 
-            GLuint TextureName;
+            GLuint texture_name_;
             GLint InternalFormat;
             GLenum PixelFormat;
             GLenum PixelType;
 
             u8 MipLevelStored;
-            bool HasMipMaps;
+            bool has_mip_maps_;
             bool MipmapLegacyMode;
-            bool IsRenderTarget;
+            bool is_render_target_;
             bool AutomaticMipmapUpdate;
             bool ReadOnlyLock;
             bool KeepImage;

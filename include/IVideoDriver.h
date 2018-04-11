@@ -5,9 +5,18 @@
 #define _I_VIDEO_DRIVER_H_
 #include "SColor.h"
 #include "Matrix.h"
+#include "ITexture.h"
 
 namespace kong
 {
+    namespace io
+    {
+        //class IAttributes;
+        //struct SAttributeReadWriteOptions;
+        class IReadFile;
+        class IWriteFile;
+    } // end namespace io
+
     namespace scene
     {
         class IMeshBuffer;
@@ -121,6 +130,102 @@ namespace kong
             //! Draws a mesh buffer
             /** \param mb Buffer to draw */
             virtual void DrawMeshBuffer(const scene::IMeshBuffer* mb) = 0;
+
+            //! Creates an empty software image.
+            /**
+            \param format Desired color format of the image.
+            \param size Size of the image to create.
+            \return The created image.
+            If you no longer need the image, you should call IImage::drop().
+            See IReferenceCounted::drop() for more information. */
+            virtual IImage* CreateImage(ECOLOR_FORMAT format, const core::Dimension2d<u32>& size) = 0;
+
+            //! Creates a software image by converting it to given format from another image.
+            /** \deprecated Create an empty image and use copyTo(). This method may be removed by Irrlicht 1.9.
+            \param format Desired color format of the image.
+            \param imageToCopy Image to copy to the new image.
+            \return The created image.
+            If you no longer need the image, you should call IImage::drop().
+            See IReferenceCounted::drop() for more information. */
+            _KONG_DEPRECATED_ virtual IImage* CreateImage(ECOLOR_FORMAT format, IImage *imageToCopy) = 0;
+
+            //! Creates a software image from a file.
+            /** No hardware texture will be created for this image. This
+            method is useful for example if you want to read a heightmap
+            for a terrain renderer.
+            \param filename Name of the file from which the image is
+            created.
+            \return The created image.
+            If you no longer need the image, you should call IImage::drop().
+            See IReferenceCounted::drop() for more information. */
+            virtual IImage* CreateImageFromFile(const io::path& filename) = 0;
+
+            //! Creates a software image from a file.
+            /** No hardware texture will be created for this image. This
+            method is useful for example if you want to read a heightmap
+            for a terrain renderer.
+            \param file File from which the image is created.
+            \return The created image.
+            If you no longer need the image, you should call IImage::drop().
+            See IReferenceCounted::drop() for more information. */
+            virtual IImage* CreateImageFromFile(io::IReadFile* file) = 0;
+
+            //! Get access to a named texture.
+            /** Loads the texture from disk if it is not
+            already loaded and generates mipmap levels if desired.
+            Texture loading can be influenced using the
+            setTextureCreationFlag() method. The texture can be in several
+            imageformats, such as BMP, JPG, TGA, PCX, PNG, and PSD.
+            \param filename Filename of the texture to be loaded.
+            \return Pointer to the texture, or 0 if the texture
+            could not be loaded. This pointer should not be dropped. See
+            IReferenceCounted::drop() for more information. */
+            virtual ITexture* GetTexture(const io::path& filename) = 0;
+
+            //! Get access to a named texture.
+            /** Loads the texture from disk if it is not
+            already loaded and generates mipmap levels if desired.
+            Texture loading can be influenced using the
+            setTextureCreationFlag() method. The texture can be in several
+            imageformats, such as BMP, JPG, TGA, PCX, PNG, and PSD.
+            \param file Pointer to an already opened file.
+            \return Pointer to the texture, or 0 if the texture
+            could not be loaded. This pointer should not be dropped. See
+            IReferenceCounted::drop() for more information. */
+            virtual ITexture* GetTexture(io::IReadFile* file) = 0;
+
+            //! Check if the image is already loaded.
+            /** Works similar to getTexture(), but does not load the texture
+            if it is not currently loaded.
+            \param filename Name of the texture.
+            \return Pointer to loaded texture, or 0 if not found. */
+            virtual video::ITexture* FindTexture(const io::path& filename) = 0;
+
+            //! Creates an empty texture of specified size.
+            /** \param size: Size of the texture.
+            \param name A name for the texture. Later calls to
+            getTexture() with this name will return this texture
+            \param format Desired color format of the texture. Please note
+            that the driver may choose to create the texture in another
+            color format.
+            \return Pointer to the newly created texture. This pointer
+            should not be dropped. See IReferenceCounted::drop() for more
+            information. */
+            virtual ITexture* AddTexture(const core::Dimension2d<u32>& size,
+                const io::path& name, ECOLOR_FORMAT format = ECF_A8R8G8B8) = 0;
+
+            //! Creates a texture from an IImage.
+            /** \param name A name for the texture. Later calls of
+            getTexture() with this name will return this texture
+            \param image Image the texture is created from.
+            \param mipmapData Optional pointer to a set of images which
+            build up the whole mipmap set. Must be images of the same color
+            type as image. If this parameter is not given, the mipmaps are
+            derived from image.
+            \return Pointer to the newly created texture. This pointer
+            should not be dropped. See IReferenceCounted::drop() for more
+            information. */
+            virtual ITexture* AddTexture(const io::path& name, IImage* image, void* mipmapData = nullptr) = 0;
         };
     }
 }

@@ -5,6 +5,7 @@
 #define _ARRAY_H_
 
 #include "KongMath.h"
+#include "Heapsort.h"
 
 namespace kong
 {
@@ -38,6 +39,13 @@ namespace kong
             T *Pointer();
             const T *ConstPointer() const;
 
+            void Sort();
+
+            s32 BinarySearch(const T &element);
+            s32 BinarySearch(const T &element) const;
+
+            s32 BinarySearch(const T &element, s32 left, s32 right) const;
+            s32 LinearSearch(const T& element) const;
 
         private:
             void Reallocted(u32 times = 2);
@@ -241,6 +249,68 @@ namespace kong
         const T* Array<T>::ConstPointer() const
         {
             return data_;
+        }
+
+        template <typename T>
+        void Array<T>::Sort()
+        {
+            Heapsort(data_, size_);
+        }
+
+        template <typename T>
+        s32 Array<T>::BinarySearch(const T& element)
+        {
+            Sort();
+            return BinarySearch(element, 0, size_ - 1);
+        }
+
+        template <typename T>
+        s32 Array<T>::BinarySearch(const T& element) const
+        {
+            return LinearSearch(element, 0, used - 1);
+        }
+
+        template <typename T>
+        s32 Array<T>::BinarySearch(const T& element, s32 left, s32 right) const
+        {
+            if (!size_)
+                return -1;
+
+            s32 m;
+
+            do
+            {
+                m = (left + right) >> 1;
+
+                if (element < data_[m])
+                    right = m - 1;
+                else
+                    left = m + 1;
+
+            } while ((element < data_[m] || data_[m] < element) && left <= right);
+            // this last line equals to:
+            // " while((element != array[m]) && left<=right);"
+            // but we only want to use the '<' operator.
+            // the same in next line, it is "(element == array[m])"
+
+
+            if (!(element < data_[m]) && !(data_[m] < element))
+                return m;
+
+            return -1;
+        }
+
+        template <typename T>
+        s32 Array<T>::LinearSearch(const T& element) const
+        {
+            for (u32 i = 0; i < size_; i++)
+            {
+                if (element == data_[i])
+                {
+                    return static_cast<s32>(i);
+                }
+            }
+            return -1;
         }
     } // end namespace core
 } // end namespace kong
