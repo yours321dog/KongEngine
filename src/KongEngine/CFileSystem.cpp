@@ -38,15 +38,11 @@ namespace kong
             tmp.replace(L'\\', L'/');
 #else
             p = _fullpath(fpath, filename.c_str(), _MAX_PATH);
-            std::string tmp(p);
-            int idx = -1;
-            while ((idx = tmp.find('\\')) >= 0)
-            {
-                tmp.replace(idx, 1, "/");
-            }
+            core::stringc tmp(p);
+            tmp.replace('\\', '/');
 #endif
             return tmp;
-#elif (defined(_IRR_POSIX_API_) || defined(_IRR_OSX_PLATFORM_))
+#elif (defined(_KONG_POSIX_API_) || defined(_KONG_OSX_PLATFORM_))
             c8* p = 0;
             c8 fpath[4096];
             fpath[0] = 0;
@@ -56,28 +52,30 @@ namespace kong
                 // content in fpath is unclear at this point
                 if (!fpath[0]) // seems like fpath wasn't altered, use our best guess
                 {
-                    io::path tmp(filename);
+                    io::SPath tmp(filename);
                     return flattenFilename(tmp);
                 }
                 else
-                    return io::path(fpath);
+                    return io::SPath(fpath);
             }
             if (filename[filename.size() - 1] == '/')
-                return io::path(p) + _IRR_TEXT("/");
+                return io::SPath(p) + _KONG_TEXT("/");
             else
-                return io::path(p);
+                return io::SPath(p);
 #else
-            return io::path(filename);
+            return io::SPath(filename);
 #endif
         }
 
         SPath CFileSystem::GetFileDir(const SPath& filename) const
         {
             // find last forward or backslash
-            const u32 last_slash = filename.find_last_of("/\\");
+            s32 lastSlash = filename.findLast('/');
+            const s32 lastBackSlash = filename.findLast('\\');
+            lastSlash = lastSlash > lastBackSlash ? lastSlash : lastBackSlash;
 
-            if (static_cast<u32>(last_slash) < filename.size())
-                return filename.substr(0, last_slash);
+            if (static_cast<u32>(lastSlash) < filename.size())
+                return filename.subString(0, lastSlash);
             else
                 return _KONG_TEXT(".");
         }
@@ -85,21 +83,29 @@ namespace kong
         SPath CFileSystem::GetFileBasename(const SPath& filename, bool keepExtension) const
         {
             // find last forward or backslash
-            const u32 last_slash = filename.find_last_of("/\\");
+            s32 last_slash = filename.findLast('/');
+            const s32 last_back_slash = filename.findLast('\\');
+            last_slash = core::max_(last_slash, last_back_slash);
+
+            // get number of chars after last dot
+            s32 end = 0;
+            if (!keepExtension)
+            {
+                // take care to search only after last slash to check only for
+                // dots in the filename
+                end = filename.findLast('.');
+                if (end == -1 || end < last_slash)
+                    end = 0;
+                else
+                    end = filename.size() - end;
+            }
 
             if (static_cast<u32>(last_slash) < filename.size())
-            {
-                const u32 last_ext = filename.find_last_of('.');
-
-                if (keepExtension || last_ext < last_slash)
-                {
-                    return filename.substr(last_slash + 1);
-                }
-
-                return filename.substr(last_slash + 1, last_ext - last_slash);
-            }
+                return filename.subString(last_slash + 1, filename.size() - last_slash - 1 - end);
+            else if (end != 0)
+                return filename.subString(0, filename.size() - end);
             else
-                return _KONG_TEXT(" ");
+                return filename;
         }
 
         //! creates a filesystem which is able to open files from the ordinary file system,

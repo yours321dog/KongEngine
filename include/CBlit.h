@@ -163,8 +163,8 @@ namespace kong
     {
         clipping.x0 = 0;
         clipping.y0 = 0;
-        clipping.x1 = t->getDimension().width_ - 1;
-        clipping.y1 = t->getDimension().height_ - 1;
+        clipping.x1 = t->GetDimension().width_ - 1;
+        clipping.y1 = t->GetDimension().height_ - 1;
     }
 
     /*
@@ -224,7 +224,7 @@ namespace kong
         s32 run;
 
         s32 xInc = 4;
-        s32 yInc = (s32)t->getPitch();
+        s32 yInc = (s32)t->GetPitch();
 
         if (dx < 0)
         {
@@ -239,7 +239,7 @@ namespace kong
         }
 
         u32 *dst;
-        dst = (u32*)((u8*)t->lock() + (p0.y_ * t->getPitch()) + (p0.x_ << 2));
+        dst = (u32*)((u8*)t->Lock() + (p0.y_ * t->GetPitch()) + (p0.x_ << 2));
 
         if (dy > dx)
         {
@@ -270,7 +270,7 @@ namespace kong
             run -= 1;
         } while (run >= 0);
 
-        t->unlock();
+        t->Unlock();
     }
 
 
@@ -290,7 +290,7 @@ namespace kong
         s32 run;
 
         s32 xInc = 4;
-        s32 yInc = (s32)t->getPitch();
+        s32 yInc = (s32)t->GetPitch();
 
         if (dx < 0)
         {
@@ -305,7 +305,7 @@ namespace kong
         }
 
         u32 *dst;
-        dst = (u32*)((u8*)t->lock() + (p0.y_ * t->getPitch()) + (p0.x_ << 2));
+        dst = (u32*)((u8*)t->Lock() + (p0.y_ * t->GetPitch()) + (p0.x_ << 2));
 
         if (dy > dx)
         {
@@ -337,7 +337,7 @@ namespace kong
             run -= 1;
         } while (run >= 0);
 
-        t->unlock();
+        t->Unlock();
     }
 
     /*
@@ -356,7 +356,7 @@ namespace kong
         s32 run;
 
         s32 xInc = 2;
-        s32 yInc = (s32)t->getPitch();
+        s32 yInc = (s32)t->GetPitch();
 
         if (dx < 0)
         {
@@ -371,7 +371,7 @@ namespace kong
         }
 
         u16 *dst;
-        dst = (u16*)((u8*)t->lock() + (p0.y_ * t->getPitch()) + (p0.x_ << 1));
+        dst = (u16*)((u8*)t->Lock() + (p0.y_ * t->GetPitch()) + (p0.x_ << 1));
 
         if (dy > dx)
         {
@@ -402,7 +402,7 @@ namespace kong
             run -= 1;
         } while (run >= 0);
 
-        t->unlock();
+        t->Unlock();
     }
 
     /*
@@ -422,7 +422,7 @@ namespace kong
         s32 run;
 
         s32 xInc = 2;
-        s32 yInc = (s32)t->getPitch();
+        s32 yInc = (s32)t->GetPitch();
 
         if (dx < 0)
         {
@@ -437,7 +437,7 @@ namespace kong
         }
 
         u16 *dst;
-        dst = (u16*)((u8*)t->lock() + (p0.y_ * t->getPitch()) + (p0.x_ << 1));
+        dst = (u16*)((u8*)t->Lock() + (p0.y_ * t->GetPitch()) + (p0.x_ << 1));
 
         if (dy > dx)
         {
@@ -469,7 +469,7 @@ namespace kong
             run -= 1;
         } while (run >= 0);
 
-        t->unlock();
+        t->Unlock();
     }
 
 
@@ -1038,8 +1038,8 @@ namespace kong
 
     static inline tExecuteBlit getBlitter2(eBlitter operation, const video::IImage * dest, const video::IImage * source)
     {
-        video::ECOLOR_FORMAT sourceFormat = (video::ECOLOR_FORMAT) (source ? source->getColorFormat() : -1);
-        video::ECOLOR_FORMAT destFormat = (video::ECOLOR_FORMAT) (dest ? dest->getColorFormat() : -1);
+        video::ECOLOR_FORMAT sourceFormat = (video::ECOLOR_FORMAT) (source ? source->GetColorFormat() : -1);
+        video::ECOLOR_FORMAT destFormat = (video::ECOLOR_FORMAT) (dest ? dest->GetColorFormat() : -1);
 
         const blitterTable * b = blitTable;
 
@@ -1073,8 +1073,8 @@ namespace kong
             return;
         }
 
-        const s32 w = tex ? tex->getDimension().width_ : 0;
-        const s32 h = tex ? tex->getDimension().height_ : 0;
+        const s32 w = tex ? tex->GetDimension().width_ : 0;
+        const s32 h = tex ? tex->GetDimension().height_ : 0;
         if (clip)
         {
             out.x0 = core::s32_clamp(clip->UpperLeftCorner.x_, 0, w);
@@ -1139,27 +1139,27 @@ namespace kong
 
         if (source)
         {
-            job.srcPitch = source->getPitch();
-            job.srcPixelMul = source->getBytesPerPixel();
-            job.src = (void*)((u8*)source->lock() + (job.Source.y0 * job.srcPitch) + (job.Source.x0 * job.srcPixelMul));
+            job.srcPitch = source->GetPitch();
+            job.srcPixelMul = source->GetBytesPerPixel();
+            job.src = (void*)((u8*)source->Lock() + (job.Source.y0 * job.srcPitch) + (job.Source.x0 * job.srcPixelMul));
         }
         else
         {
             // use srcPitch for color operation on dest
-            job.srcPitch = job.width * dest->getBytesPerPixel();
+            job.srcPitch = job.width * dest->GetBytesPerPixel();
         }
 
-        job.dstPitch = dest->getPitch();
-        job.dstPixelMul = dest->getBytesPerPixel();
-        job.dst = (void*)((u8*)dest->lock() + (job.Dest.y0 * job.dstPitch) + (job.Dest.x0 * job.dstPixelMul));
+        job.dstPitch = dest->GetPitch();
+        job.dstPixelMul = dest->GetBytesPerPixel();
+        job.dst = (void*)((u8*)dest->Lock() + (job.Dest.y0 * job.dstPitch) + (job.Dest.x0 * job.dstPixelMul));
 
         blitter(&job);
 
         if (source)
-            source->unlock();
+            source->Unlock();
 
         if (dest)
-            dest->unlock();
+            dest->Unlock();
 
         return 1;
     }
@@ -1193,27 +1193,27 @@ namespace kong
 
         if (source)
         {
-            job.srcPitch = source->getPitch();
-            job.srcPixelMul = source->getBytesPerPixel();
-            job.src = (void*)((u8*)source->lock() + (job.Source.y0 * job.srcPitch) + (job.Source.x0 * job.srcPixelMul));
+            job.srcPitch = source->GetPitch();
+            job.srcPixelMul = source->GetBytesPerPixel();
+            job.src = (void*)((u8*)source->Lock() + (job.Source.y0 * job.srcPitch) + (job.Source.x0 * job.srcPixelMul));
         }
         else
         {
             // use srcPitch for color operation on dest
-            job.srcPitch = job.width * dest->getBytesPerPixel();
+            job.srcPitch = job.width * dest->GetBytesPerPixel();
         }
 
-        job.dstPitch = dest->getPitch();
-        job.dstPixelMul = dest->getBytesPerPixel();
-        job.dst = (void*)((u8*)dest->lock() + (job.Dest.y0 * job.dstPitch) + (job.Dest.x0 * job.dstPixelMul));
+        job.dstPitch = dest->GetPitch();
+        job.dstPixelMul = dest->GetBytesPerPixel();
+        job.dst = (void*)((u8*)dest->Lock() + (job.Dest.y0 * job.dstPitch) + (job.Dest.x0 * job.dstPixelMul));
 
         blitter(&job);
 
         if (source)
-            source->unlock();
+            source->Unlock();
 
         if (dest)
-            dest->unlock();
+            dest->Unlock();
 
         return 1;
     }
@@ -1240,7 +1240,7 @@ namespace kong
         {
             u32 alpha = extractAlpha(color.color_);
 
-            switch (img->getColorFormat())
+            switch (img->GetColorFormat())
             {
             case video::ECF_A1R5G5B5:
                 if (alpha == 256)

@@ -33,90 +33,90 @@ namespace kong
             virtual ~CImage();
 
             //! Lock function.
-            virtual void* lock()
+            virtual void* Lock()
             {
-                return Data;
+                return data_;
             }
 
             //! Unlock function.
-            virtual void unlock() {}
+            virtual void Unlock() {}
 
             //! Returns width and height of image data.
-            virtual const core::Dimension2d<u32>& getDimension() const;
+            virtual const core::Dimension2d<u32>& GetDimension() const;
 
             //! Returns bits per pixel.
-            virtual u32 getBitsPerPixel() const;
+            virtual u32 GetBitsPerPixel() const;
 
             //! Returns bytes per pixel
-            virtual u32 getBytesPerPixel() const;
+            virtual u32 GetBytesPerPixel() const;
 
             //! Returns image data size in bytes
-            virtual u32 getImageDataSizeInBytes() const;
+            virtual u32 GetImageDataSizeInBytes() const;
 
             //! Returns image data size in pixels
-            virtual u32 getImageDataSizeInPixels() const;
+            virtual u32 GetImageDataSizeInPixels() const;
 
             //! returns mask for red value of a pixel
-            virtual u32 getRedMask() const;
+            virtual u32 GetRedMask() const;
 
             //! returns mask for green value of a pixel
-            virtual u32 getGreenMask() const;
+            virtual u32 GetGreenMask() const;
 
             //! returns mask for blue value of a pixel
-            virtual u32 getBlueMask() const;
+            virtual u32 GetBlueMask() const;
 
             //! returns mask for alpha value of a pixel
-            virtual u32 getAlphaMask() const;
+            virtual u32 GetAlphaMask() const;
 
             //! returns a pixel
-            virtual SColor getPixel(u32 x, u32 y) const;
+            virtual SColor GetPixel(u32 x, u32 y) const;
 
             //! sets a pixel
-            virtual void setPixel(u32 x, u32 y, const SColor &color, bool blend = false);
+            virtual void SetPixel(u32 x, u32 y, const SColor &color, bool blend = false);
 
             //! returns the color format
-            virtual ECOLOR_FORMAT getColorFormat() const;
+            virtual ECOLOR_FORMAT GetColorFormat() const;
 
             //! returns pitch of image
-            virtual u32 getPitch() const { return Pitch; }
+            virtual u32 GetPitch() const { return pitch_; }
 
             //! copies this surface into another, scaling it to fit.
-            virtual void copyToScaling(void* target, u32 width, u32 height, ECOLOR_FORMAT format, u32 pitch = 0);
+            virtual void CopyToScaling(void* target, u32 width, u32 height, ECOLOR_FORMAT format, u32 pitch = 0);
 
             //! copies this surface into another, scaling it to fit.
-            virtual void copyToScaling(IImage* target);
+            virtual void CopyToScaling(IImage* target);
 
             //! copies this surface into another
-            virtual void copyTo(IImage* target, const core::position2d<s32>& pos = core::position2d<s32>(0, 0));
+            virtual void CopyTo(IImage* target, const core::position2d<s32>& pos = core::position2d<s32>(0, 0));
 
             //! copies this surface into another
-            virtual void copyTo(IImage* target, const core::position2d<s32>& pos, const core::rect<s32>& sourceRect, const core::rect<s32>* clipRect = 0);
+            virtual void CopyTo(IImage* target, const core::position2d<s32>& pos, const core::rect<s32>& sourceRect, const core::rect<s32>* clipRect = 0);
 
             //! copies this surface into another, using the alpha mask, an cliprect and a color to add with
-            virtual void copyToWithAlpha(IImage* target, const core::position2d<s32>& pos,
+            virtual void CopyToWithAlpha(IImage* target, const core::position2d<s32>& pos,
                 const core::rect<s32>& sourceRect, const SColor &color,
                 const core::rect<s32>* clipRect = 0);
 
             //! copies this surface into another, scaling it to fit, appyling a box filter
-            virtual void copyToScalingBoxFilter(IImage* target, s32 bias = 0, bool blend = false);
+            virtual void CopyToScalingBoxFilter(IImage* target, s32 bias = 0, bool blend = false);
 
             //! fills the surface with given color
-            virtual void fill(const SColor &color);
+            virtual void Fill(const SColor &color);
 
         private:
 
             //! assumes format and size has been set and creates the rest
-            void initData();
+            void InitData();
 
-            inline SColor getPixelBox(s32 x, s32 y, s32 fx, s32 fy, s32 bias) const;
+            inline SColor GetPixelBox(s32 x, s32 y, s32 fx, s32 fy, s32 bias) const;
 
-            u8* Data;
-            core::Dimension2d<u32> Size;
-            u32 BytesPerPixel;
-            u32 Pitch;
-            ECOLOR_FORMAT Format;
+            u8* data_;
+            core::Dimension2d<u32> size_;
+            u32 bytes_per_pixel_;
+            u32 pitch_;
+            ECOLOR_FORMAT format_;
 
-            bool DeleteMemory;
+            bool delete_memory_;
         };
 
     } // end namespace video

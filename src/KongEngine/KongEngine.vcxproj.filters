@@ -49,6 +49,21 @@
     <Filter Include="KongEngine\video\Buring Video">
       <UniqueIdentifier>{6ef5e153-4b2f-4826-8d5b-843b01b69742}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KongEngine\video\Null\Loader">
+      <UniqueIdentifier>{e748ee8e-8de2-45c1-ac8d-0daaacf8ccf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine\kong\extern">
+      <UniqueIdentifier>{1e8865f1-24cd-4d8c-8f38-a83b49a5c076}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine\kong\extern\jpeglib">
+      <UniqueIdentifier>{01c9f68b-b7e4-4f13-b6e7-17f5ee6f48b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine\kong\extern\libpng">
+      <UniqueIdentifier>{f894ee42-be9b-4736-b6da-1a50cb54f603}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KongEngine\kong\extern\zlib">
+      <UniqueIdentifier>{bd9a89f4-7047-4a7a-ac46-0a53dc51fba4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -98,6 +113,228 @@
     </ClCompile>
     <ClCompile Include="CColorConverter.cpp">
       <Filter>KongEngine\video\Null</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jaricom.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcapimin.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcapistd.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcarith.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jccoefct.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jccolor.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcdctmgr.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jchuff.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcinit.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcmainct.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcmarker.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcmaster.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcomapi.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcparam.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcprepct.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jcsample.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jctrans.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdapimin.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdapistd.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdarith.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdatadst.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdatasrc.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdcoefct.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdcolor.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jddctmgr.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdhuff.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdinput.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmainct.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmarker.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmaster.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdmerge.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdpostct.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdsample.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jdtrans.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jerror.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jfdctflt.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jfdctfst.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jfdctint.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jidctflt.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jidctfst.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jidctint.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jmemmgr.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jmemnobs.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jquant1.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jquant2.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\jutils.c">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\png.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngerror.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngget.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngmem.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngpread.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngread.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngrio.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngrtran.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngrutil.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngset.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngtrans.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngwio.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngwrite.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngwtran.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="libpng\pngwutil.c">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\adler32.c">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\compress.c">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\crc32.c">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\deflate.c">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inffast.c">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inflate.c">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inftrees.c">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\trees.c">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\uncompr.c">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\zutil.c">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderPng.cpp">
+      <Filter>KongEngine\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="CImageLoaderJpg.cpp">
+      <Filter>KongEngine\video\Null\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLTexture.cpp">
+      <Filter>KongEngine\video\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,9 +443,6 @@
     <ClInclude Include="..\..\include\IFileSystem.h">
       <Filter>Include\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\SPath.h">
-      <Filter>Include\scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\IReadFile.h">
       <Filter>Include\io</Filter>
     </ClInclude>
@@ -259,6 +493,96 @@
     </ClInclude>
     <ClInclude Include="..\..\include\CColorConverter.h">
       <Filter>KongEngine\video\Null</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CImageLoaderPng.h">
+      <Filter>KongEngine\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CImageLoaderJpg.h">
+      <Filter>KongEngine\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\cderror.h">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jconfig.h">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jdct.h">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jerror.h">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jinclude.h">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jmemsys.h">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jmorecfg.h">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jpegint.h">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jpeglib.h">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\jversion.h">
+      <Filter>KongEngine\kong\extern\jpeglib</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\png.h">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="libpng\pngconf.h">
+      <Filter>KongEngine\kong\extern\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\crc32.h">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\deflate.h">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffast.h">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffixed.h">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inflate.h">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inftrees.h">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\trees.h">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zconf.h">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zlib.h">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zutil.h">
+      <Filter>KongEngine\kong\extern\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\coreutil.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\KongString.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SPath.h">
+      <Filter>Include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\EDriverTypes.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\COpenGLTexture.h">
+      <Filter>KongEngine\video\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ITexture.h">
+      <Filter>Include\video</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

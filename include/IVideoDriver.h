@@ -38,16 +38,16 @@ namespace kong
             ETS_TEXTURE_2,
             //! Texture transformation
             ETS_TEXTURE_3,
-#if _IRR_MATERIAL_MAX_TEXTURES_>4
+#if _KONG_MATERIAL_MAX_TEXTURES_>4
             //! Texture transformation
             ETS_TEXTURE_4,
-#if _IRR_MATERIAL_MAX_TEXTURES_>5
+#if _KONG_MATERIAL_MAX_TEXTURES_>5
             //! Texture transformation
             ETS_TEXTURE_5,
-#if _IRR_MATERIAL_MAX_TEXTURES_>6
+#if _KONG_MATERIAL_MAX_TEXTURES_>6
             //! Texture transformation
             ETS_TEXTURE_6,
-#if _IRR_MATERIAL_MAX_TEXTURES_>7
+#if _KONG_MATERIAL_MAX_TEXTURES_>7
             //! Texture transformation
             ETS_TEXTURE_7,
 #endif

@@ -5,8 +5,8 @@
 //! As of Irrlicht 1.6, position2d is a synonym for vector2d.
 /** You should consider position2d to be deprecated, and use vector2d by preference. */
 
-#ifndef __IRR_POSITION_H_INCLUDED__
-#define __IRR_POSITION_H_INCLUDED__
+#ifndef __KONG_POSITION_H_INCLUDED__
+#define __KONG_POSITION_H_INCLUDED__
 
 #include "Vector.h"
 
@@ -28,5 +28,5 @@ namespace kong
 // ...and use a #define to catch the rest, for (e.g.) position2d<f64>
 #define position2d Vector
 
-#endif // __IRR_POSITION_H_INCLUDED__
+#endif // __KONG_POSITION_H_INCLUDED__
 

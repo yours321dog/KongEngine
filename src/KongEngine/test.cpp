@@ -231,10 +231,10 @@ int main()
     //TestArray();
     //TestS3DVertex();
     //TestList();
-    TestWindow();
+    //TestWindow();
     //TestReplace();
-    //TestFindLastOf();
-    //TestFileSystem();
+    TestFindLastOf();
+    TestFileSystem();
     system("pause");
     return 0;
 }

@@ -70,7 +70,7 @@ namespace kong
                 return;
             }
 
-#if defined ( _IRR_WCHAR_FILESYSTEM )
+#if defined ( _KONG_WCHAR_FILESYSTEM )
             file_ = _wfopen(filename_.c_str(), L"rb");
 #else
             fopen_s(&file_, filename_.c_str(), "rb");

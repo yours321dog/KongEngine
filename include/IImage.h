@@ -28,77 +28,77 @@ namespace kong
             depends on the color format of the image. For example if the color
             format is ECF_A8R8G8B8, it is of u32. Be sure to call unlock() after
             you don't need the pointer any more. */
-            virtual void* lock() = 0;
+            virtual void* Lock() = 0;
 
             //! Unlock function.
             /** Should be called after the pointer received by lock() is not
             needed anymore. */
-            virtual void unlock() = 0;
+            virtual void Unlock() = 0;
 
             //! Returns width and height of image data.
-            virtual const core::Dimension2d<u32>& getDimension() const = 0;
+            virtual const core::Dimension2d<u32>& GetDimension() const = 0;
 
             //! Returns bits per pixel.
-            virtual u32 getBitsPerPixel() const = 0;
+            virtual u32 GetBitsPerPixel() const = 0;
 
             //! Returns bytes per pixel
-            virtual u32 getBytesPerPixel() const = 0;
+            virtual u32 GetBytesPerPixel() const = 0;
 
             //! Returns image data size in bytes
-            virtual u32 getImageDataSizeInBytes() const = 0;
+            virtual u32 GetImageDataSizeInBytes() const = 0;
 
             //! Returns image data size in pixels
-            virtual u32 getImageDataSizeInPixels() const = 0;
+            virtual u32 GetImageDataSizeInPixels() const = 0;
 
             //! Returns a pixel
-            virtual SColor getPixel(u32 x, u32 y) const = 0;
+            virtual SColor GetPixel(u32 x, u32 y) const = 0;
 
             //! Sets a pixel
-            virtual void setPixel(u32 x, u32 y, const SColor &color, bool blend = false) = 0;
+            virtual void SetPixel(u32 x, u32 y, const SColor &color, bool blend = false) = 0;
 
             //! Returns the color format
-            virtual ECOLOR_FORMAT getColorFormat() const = 0;
+            virtual ECOLOR_FORMAT GetColorFormat() const = 0;
 
             //! Returns mask for red value of a pixel
-            virtual u32 getRedMask() const = 0;
+            virtual u32 GetRedMask() const = 0;
 
             //! Returns mask for green value of a pixel
-            virtual u32 getGreenMask() const = 0;
+            virtual u32 GetGreenMask() const = 0;
 
             //! Returns mask for blue value of a pixel
-            virtual u32 getBlueMask() const = 0;
+            virtual u32 GetBlueMask() const = 0;
 
             //! Returns mask for alpha value of a pixel
-            virtual u32 getAlphaMask() const = 0;
+            virtual u32 GetAlphaMask() const = 0;
 
             //! Returns pitch of image
-            virtual u32 getPitch() const = 0;
+            virtual u32 GetPitch() const = 0;
 
             //! Copies the image into the target, scaling the image to fit
-            virtual void copyToScaling(void* target, u32 width, u32 height, ECOLOR_FORMAT format = ECF_A8R8G8B8, u32 pitch = 0) = 0;
+            virtual void CopyToScaling(void* target, u32 width, u32 height, ECOLOR_FORMAT format = ECF_A8R8G8B8, u32 pitch = 0) = 0;
 
             //! Copies the image into the target, scaling the image to fit
-            virtual void copyToScaling(IImage* target) = 0;
+            virtual void CopyToScaling(IImage* target) = 0;
 
             //! copies this surface into another
-            virtual void copyTo(IImage* target, const core::position2d<s32>& pos = core::position2d<s32>(0, 0)) = 0;
+            virtual void CopyTo(IImage* target, const core::position2d<s32>& pos = core::position2d<s32>(0, 0)) = 0;
 
             //! copies this surface into another
-            virtual void copyTo(IImage* target, const core::position2d<s32>& pos, const core::rect<s32>& sourceRect, const core::rect<s32>* clipRect = 0) = 0;
+            virtual void CopyTo(IImage* target, const core::position2d<s32>& pos, const core::rect<s32>& sourceRect, const core::rect<s32>* clipRect = 0) = 0;
 
             //! copies this surface into another, using the alpha mask and cliprect and a color to add with
-            virtual void copyToWithAlpha(IImage* target, const core::position2d<s32>& pos,
+            virtual void CopyToWithAlpha(IImage* target, const core::position2d<s32>& pos,
                 const core::rect<s32>& sourceRect, const SColor &color,
                 const core::rect<s32>* clipRect = 0) = 0;
 
             //! copies this surface into another, scaling it to fit, appyling a box filter
-            virtual void copyToScalingBoxFilter(IImage* target, s32 bias = 0, bool blend = false) = 0;
+            virtual void CopyToScalingBoxFilter(IImage* target, s32 bias = 0, bool blend = false) = 0;
 
             //! fills the surface with given color
-            virtual void fill(const SColor &color) = 0;
+            virtual void Fill(const SColor &color) = 0;
 
             //! get the amount of Bits per Pixel of the given color format
-            static u32 getBitsPerPixelFromFormat(const ECOLOR_FORMAT format)
+            static u32 GetBitsPerPixelFromFormat(const ECOLOR_FORMAT format)
             {
                 switch (format)
                 {
@@ -131,7 +131,7 @@ namespace kong
             /** Since we don't have support for e.g. floating point IImage formats
             one should test if the color format can be used for arbitrary usage, or
             if it is restricted to RTTs. */
-            static bool isRenderTargetOnlyFormat(const ECOLOR_FORMAT format)
+            static bool IsRenderTargetOnlyFormat(const ECOLOR_FORMAT format)
             {
                 switch (format)
                 {
