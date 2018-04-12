@@ -165,7 +165,7 @@ namespace kong
 
             //! Check whether the texture has MipMaps
             /** \return True if texture has MipMaps, else false. */
-            virtual bool hasMipMaps() const { return false; }
+            virtual bool HasMipMaps() const { return false; }
 
             //! Returns if the texture has an alpha channel
             virtual bool hasAlpha() const {
@@ -186,17 +186,17 @@ namespace kong
             render a scene into the texture. Once unbound as render target, they can
             be used just as usual textures again.
             \return True if this is a render target, otherwise false. */
-            virtual bool isRenderTarget() const { return false; }
+            virtual bool IsRenderTarget() const { return false; }
 
             //! Get name of texture (in most cases this is the filename)
-            const io::SNamedPath& getName() const { return NamedPath; }
+            const io::SNamedPath& GetName() const { return NamedPath; }
 
         protected:
 
             //! Helper function, helps to get the desired texture creation format from the flags.
             /** \return Either ETCF_ALWAYS_32_BIT, ETCF_ALWAYS_16_BIT,
             ETCF_OPTIMIZED_FOR_QUALITY, or ETCF_OPTIMIZED_FOR_SPEED. */
-            inline E_TEXTURE_CREATION_FLAG getTextureFormatFromFlags(u32 flags)
+            inline E_TEXTURE_CREATION_FLAG GetTextureFormatFromFlags(u32 flags)
             {
                 if (flags & ETCF_OPTIMIZED_FOR_SPEED)
                     return ETCF_OPTIMIZED_FOR_SPEED;

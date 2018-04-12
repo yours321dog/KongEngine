@@ -84,6 +84,10 @@ namespace kong
 
             //! adds a surface, not loaded or created by the Irrlicht Engine
             void AddTexture(video::ITexture* surface);
+
+            //! sets the current Texture
+            //! Returns whether setting was a success or not.
+            bool SetActiveTexture(u32 stage, const video::ITexture* texture);
         protected:
             //! enumeration for rendering modes such as 2d and 3d for minizing the switching of renderStates.
             enum E_RENDER_MODE
@@ -99,7 +103,7 @@ namespace kong
 
                 bool operator < (const SSurface& other) const
                 {
-                    return Surface->getName() < other.Surface->getName();
+                    return Surface->GetName() < other.Surface->GetName();
                 }
             };
 
@@ -127,6 +131,72 @@ namespace kong
             //! opens the file and loads it into the surface
             video::ITexture* LoadTextureFromFile(io::IReadFile* file, const io::path& hashName = "");
 
+            //! creates a transposed matrix in supplied GLfloat array to pass to OpenGL
+            inline void GetGLMatrix(f32 gl_matrix[16], const core::Matrixf& m);
+            inline void GetGLTextureMatrix(f32 gl_matrix[16], const core::Matrixf& m);
+
+            class STextureStageCache
+            {
+                const ITexture* current_texture_[MATERIAL_MAX_TEXTURES];
+            public:
+                STextureStageCache()
+                {
+                    for (auto& i : current_texture_)
+                    {
+                        i = nullptr;
+                    }
+                }
+
+                ~STextureStageCache()
+                {
+                    Clear();
+                }
+
+                void Set(u32 stage, const ITexture* tex)
+                {
+                    if (stage<MATERIAL_MAX_TEXTURES)
+                    {
+                        const ITexture* oldTexture = current_texture_[stage];
+                        current_texture_[stage] = tex;
+                        delete oldTexture;
+                    }
+                }
+
+                const ITexture* operator[](int stage) const
+                {
+                    if ((u32)stage<MATERIAL_MAX_TEXTURES)
+                        return current_texture_[stage];
+                    else
+                        return 0;
+                }
+
+                void Remove(const ITexture* tex)
+                {
+                    for (s32 i = MATERIAL_MAX_TEXTURES - 1; i >= 0; --i)
+                    {
+                        if (current_texture_[i] == tex)
+                        {
+                            delete tex;
+                            current_texture_[i] = 0;
+                        }
+                    }
+                }
+
+                void Clear()
+                {
+                    // Drop all the CurrentTexture handles
+                    for (u32 i = 0; i<MATERIAL_MAX_TEXTURES; ++i)
+                    {
+                        if (current_texture_[i])
+                        {
+                            delete current_texture_[i];
+                            current_texture_[i] = nullptr;
+                        }
+                    }
+                }
+            };
+            STextureStageCache current_texture_;
+
 #ifdef _KONG_WINDOWS_API_
             HDC hdc_; // Private GDI Device Context
             HWND window_;
@@ -138,6 +208,9 @@ namespace kong
             SKongCreationParameters params_;
             core::Matrixf matrices_[ETS_COUNT];
             io::IFileSystem *io_;
+            SMaterial material_;
+            s32 max_texture_units_;
+            core::Matrixf texture_flip_matrix_;
         };
     } // end namespace video
 } // end namespace kong

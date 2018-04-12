@@ -49,6 +49,8 @@
 
 #endif // _KONG_WINDOWS_API_
 
+//! Maximum number of texture an SMaterial can have, up to 8 are supported by Irrlicht.
+#define _KONG_MATERIAL_MAX_TEXTURES_ 4
 
 //! Define _KONG_COMPILE_WITH_OPENGL_ to compile the Irrlicht engine with OpenGL.
 /** If you do not wish the engine to be compiled with OpenGL, comment this

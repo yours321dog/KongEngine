@@ -587,6 +587,9 @@
     <ClInclude Include="..\..\include\Heapsort.h">
       <Filter>Include\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\SMaterialLayer.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\base.fs">

@@ -78,10 +78,10 @@ namespace kong
             virtual u32 GetPitch() const;
 
             //! return open gl texture name
-            GLuint getOpenGLTextureName() const;
+            GLuint GetOpenGLTextureName() const;
 
             //! return whether this texture has mipmaps
-            virtual bool hasMipMaps() const;
+            virtual bool HasMipMaps() const;
 
             //! Regenerates the mip map levels of the texture.
             /** Useful after locking and modifying the texture
@@ -89,7 +89,7 @@ namespace kong
             virtual void RegenerateMipMapLevels(void* mipmapData = 0);
 
             //! Is it a render target?
-            virtual bool isRenderTarget() const;
+            virtual bool IsRenderTarget() const;
 
             //! Is it a FrameBufferObject?
             virtual bool isFrameBufferObject() const;
@@ -101,7 +101,7 @@ namespace kong
             virtual void unbindRTT();
 
             //! sets whether this texture is intended to be used as a render target.
-            void setIsRenderTarget(bool isTarget);
+            void SetIsRenderTarget(bool isTarget);
 
         protected:
 
@@ -116,7 +116,7 @@ namespace kong
                 ECOLOR_FORMAT format, GLint& filtering, GLenum& colorformat, GLenum& type);
 
             //! get important numbers of the image and hw texture
-            void getImageValues(IImage* image);
+            void GetImageValues(IImage* image);
 
             //! copies the texture into an OpenGL texture.
             /** \param newTexture True if method is called for a newly created texture for the first time. Otherwise call with false to improve memory handling.

@@ -31,11 +31,16 @@ namespace kong
 
             T &operator()(int, int);
             const T&operator()(int, int) const;
+            T &operator[](int);
+            const T&operator[](int) const;
             Matrix<T> &operator=(const Matrix<T>&);
             Matrix<T> operator+(const Matrix<T>&);
             Matrix<T> operator-(const Matrix<T>&);
             Matrix<T> operator*(const Matrix<T>&);
+            Matrix<T> operator*(const Matrix<T>&) const;
             Matrix<T> operator*(const T&);
+            bool operator==(const Matrix<T>&) const;
+            bool operator!=(const Matrix<T>&) const;
 
             Vector<T> Apply(const Vector<T> &);
 
@@ -52,6 +57,8 @@ namespace kong
             const T *Pointer() const;
 
             T *Pointer();
+
+            bool IsIdentity() const;
 
         private:
             T m_[16];
@@ -151,6 +158,21 @@ namespace kong
         }
 
         template <typename T>
+        Matrix<T> Matrix<T>::operator*(const Matrix<T>&) const
+        {
+            Matrix<T> tmp;
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    tmp.m_[i * 4 + j] = m_[i * 4 + 0] * m.m_[0 * 4 + j] + m_[i * 4 + 1] * m.m_[1 * 4 + j]
+                        + m_[i * 4 + 2] * m.m_[2 * 4 + j] + m_[i * 4 + 3] * m.m_[3 * 4 + j];
+                }
+            }
+            return tmp;
+        }
+
+        template <typename T>
         Matrix<T> Matrix<T>::operator*(const T& scale)
         {
             Matrix<T> tmp;
@@ -162,6 +184,32 @@ namespace kong
                 }
             }
             return tmp;
+        }
+
+        template <typename T>
+        bool Matrix<T>::operator==(const Matrix<T>& other) const
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if (m_[i] != other.m_[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        template <typename T>
+        bool Matrix<T>::operator!=(const Matrix<T>& other) const
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if (m_[i] == other.m_[i])
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         template <typename T>
@@ -193,6 +241,18 @@ namespace kong
         const T& Matrix<T>::operator()(int i, int j) const
         {
             return m_[i * 4 + j];
+        }
+
+        template <typename T>
+        T& Matrix<T>::operator[](int i)
+        {
+            return m_[i];
+        }
+
+        template <typename T>
+        const T& Matrix<T>::operator[](int i) const
+        {
+            return m_[i];
         }
 
         template <typename T>
@@ -343,6 +403,13 @@ namespace kong
         T* Matrix<T>::Pointer()
         {
             return static_cast<T*>(m_);
+        }
+
+        template <typename T>
+        bool Matrix<T>::IsIdentity() const
+        {
+            Matrix<T> tmp(IDENTITY);
+            return (*this) == tmp;
         }
 
         typedef Matrix<int> Matrixi;

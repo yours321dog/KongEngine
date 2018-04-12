@@ -225,6 +225,7 @@
     <ClInclude Include="..\..\include\SExposedVideoData.h" />
     <ClInclude Include="..\..\include\SKongCreationParameters.h" />
     <ClInclude Include="..\..\include\SMaterial.h" />
+    <ClInclude Include="..\..\include\SMaterialLayer.h" />
     <ClInclude Include="..\..\include\SMesh.h" />
     <ClInclude Include="..\..\include\SoftwareDriver2_helper.h" />
     <ClInclude Include="..\..\include\SPath.h" />

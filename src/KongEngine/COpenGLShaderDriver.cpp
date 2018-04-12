@@ -24,9 +24,6 @@ namespace kong
                 return false;
             }
 
-            if (glewInit() != GLEW_OK)
-                throw std::runtime_error("glewInit failed");
-
             shader_helper_ = new COpenGLShaderHelper(io_, vertex_path_, fragment_path_);
 
             glGenVertexArrays(1, &vao_);

@@ -21,13 +21,13 @@ namespace kong
 
         //! constructor for usual textures
         COpenGLTexture::COpenGLTexture(IImage* origImage, const io::path& name, void* mipmapData, COpenGLDriver* driver)
-            : ITexture(name), ColorFormat(ECF_A8R8G8B8), driver_(driver), image_(0), MipImage(0),
+            : ITexture(name), ColorFormat(ECF_A8R8G8B8), driver_(driver), image_(nullptr), MipImage(nullptr),
             texture_name_(0), InternalFormat(GL_RGBA), PixelFormat(GL_BGRA_EXT),
             PixelType(GL_UNSIGNED_BYTE), MipLevelStored(0), MipmapLegacyMode(true),
             is_render_target_(false), AutomaticMipmapUpdate(false),
             ReadOnlyLock(false), KeepImage(true)
         {
-            getImageValues(origImage);
+            GetImageValues(origImage);
 
             glGenTextures(1, &texture_name_);
 
@@ -214,7 +214,7 @@ namespace kong
 
 
         // prepare values ImageSize, TextureSize, and ColorFormat based on image
-        void COpenGLTexture::getImageValues(IImage* image)
+        void COpenGLTexture::GetImageValues(IImage* image)
         {
             if (image == nullptr)
             {
@@ -299,14 +299,14 @@ namespace kong
 
 
         //! return open gl texture name
-        GLuint COpenGLTexture::getOpenGLTextureName() const
+        GLuint COpenGLTexture::GetOpenGLTextureName() const
         {
             return texture_name_;
         }
 
 
         //! Returns whether this texture has mipmaps
-        bool COpenGLTexture::hasMipMaps() const
+        bool COpenGLTexture::HasMipMaps() const
         {
             return has_mip_maps_;
         }
@@ -319,13 +319,13 @@ namespace kong
         }
 
 
-        bool COpenGLTexture::isRenderTarget() const
+        bool COpenGLTexture::IsRenderTarget() const
         {
             return is_render_target_;
         }
 
 
-        void COpenGLTexture::setIsRenderTarget(bool isTarget)
+        void COpenGLTexture::SetIsRenderTarget(bool isTarget)
         {
             is_render_target_ = isTarget;
         }

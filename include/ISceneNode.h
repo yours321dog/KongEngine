@@ -246,7 +246,6 @@ namespace kong
                 return video::IdentityMaterial;
             }
 
-
             //! Get amount of materials used by this scene node.
             /** \return Current amount of materials of this scene node. */
             virtual u32 GetMaterialCount() const
@@ -361,6 +360,18 @@ namespace kong
                 }
             }
 
+            //! Sets the texture of the specified layer in all materials of this scene node to the new texture.
+            /** \param textureLayer Layer of texture to be set. Must be a
+            value smaller than MATERIAL_MAX_TEXTURES.
+            \param texture New texture to be used. */
+            void SetMaterialTexture(u32 textureLayer, video::ITexture* texture)
+            {
+                if (textureLayer >= video::MATERIAL_MAX_TEXTURES)
+                    return;
+
+                for (u32 i = 0; i<GetMaterialCount(); ++i)
+                    GetMaterial(i).SetTexture(textureLayer, texture);
+            }
 
         protected:
             //! Sets the new scene manager for this node and all children.

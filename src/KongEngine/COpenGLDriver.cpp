@@ -9,6 +9,7 @@
 #include "CImage.h"
 #include "COpenGLTexture.h"
 #include "IReadFile.h"
+#include <GL/glew.h>
 
 namespace kong
 {
@@ -110,13 +111,28 @@ namespace kong
                 return false;
             }
             wglMakeCurrent(hdc_, hrc_);
+            if (glewInit() != GLEW_OK)
+            {
+                printf("Glew init error\n");
+                return false;
+            }
+
+            glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &max_texture_units_);
 
             return true;
         }
 
         void COpenGLDriver::SetMaterial(const SMaterial& material)
         {
+            material_ = material;
+            //OverrideMaterial.apply(Material);
 
+            for (s32 i = max_texture_units_ - 1; i >= 0; --i)
+            {
+                SetActiveTexture(i, material.GetTexture(i));
+                SetTransform((E_TRANSFORMATION_STATE)(ETS_TEXTURE_0 + i),
+                    material_.GetTextureMatrix(i));
+            }
         }
 
         bool COpenGLDriver::BeginScene(bool back_buffer, bool z_buffer, SColor color)
@@ -166,6 +182,31 @@ namespace kong
                 break;
             case ETS_COUNT:
                 return;
+            default:
+            {
+                const u32 i = state - ETS_TEXTURE_0;
+                if (i >= MATERIAL_MAX_TEXTURES)
+                    break;
+
+                const bool isRTT = material_.GetTexture(i) && material_.GetTexture(i)->IsRenderTarget();
+
+                //if (MultiTextureExtension)
+                //    extGlActiveTexture(GL_TEXTURE0_ARB + i);
+
+                glMatrixMode(GL_TEXTURE);
+                if (!isRTT && mat.IsIdentity())
+                    glLoadIdentity();
+                else
+                {
+                    GLfloat glmat[16];
+                    if (isRTT)
+                        GetGLTextureMatrix(glmat, mat * texture_flip_matrix_);
+                    else
+                        GetGLTextureMatrix(glmat, mat);
+                    glLoadMatrixf(glmat);
+                }
+                break;
+            }
             }
         }
 
@@ -338,6 +379,37 @@ namespace kong
             return texture;
         }
 
+        //! creates a matrix in supplied GLfloat array to pass to OpenGL
+        inline void COpenGLDriver::GetGLMatrix(f32 gl_matrix[16], const core::Matrixf& m)
+        {
+            memcpy(gl_matrix, m.Pointer(), 16 * sizeof(f32));
+        }
+
+
+        //! creates a opengltexturematrix from a D3D style texture matrix
+        inline void COpenGLDriver::GetGLTextureMatrix(f32 *o, const core::Matrixf& m)
+        {
+            o[0] = m[0];
+            o[1] = m[1];
+            o[2] = 0.f;
+            o[3] = 0.f;
+
+            o[4] = m[4];
+            o[5] = m[5];
+            o[6] = 0.f;
+            o[7] = 0.f;
+
+            o[8] = 0.f;
+            o[9] = 0.f;
+            o[10] = 1.f;
+            o[11] = 0.f;
+
+            o[12] = m[8];
+            o[13] = m[9];
+            o[14] = 0.f;
+            o[15] = 1.f;
+        }
+
         //! looks if the image is already loaded
         video::ITexture* COpenGLDriver::FindTexture(const io::path& filename)
         {
@@ -467,8 +539,10 @@ namespace kong
                 return 0;
             }
 
-            if (0 == name.size())
-                return 0;
+            if (name.size() == 0)
+            {
+                return nullptr;
+            }
 
             IImage* image = new CImage(format, size);
             ITexture* t = createDeviceDependentTexture(image, name);
@@ -500,6 +574,34 @@ namespace kong
 
                 textures_.Sort();
             }
+        }
+
+        bool COpenGLDriver::SetActiveTexture(u32 stage, const video::ITexture* texture)
+        {
+            if (current_texture_[stage] == texture)
+                return true;
+
+            current_texture_.Set(stage, texture);
+
+            if (!texture)
+            {
+                glDisable(GL_TEXTURE_2D);
+                return true;
+            }
+            else
+            {
+                if (texture->GetDriverType() != EDT_OPENGL)
+                {
+                    glDisable(GL_TEXTURE_2D);
+                    current_texture_.Set(stage, 0);
+                    //os::Printer::log("Fatal Error: Tried to set a texture not owned by this driver.", ELL_ERROR);
+                    return false;
+                }
+
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, dynamic_cast<const COpenGLTexture*>(texture)->GetOpenGLTextureName());
+            }
+            return true;
         }
     } // end namespace video
 } // end namespace kong

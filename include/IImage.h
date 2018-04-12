@@ -21,6 +21,7 @@ namespace kong
         class IImage
         {
         public:
+            virtual ~IImage() = default;
 
             //! Lock function. Use this to get a pointer to the image data.
             /** After you don't need the pointer anymore, you must call unlock().

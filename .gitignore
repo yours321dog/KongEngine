@@ -60,3 +60,4 @@ Temporary Items
 *.idb
 *.sdf
 src/KongEngine/Debug/vc120.idb
+*.TMP
