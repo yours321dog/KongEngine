@@ -57,7 +57,7 @@ namespace kong
                 TrilinearFilter(false),
                 AnisotropicFilter(0),
                 LODBias(0),
-                texture_matrix_(0)
+                texture_matrix_(nullptr)
             {}
 
             //! Copy constructor
@@ -121,7 +121,7 @@ namespace kong
             /** \return Texture matrix of this layer. */
             core::Matrixf& GetTextureMatrix()
             {
-                if (!texture_matrix_)
+                if (texture_matrix_ == nullptr)
                 {
                     texture_matrix_ = matrix_allocator_.allocate(1);
                     matrix_allocator_.construct(texture_matrix_, core::identity_matrix);
@@ -133,7 +133,7 @@ namespace kong
             /** \return Texture matrix of this layer. */
             const core::Matrixf& GetTextureMatrix() const
             {
-                if (texture_matrix_)
+                if (texture_matrix_ != nullptr)
                     return *texture_matrix_;
                 else
                     return core::identity_matrix;

@@ -164,6 +164,7 @@ void TestWindow()
 
     smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -2.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
     ISceneNode *node = smr->AddCubeSceneNode(1.f, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
+    node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
 
     Vector3Df node_pos(0.f, 0.f, 0.f);
     f32 movement = 0.05;
@@ -207,6 +208,42 @@ void TestWindow()
     }
 }
 
+void TestDrawImage()
+{
+    MyEventReceiver receiver;
+
+    KongDevice *device = CreateDevice(Dimension2d<u32>(640, 480), 16,
+        false, false, false, &receiver);
+
+    if (!device)
+    {
+        return;
+    }
+
+    IVideoDriver *driver = device->GetVideoDriver();
+    ISceneManager *smr = device->GetSceneManager();
+
+    //smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -2.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
+    //ISceneNode *node = smr->AddCubeSceneNode(1.f, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
+
+    Vector3Df node_pos(0.f, 0.f, 0.f);
+    f32 movement = 0.05;
+
+    ITexture *texture = driver->GetTexture("../../materials/saber1.jpg");
+
+    while (device->run())
+    {
+        driver->BeginScene();
+
+        //driver->Draw3DLine(Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
+        //smr->DrawAll();
+
+        driver->Draw2DImage(texture, Vector2Df(-0.5, -0.5), rect<f32>(0.f, 0.f, 1.f, 1.f));
+
+        driver->EndScene();
+    }
+}
+
 void TestReplace()
 {
     std::string str1("abcdefabdef");
@@ -231,10 +268,11 @@ int main()
     //TestArray();
     //TestS3DVertex();
     //TestList();
-    //TestWindow();
+    TestWindow();
+    //TestDrawImage();
     //TestReplace();
-    TestFindLastOf();
-    TestFileSystem();
+    //TestFindLastOf();
+    //TestFileSystem();
     system("pause");
     return 0;
 }

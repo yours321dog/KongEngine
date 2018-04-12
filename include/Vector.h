@@ -19,6 +19,8 @@ namespace kong
             Vector<T> &operator=(const Vector<T>&);
             Vector<T> operator+(const Vector<T>&) const;
             Vector<T> operator+(const T&) const;
+            Vector<T> &operator+=(const Vector<T>&);
+            Vector<T> &operator+=(const T&);
             Vector<T> operator-(const Vector<T>&) const;
             Vector<T> operator*(const f32 &) const;
             Vector<T> operator/(const f32 &) const;
@@ -102,6 +104,28 @@ namespace kong
             tmp.w_ = T(1);
 
             return tmp;
+        }
+
+        template <typename T>
+        Vector<T>& Vector<T>::operator+=(const Vector<T>& other)
+        {
+            x_ += other.x_;
+            y_ += other.y_;
+            z_ += other.z_;
+            w_ = T(1);
+
+            return *this;
+        }
+
+        template <typename T>
+        Vector<T>& Vector<T>::operator+=(const T& val)
+        {
+            x_ += val;
+            y_ += val;
+            z_ += val;
+            w_ = T(1);
+
+            return *this;
         }
 
         template <typename T>

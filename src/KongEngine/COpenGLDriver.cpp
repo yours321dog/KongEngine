@@ -3,21 +3,34 @@
 
 #include "COpenGLDriver.h"
 
-#include "GL/gl.h"
+#include <GL/glew.h>
+//#include "GL/gl.h"
 //#include "GL/glew.h"
 #include "IMeshBuffer.h"
 #include "CImage.h"
 #include "COpenGLTexture.h"
 #include "IReadFile.h"
-#include <GL/glew.h>
 
 namespace kong
 {
     namespace video
     {
+        //! creates a loader which is able to load png images
+        IImageLoader* CreateImageLoaderPng();
+
+        //! creates a loader which is able to load jpeg images
+        IImageLoader* CreateImageLoaderJpg();
+
         COpenGLDriver::COpenGLDriver(const SKongCreationParameters& params, io::IFileSystem* io, CKongDeviceWin32* device)
-            : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device), params_(params), io_(io)
+            : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device), params_(params),
+            io_(io), max_texture_units_(0), max_supported_textures_(0)
         {
+#ifdef _KONG_COMPILE_WITH_JPG_LOADER_
+            surface_loader_.PushBack(video::CreateImageLoaderJpg());
+#endif
+#ifdef _KONG_COMPILE_WITH_PNG_LOADER_
+            surface_loader_.PushBack(video::CreateImageLoaderPng());
+#endif
         }
 
         bool COpenGLDriver::InitDriver(CKongDeviceWin32* device)
@@ -118,6 +131,8 @@ namespace kong
             }
 
             glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &max_texture_units_);
+            max_texture_units_ = core::min_<u32>(max_texture_units_, MATERIAL_MAX_TEXTURES);
+            max_supported_textures_ = max_texture_units_;
 
             return true;
         }
@@ -307,27 +322,27 @@ namespace kong
             s32 i;
 
             // try to load file based on file extension
-            for (i = SurfaceLoader.Size() - 1; i >= 0; --i)
+            for (i = surface_loader_.Size() - 1; i >= 0; --i)
             {
-                if (SurfaceLoader[i]->IsALoadableFileExtension(file->GetFileName()))
+                if (surface_loader_[i]->IsALoadableFileExtension(file->GetFileName()))
                 {
                     // reset file position which might have changed due to previous loadImage calls
                     file->Seek(0);
-                    image = SurfaceLoader[i]->LoadImage(file);
+                    image = surface_loader_[i]->LoadImage(file);
                     if (image)
                         return image;
                 }
             }
 
             // try to load file based on what is in it
-            for (i = SurfaceLoader.Size() - 1; i >= 0; --i)
+            for (i = surface_loader_.Size() - 1; i >= 0; --i)
             {
                 // dito
                 file->Seek(0);
-                if (SurfaceLoader[i]->IsALoadableFileFormat(file))
+                if (surface_loader_[i]->IsALoadableFileFormat(file))
                 {
                     file->Seek(0);
-                    image = SurfaceLoader[i]->LoadImage(file);
+                    image = surface_loader_[i]->LoadImage(file);
                     if (image)
                         return image;
                 }
@@ -602,6 +617,89 @@ namespace kong
                 glBindTexture(GL_TEXTURE_2D, dynamic_cast<const COpenGLTexture*>(texture)->GetOpenGLTextureName());
             }
             return true;
+        }
+
+        bool COpenGLDriver::DisableTextures(u32 fromStage)
+        {
+            bool result = true;
+            for (u32 i = fromStage; i<max_supported_textures_; ++i)
+                result &= SetActiveTexture(i, nullptr);
+            return result;
+        }
+
+        //! draws a 2d image, using a color and the alpha channel of the texture if
+        //! desired. The image is drawn at pos, clipped against clipRect (if != 0).
+        //! Only the subtexture defined by sourceRect is used.
+        void COpenGLDriver::Draw2DImage(const video::ITexture* texture,
+            const core::position2d<s32>& pos,
+            const core::rect<s32>& sourceRect,
+            const core::rect<s32>* clipRect, SColor color,
+            bool useAlphaChannelOfTexture)
+        {
+            //if (!texture)
+            //    return;
+
+            //if (!sourceRect.isValid())
+            //    return;
+
+            //DisableTextures(1);
+            //if (!SetActiveTexture(0, texture))
+            //    return;
+            ////setRenderStates2DMode(color.GetAlpha()<255, true, useAlphaChannelOfTexture);
+
+            //core::rect<f32> 
+
+            //glColor4ub(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
+            //glBegin(GL_QUADS);
+
+            //glTexCoord2f(tcoords.UpperLeftCorner.x_, tcoords.UpperLeftCorner.y_);
+            //glVertex2f(GLfloat(poss.UpperLeftCorner.x_), GLfloat(poss.UpperLeftCorner.y_));
+
+            //glTexCoord2f(tcoords.LowerRightCorner.x_, tcoords.UpperLeftCorner.y_);
+            //glVertex2f(GLfloat(poss.LowerRightCorner.x_), GLfloat(poss.UpperLeftCorner.y_));
+
+            //glTexCoord2f(tcoords.LowerRightCorner.x_, tcoords.LowerRightCorner.y_);
+            //glVertex2f(GLfloat(poss.LowerRightCorner.x_), GLfloat(poss.LowerRightCorner.y_));
+
+            //glTexCoord2f(tcoords.UpperLeftCorner.x_, tcoords.LowerRightCorner.y_);
+            //glVertex2f(GLfloat(poss.UpperLeftCorner.x_), GLfloat(poss.LowerRightCorner.y_));
+
+            //glEnd();
+        }
+
+        void COpenGLDriver::Draw2DImage(const video::ITexture* texture, const core::Vector<f32>& destPos, const core::rect<f32>& sourceRect, SColor color)
+        {
+            if (!texture)
+                return;
+
+            if (!sourceRect.isValid())
+                return;
+
+            core::rect<f32> poss = sourceRect + destPos;
+            core::rect<f32> tcoords(0.f, 1.f, 1.f, 0.f);
+
+            DisableTextures(1);
+            if (!SetActiveTexture(0, texture))
+            {
+                return;
+            }
+
+            glColor4ub(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
+            glBegin(GL_QUADS);
+
+            glTexCoord2f(tcoords.UpperLeftCorner.x_, tcoords.UpperLeftCorner.y_);
+            glVertex2f(GLfloat(poss.UpperLeftCorner.x_), GLfloat(poss.UpperLeftCorner.y_));
+
+            glTexCoord2f(tcoords.LowerRightCorner.x_, tcoords.UpperLeftCorner.y_);
+            glVertex2f(GLfloat(poss.LowerRightCorner.x_), GLfloat(poss.UpperLeftCorner.y_));
+
+            glTexCoord2f(tcoords.LowerRightCorner.x_, tcoords.LowerRightCorner.y_);
+            glVertex2f(GLfloat(poss.LowerRightCorner.x_), GLfloat(poss.LowerRightCorner.y_));
+
+            glTexCoord2f(tcoords.UpperLeftCorner.x_, tcoords.LowerRightCorner.y_);
+            glVertex2f(GLfloat(poss.UpperLeftCorner.x_), GLfloat(poss.LowerRightCorner.y_));
+
+            glEnd();
         }
     } // end namespace video
 } // end namespace kong

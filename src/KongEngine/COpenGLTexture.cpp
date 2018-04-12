@@ -239,7 +239,7 @@ namespace kong
             void *data = image_->Lock();
             if (data != nullptr)
             {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, image_size_.width_, image_size_.height_, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, data);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_size_.width_, image_size_.height_, 0, GL_BGRA_EXT, GL_UNSIGNED_INT_8_8_8_8_REV, data);
             }
             image_->Unlock();
         }

@@ -297,7 +297,7 @@ namespace kong
 
 
         //! creates a loader which is able to load jpeg images
-        IImageLoader* createImageLoaderJPG()
+        IImageLoader* CreateImageLoaderJpg()
         {
             return new CImageLoaderJpg();
         }

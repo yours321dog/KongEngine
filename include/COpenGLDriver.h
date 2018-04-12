@@ -47,6 +47,15 @@ namespace kong
             void Draw3DLine(const core::Vector3Df& start,
                 const core::Vector3Df& end, SColor color = SColor(255, 255, 255, 255)) override;
 
+            //! Draws a 2d image using a color
+            virtual void Draw2DImage(const video::ITexture* texture, const core::position2d<s32>& destPos,
+                const core::rect<s32>& sourceRect, const core::rect<s32>* clipRect = 0,
+                SColor color = SColor(255, 255, 255, 255), bool useAlphaChannelOfTexture = false);
+
+            //! Draws a 2d image
+            virtual void Draw2DImage(const video::ITexture* texture, const core::position2d<f32>& destPos,
+                const core::rect<f32>& sourceRect, SColor color = SColor(255, 255, 255, 255));
+
             //! Draws a mesh buffer
             void DrawMeshBuffer(const scene::IMeshBuffer* mesh_buffer) override;
 
@@ -88,6 +97,10 @@ namespace kong
             //! sets the current Texture
             //! Returns whether setting was a success or not.
             bool SetActiveTexture(u32 stage, const video::ITexture* texture);
+
+            //! disables all textures beginning with the optional fromStage parameter. Otherwise all texture stages are disabled.
+            //! Returns whether disabling was successful or not.
+            bool DisableTextures(u32 fromStage = 0);
         protected:
             //! enumeration for rendering modes such as 2d and 3d for minizing the switching of renderStates.
             enum E_RENDER_MODE
@@ -123,7 +136,7 @@ namespace kong
             };
 
             core::Array<SSurface> textures_;
-            core::Array<video::IImageLoader*> SurfaceLoader;
+            core::Array<video::IImageLoader*> surface_loader_;
 
             //! clears the zbuffer and color buffer
             void ClearBuffers(bool back_buffer, bool z_buffer, bool stencil_buffer, SColor color);
@@ -210,6 +223,7 @@ namespace kong
             io::IFileSystem *io_;
             SMaterial material_;
             s32 max_texture_units_;
+            s32 max_supported_textures_;
             core::Matrixf texture_flip_matrix_;
         };
     } // end namespace video

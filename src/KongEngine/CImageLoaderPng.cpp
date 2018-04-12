@@ -278,7 +278,7 @@ namespace kong
         }
 
 
-        IImageLoader* CreateImageLoaderPNG()
+        IImageLoader* CreateImageLoaderPng()
         {
             return new CImageLoaderPng();
         }

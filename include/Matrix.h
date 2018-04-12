@@ -158,7 +158,7 @@ namespace kong
         }
 
         template <typename T>
-        Matrix<T> Matrix<T>::operator*(const Matrix<T>&) const
+        Matrix<T> Matrix<T>::operator*(const Matrix<T>& m) const
         {
             Matrix<T> tmp;
             for (int i = 0; i < 4; i++)

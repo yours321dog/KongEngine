@@ -127,6 +127,45 @@ namespace kong
             virtual void Draw3DLine(const core::Vector3Df& start,
                 const core::Vector3Df& end, SColor color = SColor(255, 255, 255, 255)) = 0;
 
+            //! Draws a 2d image using a color
+            /** (if color is other than
+            Color(255,255,255,255)) and the alpha channel of the texture.
+            \param texture Texture to be drawn.
+            \param destPos Upper left 2d destination position where the
+            image will be drawn.
+            \param sourceRect Source rectangle in the image.
+            \param clipRect Pointer to rectangle on the screen where the
+            image is clipped to.
+            If this pointer is NULL the image is not clipped.
+            \param color Color with which the image is drawn. If the color
+            equals Color(255,255,255,255) it is ignored. Note that the
+            alpha component is used: If alpha is other than 255, the image
+            will be transparent.
+            \param useAlphaChannelOfTexture: If true, the alpha channel of
+            the texture is used to draw the image.*/
+            virtual void Draw2DImage(const video::ITexture* texture, const core::position2d<s32>& destPos,
+                const core::rect<s32>& sourceRect, const core::rect<s32>* clipRect = 0,
+                SColor color = SColor(255, 255, 255, 255), bool useAlphaChannelOfTexture = false) = 0;
+
+            //! Draws a 2d image using a color
+            /** (if color is other than
+            Color(255,255,255,255)) and the alpha channel of the texture.
+            \param texture Texture to be drawn.
+            \param destPos Upper left 2d destination position where the
+            image will be drawn.
+            \param sourceRect Source rectangle in the image.
+            \param clipRect Pointer to rectangle on the screen where the
+            image is clipped to.
+            If this pointer is NULL the image is not clipped.
+            \param color Color with which the image is drawn. If the color
+            equals Color(255,255,255,255) it is ignored. Note that the
+            alpha component is used: If alpha is other than 255, the image
+            will be transparent.
+            \param useAlphaChannelOfTexture: If true, the alpha channel of
+            the texture is used to draw the image.*/
+            virtual void Draw2DImage(const video::ITexture* texture, const core::position2d<f32>& destPos,
+                const core::rect<f32>& sourceRect, SColor color = SColor(255, 255, 255, 255)) = 0;
+
             //! Draws a mesh buffer
             /** \param mb Buffer to draw */
             virtual void DrawMeshBuffer(const scene::IMeshBuffer* mb) = 0;
