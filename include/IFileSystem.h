@@ -65,6 +65,11 @@ namespace kong
             \param keepExtension True if filename with extension is returned otherwise everything
             after the final '.' is removed as well. */
             virtual SPath GetFileBasename(const SPath& filename, bool keepExtension = true) const = 0;
+
+            //! Determines if a file exists and could be opened.
+            /** \param filename is the string identifying the file which should be tested for existence.
+            \return True if file exists, and false if it does not exist or an error occured. */
+            virtual bool ExistFile(const path& filename) const = 0;
         };
     }
 }

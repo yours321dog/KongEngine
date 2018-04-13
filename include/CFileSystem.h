@@ -32,6 +32,9 @@ namespace kong
 
             //! Get the base name of a file
             SPath GetFileBasename(const SPath& filename, bool keepExtension) const override;
+
+            //! Determines if a file exists and could be opened.
+            bool ExistFile(const path& filename) const override;
         };
     } // end namepsace io
 } // end namespace kong

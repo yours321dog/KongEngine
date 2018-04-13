@@ -10,6 +10,8 @@
 #include "CImage.h"
 #include "COpenGLTexture.h"
 #include "IReadFile.h"
+#include "CMeshManipulator.h"
+#include "os.h"
 
 namespace kong
 {
@@ -25,12 +27,22 @@ namespace kong
             : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device), params_(params),
             io_(io), max_texture_units_(0), max_supported_textures_(0)
         {
+            // create manipulator
+            mesh_manipulator_ = new scene::CMeshManipulator();
+
+
 #ifdef _KONG_COMPILE_WITH_JPG_LOADER_
             surface_loader_.PushBack(video::CreateImageLoaderJpg());
 #endif
 #ifdef _KONG_COMPILE_WITH_PNG_LOADER_
             surface_loader_.PushBack(video::CreateImageLoaderPng());
 #endif
+
+        }
+
+        COpenGLDriver::~COpenGLDriver()
+        {
+            delete mesh_manipulator_;
         }
 
         bool COpenGLDriver::InitDriver(CKongDeviceWin32* device)
@@ -625,6 +637,125 @@ namespace kong
             for (u32 i = fromStage; i<max_supported_textures_; ++i)
                 result &= SetActiveTexture(i, nullptr);
             return result;
+        }
+
+        scene::IMeshManipulator* COpenGLDriver::GetMeshManipulator()
+        {
+            return mesh_manipulator_;
+        }
+
+        void COpenGLDriver::MakeNormalMapTexture(video::ITexture* texture, f32 amplitude) const
+        {
+            if (!texture)
+                return;
+
+            if (texture->GetColorFormat() != ECF_A1R5G5B5 &&
+                texture->GetColorFormat() != ECF_A8R8G8B8)
+            {
+                os::Printer::log("Error: Unsupported texture color format for making normal map.", ELL_ERROR);
+                return;
+            }
+
+            core::Dimension2d<u32> dim = texture->GetSize();
+            amplitude = amplitude / 255.0f;
+            f32 vh = dim.height_ / (f32)dim.width_;
+            f32 hh = dim.height_ / (f32)dim.height_;
+
+            if (texture->GetColorFormat() == ECF_A8R8G8B8)
+            {
+                // ECF_A8R8G8B8 version
+
+                s32 *p = static_cast<s32*>(texture->Lock());
+
+                if (!p)
+                {
+                    os::Printer::log("Could not lock texture for making normal map.", ELL_ERROR);
+                    return;
+                }
+
+                // copy texture
+
+                u32 pitch = texture->GetPitch() / 4;
+
+                s32* in = new s32[dim.height_ * pitch];
+                memcpy(in, p, dim.height_ * pitch * 4);
+
+                for (s32 x = 0; x < s32(pitch); ++x)
+                    for (s32 y = 0; y < s32(dim.height_); ++y)
+                    {
+                        // TODO: this could be optimized really a lot
+
+                        core::vector3df h1((x - 1)*hh, nml32(x - 1, y, pitch, dim.height_, in)*amplitude, y*vh);
+                        core::vector3df h2((x + 1)*hh, nml32(x + 1, y, pitch, dim.height_, in)*amplitude, y*vh);
+                        //core::vector3df v1(x*hh, nml32(x, y-1, pitch, dim.Height, in)*amplitude, (y-1)*vh);
+                        //core::vector3df v2(x*hh, nml32(x, y+1, pitch, dim.Height, in)*amplitude, (y+1)*vh);
+                        core::vector3df v1(x*hh, nml32(x, y + 1, pitch, dim.height_, in)*amplitude, (y - 1)*vh);
+                        core::vector3df v2(x*hh, nml32(x, y - 1, pitch, dim.height_, in)*amplitude, (y + 1)*vh);
+
+                        core::vector3df v = v1 - v2;
+                        core::vector3df h = h1 - h2;
+
+                        core::vector3df n = v.CrossProduct(h);
+                        n.Normalize();
+                        n *= 0.5f;
+                        n += core::vector3df(0.5f, 0.5f, 0.5f); // now between 0 and 1
+                        n *= 255.0f;
+
+                        s32 height = (s32)nml32(x, y, pitch, dim.height_, in);
+                        p[y*pitch + x] = video::SColor(
+                            height, // store height in alpha
+                            (s32)n.x_, (s32)n.z_, (s32)n.y_).color_;
+                    }
+
+                delete[] in;
+                texture->Unlock();
+            }
+            else
+            {
+                // ECF_A1R5G5B5 version
+
+                s16 *p = (s16*)texture->Lock();
+
+                if (!p)
+                {
+                    os::Printer::log("Could not lock texture for making normal map.", ELL_ERROR);
+                    return;
+                }
+
+                u32 pitch = texture->GetPitch() / 2;
+
+                // copy texture
+
+                s16* in = new s16[dim.height_ * pitch];
+                memcpy(in, p, dim.height_ * pitch * 2);
+
+                for (s32 x = 0; x < s32(pitch); ++x)
+                    for (s32 y = 0; y < s32(dim.height_); ++y)
+                    {
+                        // TODO: this could be optimized really a lot
+
+                        core::vector3df h1((x - 1)*hh, nml16(x - 1, y, pitch, dim.height_, in)*amplitude, y*vh);
+                        core::vector3df h2((x + 1)*hh, nml16(x + 1, y, pitch, dim.height_, in)*amplitude, y*vh);
+                        core::vector3df v1(x*hh, nml16(x, y - 1, pitch, dim.height_, in)*amplitude, (y - 1)*vh);
+                        core::vector3df v2(x*hh, nml16(x, y + 1, pitch, dim.height_, in)*amplitude, (y + 1)*vh);
+
+                        core::vector3df v = v1 - v2;
+                        core::vector3df h = h1 - h2;
+
+                        core::vector3df n = v.CrossProduct(h);
+                        n.Normalize();
+                        n *= 0.5f;
+                        n += core::vector3df(0.5f, 0.5f, 0.5f); // now between 0 and 1
+                        n *= 255.0f;
+
+                        p[y*pitch + x] = video::RGBA16((u32)n.x_, (u32)n.z_, (u32)n.y_);
+                    }
+
+                delete[] in;
+                texture->Unlock();
+            }
+
+            texture->RegenerateMipMapLevels();
         }
 
         //! draws a 2d image, using a color and the alpha channel of the texture if

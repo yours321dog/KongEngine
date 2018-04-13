@@ -32,6 +32,7 @@ namespace kong
             T &operator[](s32 i) const;
             void SetAll(const T val);
             void Clear();
+            void Erase(u32 i);
 
             void PushBack(const T &val);
             void Insert(const T &val, u32 index = 0);
@@ -46,6 +47,10 @@ namespace kong
 
             s32 BinarySearch(const T &element, s32 left, s32 right) const;
             s32 LinearSearch(const T& element) const;
+
+            T GetLast();
+
+            const T GetLast() const;
 
         private:
             void Reallocted(u32 times = 2);
@@ -194,6 +199,22 @@ namespace kong
         }
 
         template <typename T>
+        void Array<T>::Erase(u32 idx)
+        {
+            if (idx >= size_)
+            {
+                return;
+            }
+
+            for (u32 i = idx + 1; i < size_; ++i)
+            {
+                data_[i - 1] = data_[i];
+            }
+
+            size_--;
+        }
+
+        template <typename T>
         void Array<T>::PushBack(const T& val)
         {
             if (size_ == allocated_)
@@ -311,6 +332,18 @@ namespace kong
                 }
             }
             return -1;
+        }
+
+        template <typename T>
+        T Array<T>::GetLast()
+        {
+            return data_[size_ - 1];
+        }
+
+        template <typename T>
+        const T Array<T>::GetLast() const
+        {
+            return data_[size_ - 1];
         }
     } // end namespace core
 } // end namespace kong

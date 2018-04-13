@@ -11,18 +11,27 @@
 
 namespace kong
 {
+    namespace io {
+        class IFileSystem;
+    }
     namespace scene
     {
         class CSceneManager : public ISceneManager, public ISceneNode
         {
         public:
             //! constructor
-            CSceneManager(video::IVideoDriver* driver/*, io::IFileSystem* fs,
+            CSceneManager(video::IVideoDriver* driver, io::IFileSystem* fs/*,
                 gui::ICursorControl* cursorControl, IMeshCache* cache = 0,
                 gui::IGUIEnvironment *guiEnvironment = 0*/);
 
             //! destructor
             virtual ~CSceneManager();
+
+            //! gets an animateable mesh. loads it if needed. returned pointer must not be dropped.
+            virtual IAnimatedMesh* getMesh(const io::path& filename);
+
+            //! gets an animateable mesh. loads it if needed. returned pointer must not be dropped.
+            virtual IAnimatedMesh* getMesh(io::IReadFile* file);
 
             //! add cube scene node
             virtual IMeshSceneNode* AddCubeSceneNode(f32 size = 10.0f, ISceneNode* parent = nullptr, s32 id = -1,
@@ -76,6 +85,9 @@ namespace kong
             //! Registers a node for rendering it at a specific time.
             virtual u32 RegisterNodeForRendering(ISceneNode* node, E_SCENE_NODE_RENDER_PASS pass = ESNRP_AUTOMATIC);
 
+            //! Get pointer to the mesh manipulator.
+            virtual IMeshManipulator* GetMeshManipulator();
+
         private:
             struct DefaultNodeEntry
             {
@@ -109,11 +121,15 @@ namespace kong
             core::Array<ISceneNode *> shadow_node_list_;
             core::Array<DefaultNodeEntry> solid_node_list_;
 
+            core::Array<IMeshLoader*> MeshLoaderList;
+
             video::SColor shadow_color_;
             video::SColor ambient_light_;
 
             ICameraSceneNode *active_camera_;
             core::Vector3Df cam_world_pos_;
+
+            io::IFileSystem *file_system_;
         };
     }
 }

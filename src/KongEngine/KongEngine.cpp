@@ -49,6 +49,7 @@ namespace kong
     namespace core
     {
         const Matrixf identity_matrix(Matrixf::IDENTITY);
+        kong::core::stringc LOCALE_DECIMAL_POINTS(".");
     }
 
     namespace video

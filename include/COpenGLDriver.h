@@ -27,7 +27,7 @@ namespace kong
         public:
             COpenGLDriver(const SKongCreationParameters &params, io::IFileSystem* io, CKongDeviceWin32* device);
 
-            virtual ~COpenGLDriver() = default;
+            virtual ~COpenGLDriver();
 
             virtual bool InitDriver(CKongDeviceWin32 *device);
 
@@ -101,6 +101,12 @@ namespace kong
             //! disables all textures beginning with the optional fromStage parameter. Otherwise all texture stages are disabled.
             //! Returns whether disabling was successful or not.
             bool DisableTextures(u32 fromStage = 0);
+
+            //! Returns a pointer to the mesh manipulator.
+            scene::IMeshManipulator* GetMeshManipulator() override;
+
+            //! Creates a normal map from a height map texture.
+            void MakeNormalMapTexture(video::ITexture* texture, f32 amplitude = 1.0f) const override;
         protected:
             //! enumeration for rendering modes such as 2d and 3d for minizing the switching of renderStates.
             enum E_RENDER_MODE
@@ -109,6 +115,35 @@ namespace kong
                 ERM_2D,		// 2d drawing rendermode
                 ERM_3D		// 3d rendering mode
             };
+
+            //! normal map lookup 32 bit version
+            inline f32 nml32(int x, int y, int pitch, int height, s32 *p) const
+            {
+                if (x < 0)
+                    x = pitch - 1;
+                if (x >= pitch)
+                    x = 0;
+                if (y < 0)
+                    y = height - 1;
+                if (y >= height)
+                    y = 0;
+                return (f32)(((p[(y * pitch) + x]) >> 16) & 0xff);
+            }
+
+            //! normal map lookup 16 bit version
+            inline f32 nml16(int x, int y, int pitch, int height, s16 *p) const
+            {
+                if (x < 0)
+                    x = pitch - 1;
+                if (x >= pitch)
+                    x = 0;
+                if (y < 0)
+                    y = height - 1;
+                if (y >= height)
+                    y = 0;
+
+                return (f32)getAverage(p[(y * pitch) + x]);
+            }
 
             struct SSurface
             {
@@ -225,6 +260,9 @@ namespace kong
             s32 max_texture_units_;
             s32 max_supported_textures_;
             core::Matrixf texture_flip_matrix_;
+
+            //! mesh manipulator
+            scene::IMeshManipulator* mesh_manipulator_;
         };
     } // end namespace video
 } // end namespace kong

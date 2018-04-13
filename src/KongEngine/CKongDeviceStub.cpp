@@ -8,8 +8,8 @@ namespace kong
 {
     namespace scene
     {
-        ISceneManager* CreateSceneManager(video::IVideoDriver* driver
-            /*io::IFileSystem* fs, gui::ICursorControl* cc, gui::IGUIEnvironment *gui*/);
+        ISceneManager* CreateSceneManager(video::IVideoDriver* driver,
+            io::IFileSystem* fs/*, gui::ICursorControl* cc, gui::IGUIEnvironment *gui*/);
     }
 
     kong::CKongDeviceStub::CKongDeviceStub(const SKongCreationParameters &param)
@@ -24,7 +24,7 @@ namespace kong
 
     void kong::CKongDeviceStub::CreateScene()
     {
-        scene_manager_ = scene::CreateSceneManager(video_driver_);
+        scene_manager_ = scene::CreateSceneManager(video_driver_, file_system_);
     }
 
     bool CKongDeviceStub::PostEventFromUser(const SEvent &post_event) const

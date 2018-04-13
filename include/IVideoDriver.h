@@ -21,7 +21,7 @@ namespace kong
     {
         class IMeshBuffer;
         class IMesh;
-        //class IMeshManipulator;
+        class IMeshManipulator;
         class ISceneNode;
     } // end namespace scene
 
@@ -265,6 +265,19 @@ namespace kong
             should not be dropped. See IReferenceCounted::drop() for more
             information. */
             virtual ITexture* AddTexture(const io::path& name, IImage* image, void* mipmapData = nullptr) = 0;
+
+            //! Returns a pointer to the mesh manipulator.
+            virtual scene::IMeshManipulator* GetMeshManipulator() = 0;
+
+            //! Creates a normal map from a height map texture.
+            /** If the target texture has 32 bit, the height value is
+            stored in the alpha component of the texture as addition. This
+            value is used by the video::EMT_PARALLAX_MAP_SOLID material and
+            similar materials.
+            \param texture Texture whose alpha channel is modified.
+            \param amplitude Constant value by which the height
+            information is multiplied.*/
+            virtual void MakeNormalMapTexture(video::ITexture* texture, f32 amplitude = 1.0f) const = 0;
         };
     }
 }

@@ -7,6 +7,7 @@
 #include "KongTypes.h"
 #include "SMaterial.h"
 #include "S3DVertex.h"
+#include "aabbox3d.h"
 
 namespace kong
 {
@@ -24,9 +25,9 @@ namespace kong
             /** \return Material of this buffer. */
             virtual const video::SMaterial& GetMaterial() const = 0;
 
-            ////! Get type of vertex data which is stored in this meshbuffer.
-            ///** \return Vertex type of this buffer. */
-            //virtual video::E_VERTEX_TYPE getVertexType() const = 0;
+            //! Get type of vertex data which is stored in this meshbuffer.
+            /** \return Vertex type of this buffer. */
+            virtual video::E_VERTEX_TYPE GetVertexType() const = 0;
 
             //! Get access to vertex data. The data is an array of vertices.
             /** Which vertex type is used can be determined by getVertexType().
@@ -41,6 +42,10 @@ namespace kong
             //! Get amount of vertices in meshbuffer.
             /** \return Number of vertices in this buffer. */
             virtual u32 GetVertexCount() const = 0;
+
+            //! Get type of index data which is stored in this meshbuffer.
+            /** \return Index type of this buffer. */
+            virtual video::E_INDEX_TYPE GetIndexType() const = 0;
 
             //! Get access to Indices.
             /** \return Pointer to indices array. */
@@ -61,6 +66,36 @@ namespace kong
             //! Get the currently used ID for identification of changes.
             /** This shouldn't be used for anything outside the VideoDriver. */
             virtual u32 GetIndexChangedID() const = 0;
+
+            //! Get the axis aligned bounding box of this meshbuffer.
+            /** \return Axis aligned bounding box of this buffer. */
+            virtual const core::aabbox3df& GetBoundingBox() const = 0;
+
+            //! Set axis aligned bounding box
+            /** \param box User defined axis aligned bounding box to use
+            for this buffer. */
+            virtual void SetBoundingBox(const core::aabbox3df& box) = 0;
+
+            //! Recalculates the bounding box. Should be called if the mesh changed.
+            virtual void RecalculateBoundingBox() = 0;
+
+            //! returns position of vertex i
+            virtual const core::vector3df& GetPosition(u32 i) const = 0;
+
+            //! returns position of vertex i
+            virtual core::vector3df& GetPosition(u32 i) = 0;
+
+            //! returns normal of vertex i
+            virtual const core::vector3df& GetNormal(u32 i) const = 0;
+
+            //! returns normal of vertex i
+            virtual core::vector3df& GetNormal(u32 i) = 0;
+
+            //! returns texture coord of vertex i
+            virtual const core::vector2df& GetTCoords(u32 i) const = 0;
+
+            //! returns texture coord of vertex i
+            virtual core::vector2df& GetTCoords(u32 i) = 0;
         };
     } // end namespace scene
 } // end namespace kong

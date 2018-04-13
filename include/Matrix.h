@@ -42,7 +42,7 @@ namespace kong
             bool operator==(const Matrix<T>&) const;
             bool operator!=(const Matrix<T>&) const;
 
-            Vector<T> Apply(const Vector<T> &);
+            Vector<T> Apply(const Vector<T> &) const;
 
             void Translate(T x, T y, T z);
             void Scale(T x, T y, T z);
@@ -256,7 +256,7 @@ namespace kong
         }
 
         template <typename T>
-        Vector<T> Matrix<T>::Apply(const Vector<T>& vec)
+        Vector<T> Matrix<T>::Apply(const Vector<T>& vec) const
         {
             Vector<T> tmp;
             for (int i = 0; i < 4; i++)

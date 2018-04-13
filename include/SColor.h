@@ -229,6 +229,18 @@ namespace kong
                 return (GetRed() + GetGreen() + GetBlue()) / 3;
             }
 
+            //! Get lightness of the color in the range [0,255]
+            f32 getLightness() const
+            {
+                return 0.5f*(core::max_(core::max_(GetRed(), GetGreen()), GetBlue()) + core::min_(core::min_(GetRed(), GetGreen()), GetBlue()));
+            }
+
+            //! Get luminance of the color in the range [0,255].
+            f32 getLuminance() const
+            {
+                return 0.3f*GetRed() + 0.59f*GetGreen() + 0.11f*GetBlue();
+            }
+
             //! Sets the alpha component of the Color.
             /** The alpha component defines how transparent a color should be.
             \param a The alpha value of the color. 0 is fully transparent, 255 is fully opaque. */
@@ -278,6 +290,12 @@ namespace kong
                 return color_ != other.color_;
             }
 
+            //! comparison operator
+            /** \return True if this color is smaller than the other one */
+            bool operator<(const SColor& other) const {
+                return (color_ < other.color_);
+            }
+
             void Interpolation(const SColor &clr1, const SColor &clr2, f32 t)
             {
                 t = core::clamp(t, 0.f, 1.f);
@@ -285,6 +303,44 @@ namespace kong
                 SetRed(core::lerp(clr1.GetRed(), clr2.GetRed(), t));
                 SetGreen(core::lerp(clr1.GetGreen(), clr2.GetGreen(), t));
                 SetBlue(core::lerp(clr1.GetBlue(), clr2.GetBlue(), t));
+            }
+
+            //! Interpolates the color with a f32 value to another color
+            /** \param other: Other color
+            \param d: value between 0.0f and 1.0f
+            \return Interpolated color. */
+            SColor GetInterpolated(const SColor &other, f32 d) const
+            {
+                d = core::clamp(d, 0.f, 1.f);
+                const f32 inv = 1.0f - d;
+                return SColor((u32)core::round32(other.GetAlpha()*inv + GetAlpha()*d),
+                    (u32)core::round32(other.GetRed()*inv + GetRed()*d),
+                    (u32)core::round32(other.GetGreen()*inv + GetGreen()*d),
+                    (u32)core::round32(other.GetBlue()*inv + GetBlue()*d));
+            }
+
+            //! Returns interpolated color. ( quadratic )
+            /** \param c1: first color to interpolate with
+            \param c2: second color to interpolate with
+            \param d: value between 0.0f and 1.0f. */
+            SColor GetInterpolatedQuadratic(const SColor& c1, const SColor& c2, f32 d) const
+            {
+                // this*(1-d)*(1-d) + 2 * c1 * (1-d) + c2 * d * d;
+                d = core::clamp(d, 0.f, 1.f);
+                const f32 inv = 1.f - d;
+                const f32 mul0 = inv * inv;
+                const f32 mul1 = 2.f * d * inv;
+                const f32 mul2 = d * d;
+
+                return SColor(
+                    core::clamp(core::floor32(
+                    GetAlpha() * mul0 + c1.GetAlpha() * mul1 + c2.GetAlpha() * mul2), 0, 255),
+                    core::clamp(core::floor32(
+                    GetRed()   * mul0 + c1.GetRed()   * mul1 + c2.GetRed()   * mul2), 0, 255),
+                    core::clamp(core::floor32(
+                    GetGreen() * mul0 + c1.GetGreen() * mul1 + c2.GetGreen() * mul2), 0, 255),
+                    core::clamp(core::floor32(
+                    GetBlue()  * mul0 + c1.GetBlue()  * mul1 + c2.GetBlue()  * mul2), 0, 255));
             }
 
             //! Calculates a 16 bit A1R5G5B5 value of this color.

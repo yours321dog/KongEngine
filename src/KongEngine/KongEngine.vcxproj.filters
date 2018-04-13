@@ -345,6 +345,15 @@
     <ClCompile Include="CObjMeshFileLoader.cpp">
       <Filter>KongEngine\scene\loader</Filter>
     </ClCompile>
+    <ClCompile Include="CLogger.cpp">
+      <Filter>KongEngine\kong</Filter>
+    </ClCompile>
+    <ClCompile Include="os.cpp">
+      <Filter>KongEngine\kong</Filter>
+    </ClCompile>
+    <ClCompile Include="jpeglib\CMeshManipulator.cpp">
+      <Filter>KongEngine\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\KongCompileConfig.h">
@@ -604,6 +613,60 @@
     </ClInclude>
     <ClInclude Include="..\..\include\ILogger.h">
       <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CLogger.h">
+      <Filter>KongEngine\kong</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\os.h">
+      <Filter>KongEngine\kong</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ITimer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CTimer.h">
+      <Filter>KongEngine\kong</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\aabbox3d.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\plane3d.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\line2d.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\line3d.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IAnimatedMesh.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SAnimatedMesh.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\EMaterialFlags.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\EhardwareBufferFlags.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\fast_atof.h">
+      <Filter>Include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IAttributes.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\IMeshManipulator.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SVertexManipulator.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CMeshManipulator.h">
+      <Filter>KongEngine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib\EMaterialTypes.h">
+      <Filter>Include\video</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

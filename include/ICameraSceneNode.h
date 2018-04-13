@@ -97,17 +97,17 @@ namespace kong
             view_(0, 0) = right_(0);
             view_(1, 0) = right_(1);
             view_(2, 0) = right_(2);
-            view_(3, 0) = -(right_ * eye_);
+            view_(3, 0) = -(right_.DotProduct(eye_));
 
             view_(0, 1) = up_(0);
             view_(1, 1) = up_(1);
             view_(2, 1) = up_(2);
-            view_(3, 1) = -(up_ * eye_);
+            view_(3, 1) = -(up_.DotProduct(eye_));
 
             view_(0, 2) = to_(0);
             view_(1, 2) = to_(1);
             view_(2, 2) = to_(2);
-            view_(3, 2) = -(to_ * eye_);
+            view_(3, 2) = -(to_.DotProduct(eye_));
         }
 
         inline core::Matrixf ICameraSceneNode::GetViewTransform()

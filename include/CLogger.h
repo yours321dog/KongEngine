@@ -6,7 +6,7 @@
 #define __C_LOGGER_H_INCLUDED__
 
 #include "ILogger.h"
-//#include "os.h"
+#include "os.h"
 #include "KongString.h"
 #include "IEventReceiver.h"
 

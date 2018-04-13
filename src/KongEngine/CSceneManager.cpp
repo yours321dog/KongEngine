@@ -1,15 +1,26 @@
 #include "CSceneManager.h"
 #include "CCubeSceneNode.h"
 #include "CPerspectiveCameraSceneNode.h"
+#include "os.h"
+#include "IFileSystem.h"
+#include "IMeshLoader.h"
+#include "IReadFile.h"
+
+#ifdef _KONG_COMPILE_WITH_OBJ_LOADER_
+#include "CObjMeshFileLoader.h"
+#endif
 
 namespace kong
 {
     namespace scene
     {
-        CSceneManager::CSceneManager(video::IVideoDriver* driver)
+        CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem *fs)
             : ISceneNode(nullptr, nullptr), driver_(driver), shadow_color_(150, 0, 0, 0),
-            ambient_light_(0, 0, 0, 0), active_camera_(nullptr)
+            ambient_light_(0, 0, 0, 0), active_camera_(nullptr), file_system_(fs)
         {
+#ifdef _KONG_COMPILE_WITH_OBJ_LOADER_
+            MeshLoaderList.PushBack(new COBJMeshFileLoader(this, fs));
+#endif
             // root node's scene manager
             scene_manager_ = this;
         }
@@ -39,6 +50,82 @@ namespace kong
                 delete shadow_node_list_[i];
             }
             shadow_node_list_.Clear();
+        }
+
+        IAnimatedMesh* CSceneManager::getMesh(const io::path& filename)
+        {
+            IAnimatedMesh* msh = nullptr;
+
+            io::IReadFile* file = file_system_->CreateAndOpenFile(filename);
+            if (!file)
+            {
+                os::Printer::log("Could not load mesh, because file could not be opened: ", filename, ELL_ERROR);
+                return 0;
+            }
+
+            // iterate the list in reverse order so user-added loaders can override the built-in ones
+            s32 count = MeshLoaderList.Size();
+            for (s32 i = count - 1; i >= 0; --i)
+            {
+                if (MeshLoaderList[i]->isALoadableFileExtension(filename))
+                {
+                    // reset file to avoid side effects of previous calls to createMesh
+                    file->Seek(0);
+                    msh = MeshLoaderList[i]->createMesh(file);
+                    if (msh != nullptr)
+                    {
+                        //MeshCache->addMesh(filename, msh);
+                        //msh->drop();
+                        break;
+                    }
+                }
+            }
+
+            delete file;
+
+            if (msh == nullptr)
+                os::Printer::log("Could not load mesh, file format seems to be unsupported", filename, ELL_ERROR);
+            else
+                os::Printer::log("Loaded mesh", filename, ELL_INFORMATION);
+
+            return msh;
+        }
+
+        IAnimatedMesh* CSceneManager::getMesh(io::IReadFile* file)
+        {
+            if (!file)
+                return 0;
+
+            io::path name = file->GetFileName();
+            //IAnimatedMesh* msh = MeshCache->getMeshByName(file->getFileName());
+            IAnimatedMesh* msh = nullptr;
+            if (msh != nullptr)
+                return msh;
+
+            // iterate the list in reverse order so user-added loaders can override the built-in ones
+            s32 count = MeshLoaderList.Size();
+            for (s32 i = count - 1; i >= 0; --i)
+            {
+                if (MeshLoaderList[i]->isALoadableFileExtension(name))
+                {
+                    // reset file to avoid side effects of previous calls to createMesh
+                    file->Seek(0);
+                    msh = MeshLoaderList[i]->createMesh(file);
+                    if (msh)
+                    {
+                        //MeshCache->addMesh(file->getFileName(), msh);
+                        //msh->drop();
+                        break;
+                    }
+                }
+            }
+
+            if (!msh)
+                os::Printer::log("Could not load mesh, file format seems to be unsupported", file->GetFileName(), ELL_ERROR);
+            else
+                os::Printer::log("Loaded mesh", file->GetFileName(), ELL_INFORMATION);
+
+            return msh;
         }
 
         IMeshSceneNode* CSceneManager::AddCubeSceneNode(f32 size, ISceneNode* parent, s32 id,
@@ -281,10 +368,15 @@ namespace kong
             return taken;
         }
 
-        ISceneManager* CreateSceneManager(video::IVideoDriver* driver
-            /*io::IFileSystem* fs, gui::ICursorControl* cc, gui::IGUIEnvironment *gui*/)
+        IMeshManipulator* CSceneManager::GetMeshManipulator()
         {
-            CSceneManager *sm = new CSceneManager(driver);
+            return driver_->GetMeshManipulator();
+        }
+
+        ISceneManager* CreateSceneManager(video::IVideoDriver* driver,
+            io::IFileSystem* fs/*, gui::ICursorControl* cc, gui::IGUIEnvironment *gui*/)
+        {
+            CSceneManager *sm = new CSceneManager(driver, fs);
             return sm;
         }
     } // end namespace scene
