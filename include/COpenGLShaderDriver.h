@@ -25,6 +25,10 @@ namespace kong
             //! Draws a mesh buffer
             void DrawMeshBuffer(const scene::IMeshBuffer* mesh_buffer) override;
 
+            //! sets the current Texture
+            //! Returns whether setting was a success or not.
+            bool SetActiveTexture(u32 stage, const video::ITexture* texture) override;
+
         protected:
             COpenGLShaderHelper *shader_helper_;
 

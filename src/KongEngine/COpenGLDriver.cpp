@@ -608,7 +608,7 @@ namespace kong
                 if (texture->GetDriverType() != EDT_OPENGL)
                 {
                     glDisable(GL_TEXTURE_2D);
-                    current_texture_.Set(stage, 0);
+                    current_texture_.Set(stage, nullptr);
                     //os::Printer::log("Fatal Error: Tried to set a texture not owned by this driver.", ELL_ERROR);
                     return false;
                 }

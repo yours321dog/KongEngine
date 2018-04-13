@@ -64,6 +64,9 @@
     <Filter Include="KongEngine\kong\extern\zlib">
       <UniqueIdentifier>{bd9a89f4-7047-4a7a-ac46-0a53dc51fba4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KongEngine\scene\loader">
+      <UniqueIdentifier>{2e5301ef-47dd-4d02-8f6a-ec9611be20d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -336,6 +339,12 @@
     <ClCompile Include="COpenGLTexture.cpp">
       <Filter>KongEngine\video\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\include\IMeshLoader.h">
+      <Filter>Include\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CObjMeshFileLoader.cpp">
+      <Filter>KongEngine\scene\loader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\KongCompileConfig.h">
@@ -589,6 +598,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\SMaterialLayer.h">
       <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CObjMeshFileLoader.h">
+      <Filter>KongEngine\scene\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ILogger.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

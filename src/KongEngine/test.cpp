@@ -167,7 +167,9 @@ void TestWindow()
     node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
 
     Vector3Df node_pos(0.f, 0.f, 0.f);
+    Vector3Df node_rot(0.f, 0.f, 0.f);
     f32 movement = 0.05;
+    f32 rotate_factor = 0.05;
 
     while (device->run())
     {
@@ -199,7 +201,43 @@ void TestWindow()
         {
             node_pos.z_ += movement;
         }
+
+        if (receiver.IsKeyDown(kong::KEY_SPACE))
+        {
+            node_pos = Vector3Df(0.f, 0.f, 0.f);
+            node_rot = Vector3Df(0.f, 0.f, 0.f);
+        }
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_U))
+        {
+            node_rot.x_ -= rotate_factor;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_J))
+        {
+            node_rot.x_ += rotate_factor;
+        }
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_I))
+        {
+            node_rot.y_ -= rotate_factor;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_K))
+        {
+            node_rot.y_ += rotate_factor;
+        }
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_O))
+        {
+            node_rot.z_ -= rotate_factor;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_L))
+        {
+            node_rot.z_ += rotate_factor;
+        }
+
+
         node->SetPosition(node_pos);
+        node->SetRotation(node_rot);
 
         //driver->Draw3DLine(Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
         smr->DrawAll();

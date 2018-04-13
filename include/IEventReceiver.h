@@ -5,9 +5,9 @@
 #ifndef _IEVENTRECEIVER_H_
 #define _IEVENTRECEIVER_H_
 
-//#include "ILogger.h"
+#include "ILogger.h"
 #include "Keycodes.h"
-//#include "irrString.h"
+#include "KongString.h"
 #include "KongTypes.h"
 
 namespace kong
@@ -399,7 +399,7 @@ namespace kong
             const c8* Text;
 
             //! Log level in which the text has been logged TO DO
-            //ELOG_LEVEL Level;
+            ELOG_LEVEL Level;
         };
 
         //! Any kind of user event.
@@ -458,7 +458,7 @@ namespace kong
         u8				Joystick;
 
         //! The name that the joystick uses to identify itself.
-        //core::stringc	Name;
+        core::stringc	Name;
 
         //! The number of buttons that the joystick has.
         u32				Buttons;

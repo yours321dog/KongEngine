@@ -96,7 +96,7 @@ namespace kong
 
             //! sets the current Texture
             //! Returns whether setting was a success or not.
-            bool SetActiveTexture(u32 stage, const video::ITexture* texture);
+            virtual bool SetActiveTexture(u32 stage, const video::ITexture* texture);
 
             //! disables all textures beginning with the optional fromStage parameter. Otherwise all texture stages are disabled.
             //! Returns whether disabling was successful or not.
@@ -171,7 +171,7 @@ namespace kong
                     {
                         const ITexture* oldTexture = current_texture_[stage];
                         current_texture_[stage] = tex;
-                        delete oldTexture;
+                        //delete oldTexture;
                     }
                 }
 
@@ -180,7 +180,7 @@ namespace kong
                     if ((u32)stage<MATERIAL_MAX_TEXTURES)
                         return current_texture_[stage];
                     else
-                        return 0;
+                        return nullptr;
                 }
 
                 void Remove(const ITexture* tex)
@@ -190,7 +190,7 @@ namespace kong
                         if (current_texture_[i] == tex)
                         {
                             delete tex;
-                            current_texture_[i] = 0;
+                            current_texture_[i] = nullptr;
                         }
                     }
                 }

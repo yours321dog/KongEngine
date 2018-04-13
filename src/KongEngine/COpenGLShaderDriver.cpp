@@ -5,6 +5,7 @@
 #include "GL/glew.h"
 #include "S3DVertex.h"
 #include "IMeshBuffer.h"
+#include "COpenGLTexture.h"
 
 namespace kong
 {
@@ -83,8 +84,40 @@ namespace kong
 
             shader_helper_->Use();
             glBindVertexArray(vao_);
-            glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_SHORT, 0);
+            glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_SHORT, nullptr);
             glBindVertexArray(0);
+        }
+
+        bool COpenGLShaderDriver::SetActiveTexture(u32 stage, const video::ITexture* texture)
+        {
+            if (current_texture_[stage] == texture)
+                return true;
+
+            current_texture_.Set(stage, texture);
+
+            if (!texture)
+            {
+                glDisable(GL_TEXTURE_2D);
+                return true;
+            }
+            else
+            {
+                if (texture->GetDriverType() != EDT_OPENGL)
+                {
+                    glDisable(GL_TEXTURE_2D);
+                    current_texture_.Set(stage, nullptr);
+                    //os::Printer::log("Fatal Error: Tried to set a texture not owned by this driver.", ELL_ERROR);
+                    return false;
+                }
+
+                shader_helper_->Use();
+                glEnable(GL_TEXTURE_2D);
+                glActiveTexture(GL_TEXTURE0 + stage);
+                glBindTexture(GL_TEXTURE_2D, dynamic_cast<const COpenGLTexture*>(texture)->GetOpenGLTextureName());
+                core::stringc str = core::stringc("texture") + core::stringc(stage);
+                shader_helper_->SetInt(str.c_str(), stage);
+            }
+            return true;
         }
     } // end namespace video
 } // end namespace kong

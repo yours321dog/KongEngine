@@ -13,5 +13,6 @@ out vec2 outTexcoord;
 void main()
 {
 	gl_Position = project_transform * view_transform * world_transform * vec4(aPos.x, aPos.y, aPos.z, 1.0);
-	outClr = vec4(aClr.z, aClr.y, aClr.x, aClr.w);
+	outClr = vec4(aClr.z, aClr.y, aClr.x, aClr.w) / 255.f;
+	outTexcoord = aTexcoord;
 }

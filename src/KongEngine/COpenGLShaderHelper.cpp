@@ -59,7 +59,7 @@ namespace kong
             fs_file->Read(fs_code, fs_file->GetSize());
             vs_code[vs_file->GetSize()] = '\0';
             fs_code[fs_file->GetSize()] = '\0';
-
+ 
             // 2. compile shaders
             s32 success;
             c8 infoLog[512];

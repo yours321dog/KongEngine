@@ -87,42 +87,42 @@ namespace kong
 
             const video::SColor clr_r = video::SColor(255, 255, 0, 0);
             const video::SColor clr_g = video::SColor(255, 0, 255, 0);
-            const video::SColor clr_b = video::SColor(255, 255, 0, 255);
+            const video::SColor clr_b = video::SColor(255, 0, 0, 255);
 
             buffer->vertices_.Reallocate(24);
 
             f32 len = size_ / 2.f;
 
 
-            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, - len, 0.f, 0.f, -1.f, clr_r, 0.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(len, -len, -len, 0.f, 0.f, -1.f, clr_r, 1.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(len, len, -len, 0.f, 0.f, -1.f, clr_r, 1.f, 1.f));
-            buffer->vertices_.PushBack(video::S3DVertex(-len, len, -len, 0.f, 0.f, -1.f, clr_r, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, - len, 0.f, 0.f, -1.f, clr_r, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, -len, -len, 0.f, 0.f, -1.f, clr_r, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, -len, 0.f, 0.f, -1.f, clr_r, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, -len, 0.f, 0.f, -1.f, clr_r, 0.f, 0.f));
             
-            buffer->vertices_.PushBack(video::S3DVertex(len, -len, -len, 0.f, 0.f, -1.f, clr_g, 0.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(len, -len, len, 0.f, 0.f, -1.f, clr_g, 1.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(len, len, len, 0.f, 0.f, -1.f, clr_g, 1.f, 1.f));
-            buffer->vertices_.PushBack(video::S3DVertex(len, len, -len, 0.f, 0.f, -1.f, clr_g, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, -len, -len, 0.f, 0.f, -1.f, clr_g, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, -len, len, 0.f, 0.f, -1.f, clr_g, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, len, 0.f, 0.f, -1.f, clr_g, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, -len, 0.f, 0.f, -1.f, clr_g, 0.f, 0.f));
 
-            buffer->vertices_.PushBack(video::S3DVertex(len, len, len, 0.f, 0.f, -1.f, clr_r, 0.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(-len, len, len, 0.f, 0.f, -1.f, clr_r, 1.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, len, 0.f, 0.f, -1.f, clr_r, 1.f, 1.f));
             buffer->vertices_.PushBack(video::S3DVertex(len, -len, len, 0.f, 0.f, -1.f, clr_r, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, len, 0.f, 0.f, -1.f, clr_r, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, len, 0.f, 0.f, -1.f, clr_r, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, len, 0.f, 0.f, -1.f, clr_r, 0.f, 0.f));
 
-            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, len, 0.f, 0.f, -1.f, clr_g, 0.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, -len, 0.f, 0.f, -1.f, clr_g, 1.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(-len, len, -len, 0.f, 0.f, -1.f, clr_g, 1.f, 1.f));
-            buffer->vertices_.PushBack(video::S3DVertex(-len, len, len, 0.f, 0.f, -1.f, clr_g, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, len, 0.f, 0.f, -1.f, clr_g, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, -len, 0.f, 0.f, -1.f, clr_g, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, -len, 0.f, 0.f, -1.f, clr_g, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, len, 0.f, 0.f, -1.f, clr_g, 0.f, 0.f));
 
-            buffer->vertices_.PushBack(video::S3DVertex(-len, len, -len, 0.f, 0.f, -1.f, clr_b, 0.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(len, len, -len, 0.f, 0.f, -1.f, clr_b, 1.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(len, len, len, 0.f, 0.f, -1.f, clr_b, 1.f, 1.f));
-            buffer->vertices_.PushBack(video::S3DVertex(-len, len, len, 0.f, 0.f, -1.f, clr_b, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, -len, 0.f, 0.f, -1.f, clr_b, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, -len, 0.f, 0.f, -1.f, clr_b, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, len, 0.f, 0.f, -1.f, clr_b, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, len, 0.f, 0.f, -1.f, clr_b, 0.f, 0.f));
 
-            buffer->vertices_.PushBack(video::S3DVertex(len, -len, len, 0.f, 0.f, -1.f, clr_b, 0.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, len, 0.f, 0.f, -1.f, clr_b, 1.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, -len, 0.f, 0.f, -1.f, clr_b, 1.f, 1.f));
-            buffer->vertices_.PushBack(video::S3DVertex(len, -len, -len, 0.f, 0.f, -1.f, clr_b, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, len, 0.f, 0.f, -1.f, clr_b, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, -len, len, 0.f, 0.f, -1.f, clr_b, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, -len, -len, 0.f, 0.f, -1.f, clr_b, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, -len, 0.f, 0.f, -1.f, clr_b, 0.f, 0.f));
 
             buffer->indices_.Reallocate(36);
 

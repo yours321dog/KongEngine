@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\include\IMeshLoader.h" />
     <ClCompile Include="CFileSystem.cpp" />
     <ClCompile Include="CImage.cpp" />
     <ClCompile Include="CImageLoaderJpg.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="CReadFile.cpp" />
     <ClCompile Include="CSceneManager.cpp" />
     <ClCompile Include="CWriteFile.cpp" />
+    <ClCompile Include="CObjMeshFileLoader.cpp" />
     <ClCompile Include="jpeglib\jaricom.c" />
     <ClCompile Include="jpeglib\jcapimin.c" />
     <ClCompile Include="jpeglib\jcapistd.c" />
@@ -197,9 +199,11 @@
     <ClInclude Include="..\..\include\IFileSystem.h" />
     <ClInclude Include="..\..\include\IImage.h" />
     <ClInclude Include="..\..\include\IImageLoader.h" />
+    <ClInclude Include="..\..\include\ILogger.h" />
     <ClInclude Include="..\..\include\IMesh.h" />
     <ClInclude Include="..\..\include\IMeshBuffer.h" />
     <ClInclude Include="..\..\include\IMeshSceneNode.h" />
+    <ClInclude Include="..\..\include\CObjMeshFileLoader.h" />
     <ClInclude Include="..\..\include\IReadFile.h" />
     <ClInclude Include="..\..\include\ISceneManager.h" />
     <ClInclude Include="..\..\include\ISceneNode.h" />
