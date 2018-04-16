@@ -28,5 +28,40 @@ namespace kong
         {
 
         }
+
+        const core::aabbox3d<f32>& CLightSceneNode::GetBoundingBox() const
+        {
+            return box_;
+        }
+
+        void CLightSceneNode::SetLightData(const video::SLight& light)
+        {
+            light_data_ = light;
+        }
+
+        const video::SLight& CLightSceneNode::GetLightData() const
+        {
+            return light_data_;
+        }
+
+        video::SLight& CLightSceneNode::GetLightData()
+        {
+            return light_data_;
+        }
+
+        void CLightSceneNode::SetVisible(bool isVisible)
+        {
+            is_visible_ = isVisible;
+        }
+
+        void CLightSceneNode::SetLightType(video::E_LIGHT_TYPE type)
+        {
+            light_data_.type_ = type;
+        }
+
+        video::E_LIGHT_TYPE CLightSceneNode::GetLightType() const
+        {
+            return light_data_.type_;
+        }
     } // end namespace scene
 } // end namespace kong
