@@ -7,6 +7,8 @@
 #include "Matrix.h"
 #include "List.h"
 #include "SMaterial.h"
+#include "aabbox3d.h"
+#include "ESceneNodeType.h"
 
 namespace kong
 {
@@ -371,6 +373,38 @@ namespace kong
 
                 for (u32 i = 0; i<GetMaterialCount(); ++i)
                     GetMaterial(i).SetTexture(textureLayer, texture);
+            }
+
+            //! Get the axis aligned, not transformed bounding box of this node.
+            /** This means that if this node is an animated 3d character,
+            moving in a room, the bounding box will always be around the
+            origin. To get the box in real world coordinates, just
+            transform it with the matrix you receive with
+            getAbsoluteTransformation() or simply use
+            getTransformedBoundingBox(), which does the same.
+            \return The non-transformed bounding box. */
+            virtual const core::aabbox3d<f32>& GetBoundingBox() const = 0;
+
+            //! Get the axis aligned, transformed and animated absolute bounding box of this node.
+            /** \return The transformed bounding box. */
+            virtual const core::aabbox3d<f32> getTransformedBoundingBox() const
+            {
+                core::aabbox3d<f32> box = GetBoundingBox();
+                absolute_tranform_.TransformBoxEx(box);
+                return box;
+            }
+
+            //! Nomalize the vertices of buffers
+            virtual void NormalizeVertice()
+            {
+            }
+
+
+            //! Returns type of the scene node
+            /** \return The type of this node. */
+            virtual ESCENE_NODE_TYPE GetType() const
+            {
+                return ESNT_UNKNOWN;
             }
 
         protected:

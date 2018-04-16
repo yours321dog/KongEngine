@@ -6,6 +6,7 @@
 
 #include "Array.h"
 #include "Dimension2d.h"
+#include "IAnimatedMesh.h"
 #include "IEventReceiver.h"
 #include "IFileSystem.h"
 #include "IMeshSceneNode.h"

@@ -6,6 +6,7 @@
 #include "S3DVertex.h"
 #include "IMeshBuffer.h"
 #include "COpenGLTexture.h"
+#include "COpenGLShaderHelper.h"
 
 namespace kong
 {
@@ -31,10 +32,18 @@ namespace kong
             glGenBuffers(1, &vbo_);
             glGenBuffers(1, &ebo_);
 
-            return shader_helper_ != nullptr;
+            if (shader_helper_ == nullptr)
+            {
+                return false;
+            }
+
+            shader_helper_->Use();
+            shader_helper_->SetBool("texture0_on", false);
+
+            return true;
         }
 
-        void COpenGLShaderDriver::SetTransform(E_TRANSFORMATION_STATE state, const core::Matrixf& mat)
+        void COpenGLShaderDriver::SetTransform(u32 state, const core::Matrixf& mat)
         {
             matrices_[state] = mat;
 
@@ -95,27 +104,32 @@ namespace kong
 
             current_texture_.Set(stage, texture);
 
+            core::stringc str_on = core::stringc("texture") + core::stringc(stage) + "_on";
+            
+            shader_helper_->Use();
             if (!texture)
             {
-                glDisable(GL_TEXTURE_2D);
+                //glActiveTexture(GL_TEXTURE0 + stage);
+                //core::stringc str = core::stringc("texture") + core::stringc(stage);
+                //shader_helper_->SetInt(str.c_str(), -1);
+                shader_helper_->SetBool(str_on.c_str(), false);
                 return true;
             }
             else
             {
                 if (texture->GetDriverType() != EDT_OPENGL)
                 {
-                    glDisable(GL_TEXTURE_2D);
+                    shader_helper_->SetBool(str_on.c_str(), false);
                     current_texture_.Set(stage, nullptr);
                     //os::Printer::log("Fatal Error: Tried to set a texture not owned by this driver.", ELL_ERROR);
                     return false;
                 }
 
-                shader_helper_->Use();
-                glEnable(GL_TEXTURE_2D);
                 glActiveTexture(GL_TEXTURE0 + stage);
                 glBindTexture(GL_TEXTURE_2D, dynamic_cast<const COpenGLTexture*>(texture)->GetOpenGLTextureName());
                 core::stringc str = core::stringc("texture") + core::stringc(stage);
                 shader_helper_->SetInt(str.c_str(), stage);
+                shader_helper_->SetBool(str_on.c_str(), true);
             }
             return true;
         }

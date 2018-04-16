@@ -37,6 +37,11 @@ namespace kong
 
         return absorbed;
     }
+
+    core::Dimension2d<u32> CKongDeviceStub::GetWindowSize()
+    {
+        return create_params_.window_size_;
+    }
 }
 
 

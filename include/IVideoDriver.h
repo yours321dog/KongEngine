@@ -6,6 +6,7 @@
 #include "SColor.h"
 #include "Matrix.h"
 #include "ITexture.h"
+#include "SLight.h"
 
 namespace kong
 {
@@ -107,7 +108,7 @@ namespace kong
             /** \param state Transformation type to be set, e.g. view,
             world, or projection.
             \param mat Matrix describing the transformation. */
-            virtual void SetTransform(E_TRANSFORMATION_STATE state, const core::Matrixf& mat) = 0;
+            virtual void SetTransform(u32 state, const core::Matrixf& mat) = 0;
 
             //! Draws a 3d line.
             /** For some implementations, this method simply calls
@@ -278,6 +279,39 @@ namespace kong
             \param amplitude Constant value by which the height
             information is multiplied.*/
             virtual void MakeNormalMapTexture(video::ITexture* texture, f32 amplitude = 1.0f) const = 0;
+
+            //! Get the size of the screen or render window.
+            /** \return Size of screen or render window. */
+            virtual const core::Dimension2d<u32>& GetScreenSize() const = 0;
+
+            //! Get the size of the current render target
+            /** This method will return the screen size if the driver
+            doesn't support render to texture, or if the current render
+            target is the screen.
+            \return Size of render target or screen/window */
+            virtual const core::Dimension2d<u32>& GetCurrentRenderTargetSize() const = 0;
+
+            //! Deletes all dynamic lights which were previously added with addDynamicLight().
+            virtual void deleteAllDynamicLights() = 0;
+
+            //! adds a dynamic light, returning an index to the light
+            //! \param light: the light data to use to create the light
+            //! \return An index to the light, or -1 if an error occurs
+            virtual s32 addDynamicLight(const SLight& light) = 0;
+
+            //! Returns the maximal amount of dynamic lights the device can handle
+            /** \return Maximal amount of dynamic lights. */
+            virtual u32 getMaximalDynamicLightAmount() const = 0;
+
+            //! Returns amount of dynamic lights currently set
+            /** \return Amount of dynamic lights currently set */
+            virtual u32 getDynamicLightCount() const = 0;
+
+            //! Returns light data which was previously set by IVideoDriver::addDynamicLight().
+            /** \param idx Zero based index of the light. Must be 0 or
+            greater and smaller than IVideoDriver::getDynamicLightCount.
+            \return Light data. */
+            virtual const SLight& getDynamicLight(u32 idx) const = 0;
         };
     }
 }

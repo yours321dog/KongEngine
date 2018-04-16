@@ -41,6 +41,8 @@ namespace kong
             // render camera node
             void Render() override;
 
+            const core::aabbox3d<f32>& GetBoundingBox() const override;
+
             enum CAMERA_TYPE
             {
                 ORTHOGONAL,
@@ -178,6 +180,14 @@ namespace kong
                 driver->SetTransform(video::ETS_PROJECTION, project_);
                 driver->SetTransform(video::ETS_VIEW, view_);
             }
+        }
+
+        inline const core::aabbox3d<f32>& ICameraSceneNode::GetBoundingBox() const
+        {
+            _KONG_DEBUG_BREAK_IF(true) // Bounding Box of Scene Manager wanted.
+
+            // should never be used.
+            return *(static_cast<core::aabbox3d<f32>*>(nullptr));
         }
     }
 }

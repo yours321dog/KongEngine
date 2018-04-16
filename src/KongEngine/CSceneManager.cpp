@@ -5,6 +5,7 @@
 #include "IFileSystem.h"
 #include "IMeshLoader.h"
 #include "IReadFile.h"
+#include "CMeshSceneNode.h"
 
 #ifdef _KONG_COMPILE_WITH_OBJ_LOADER_
 #include "CObjMeshFileLoader.h"
@@ -141,6 +142,25 @@ namespace kong
             return node;
         }
 
+        IMeshSceneNode* CSceneManager::AddMeshSceneNode(IMesh* mesh, ISceneNode* parent, s32 id,
+            const core::vector3df& position, const core::vector3df& rotation, const core::vector3df& scale,
+            bool alsoAddIfMeshPointerZero)
+        {
+            if (parent == nullptr)
+            {
+                parent = this;
+            }
+
+            if (!alsoAddIfMeshPointerZero && mesh == nullptr)
+            {
+                return nullptr;
+            }
+
+            IMeshSceneNode *node = new CMeshSceneNode(mesh, parent, this, id, position, rotation, scale);
+
+            return node;
+        }
+
         ICameraSceneNode* CSceneManager::AddCameraSceneNode(ISceneNode* parent, const core::Vector3Df& position,
             const core::Vector3Df& up, const core::Vector3Df& lookat, s32 id, bool make_active)
         {
@@ -155,7 +175,9 @@ namespace kong
                 parent = this;
             }
 
-            ICameraSceneNode *node = new CPerspectiveCameraSceneNode(parent, this, id, position, up, lookat, 90);
+            const core::Dimension2d<u32> window_size = driver_->GetScreenSize();
+            f32 aspect = static_cast<f32>(window_size.width_) / window_size.height_;
+            ICameraSceneNode *node = new CPerspectiveCameraSceneNode(parent, this, id, position, up, lookat, 90, aspect);
 
             if (make_active)
             {
@@ -371,6 +393,14 @@ namespace kong
         IMeshManipulator* CSceneManager::GetMeshManipulator()
         {
             return driver_->GetMeshManipulator();
+        }
+
+        const core::aabbox3d<f32>& CSceneManager::GetBoundingBox() const
+        {
+            _KONG_DEBUG_BREAK_IF(true) // Bounding Box of Scene Manager wanted.
+
+            // should never be used.
+            return *(static_cast<core::aabbox3d<f32>*>(nullptr));
         }
 
         ISceneManager* CreateSceneManager(video::IVideoDriver* driver,

@@ -354,6 +354,15 @@
     <ClCompile Include="jpeglib\CMeshManipulator.cpp">
       <Filter>KongEngine\scene</Filter>
     </ClCompile>
+    <ClCompile Include="CMeshSceneNode.cpp">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\CLightSceneNode.h">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClCompile>
+    <ClCompile Include="CLightSceneNode.cpp">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\KongCompileConfig.h">
@@ -409,9 +418,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\SMaterial.h">
       <Filter>Include\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\CMeshBuffer.h">
-      <Filter>Include\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\List.h">
       <Filter>Include\core</Filter>
@@ -667,6 +673,21 @@
     </ClInclude>
     <ClInclude Include="jpeglib\EMaterialTypes.h">
       <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CMeshSceneNode.h">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SLight.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CMeshBuffer.h">
+      <Filter>KongEngine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ILightSceneNode.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ESceneNodeType.h">
+      <Filter>KongEngine\scene\scenenode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

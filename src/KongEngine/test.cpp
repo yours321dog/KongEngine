@@ -246,6 +246,108 @@ void TestWindow()
     }
 }
 
+void TestObjLoad()
+{
+    MyEventReceiver receiver;
+
+    KongDevice *device = CreateDevice(Dimension2d<u32>(800, 600), 16,
+        false, false, false, &receiver);
+
+    if (!device)
+    {
+        return;
+    }
+
+    IVideoDriver *driver = device->GetVideoDriver();
+    ISceneManager *smr = device->GetSceneManager();
+
+    smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -2.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
+    IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
+    //ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(0.0003f, 0.0003f, 0.0003f));
+    ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
+    node->NormalizeVertice();
+    //node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
+
+    Vector3Df node_pos(0.f, 0.f, 0.f);
+    Vector3Df node_rot(0.f, 0.f, 0.f);
+    f32 movement = 0.05;
+    f32 rotate_factor = 0.05;
+
+    while (device->run())
+    {
+        driver->BeginScene();
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_W))
+        {
+            node_pos.y_ += movement;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_S))
+        {
+            node_pos.y_ -= movement;
+        }
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_A))
+        {
+            node_pos.x_ -= movement;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_D))
+        {
+            node_pos.x_ += movement;
+        }
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_Q))
+        {
+            node_pos.z_ -= movement;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_E))
+        {
+            node_pos.z_ += movement;
+        }
+
+        if (receiver.IsKeyDown(kong::KEY_SPACE))
+        {
+            node_pos = Vector3Df(0.f, 0.f, 0.f);
+            node_rot = Vector3Df(0.f, 0.f, 0.f);
+        }
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_U))
+        {
+            node_rot.x_ -= rotate_factor;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_J))
+        {
+            node_rot.x_ += rotate_factor;
+        }
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_I))
+        {
+            node_rot.y_ -= rotate_factor;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_K))
+        {
+            node_rot.y_ += rotate_factor;
+        }
+
+        if (receiver.IsKeyDown(kong::KEY_KEY_O))
+        {
+            node_rot.z_ -= rotate_factor;
+        }
+        else if (receiver.IsKeyDown(kong::KEY_KEY_L))
+        {
+            node_rot.z_ += rotate_factor;
+        }
+
+
+        node->SetPosition(node_pos);
+        node->SetRotation(node_rot);
+
+        //driver->Draw3DLine(Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
+        smr->DrawAll();
+
+        driver->EndScene();
+    }
+}
+
 void TestDrawImage()
 {
     MyEventReceiver receiver;
@@ -306,7 +408,8 @@ int main()
     //TestArray();
     //TestS3DVertex();
     //TestList();
-    TestWindow();
+    //TestWindow();
+    TestObjLoad();
     //TestDrawImage();
     //TestReplace();
     //TestFindLastOf();

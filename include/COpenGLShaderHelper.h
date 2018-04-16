@@ -12,7 +12,7 @@ namespace kong
 {
     namespace video
     {
-        class COpenGLShaderHelper : IShaderHelper
+        class COpenGLShaderHelper : public IShaderHelper
         {
         public:
             // constructor

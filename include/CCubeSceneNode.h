@@ -21,6 +21,9 @@ namespace kong
 
             virtual ~CCubeSceneNode();
 
+            //! returns the axis aligned bounding box of this node
+            const core::aabbox3d<f32>& GetBoundingBox() const override;
+
             //! render the node.
             void Render() override;
 

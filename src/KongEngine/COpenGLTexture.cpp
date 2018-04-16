@@ -229,17 +229,22 @@ namespace kong
         //! copies the the texture into an open gl texture.
         void COpenGLTexture::UploadTexture(bool newTexture, void* mipmapData, u32 level)
         {
+            void *data = image_->Lock();
+            GLint filtering;
+            GLenum colorformat;
+            GLenum type;
+            const GLenum internalformat = getOpenGLFormatAndParametersFromColorFormat(ColorFormat, filtering, colorformat, type);
+
             glBindTexture(GL_TEXTURE_2D, texture_name_);
             // set the render filter and interpolation
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-            void *data = image_->Lock();
             if (data != nullptr)
             {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_size_.width_, image_size_.height_, 0, GL_BGRA_EXT, GL_UNSIGNED_INT_8_8_8_8_REV, data);
+                glTexImage2D(GL_TEXTURE_2D, 0, internalformat, image_size_.width_, image_size_.height_, 0, colorformat, type, data);
             }
             image_->Unlock();
         }

@@ -58,10 +58,10 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>..\..\include;.\jpeglib;.\zlib;</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;KONG_EXPORTS;_WIN32;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\include\CLightSceneNode.h" />
     <ClCompile Include="..\..\include\IMeshLoader.h" />
     <ClCompile Include="CFileSystem.cpp" />
     <ClCompile Include="CImage.cpp" />
@@ -83,7 +84,9 @@
     <ClCompile Include="CImageLoaderPng.cpp" />
     <ClCompile Include="CKongDeviceStub.cpp" />
     <ClCompile Include="CKongDeviceWin32.cpp" />
+    <ClCompile Include="CLightSceneNode.cpp" />
     <ClCompile Include="CLogger.cpp" />
+    <ClCompile Include="CMeshSceneNode.cpp" />
     <ClCompile Include="COpenGLDriver.cpp" />
     <ClCompile Include="COpenGLShaderDriver.cpp" />
     <ClCompile Include="COpenGLShaderHelper.cpp" />
@@ -188,6 +191,7 @@
     <ClInclude Include="..\..\include\CLogger.h" />
     <ClInclude Include="..\..\include\CMeshBuffer.h" />
     <ClInclude Include="..\..\include\CMeshManipulator.h" />
+    <ClInclude Include="..\..\include\CMeshSceneNode.h" />
     <ClInclude Include="..\..\include\COpenGLDriver.h" />
     <ClInclude Include="..\..\include\COpenGLShaderDriver.h" />
     <ClInclude Include="..\..\include\COpenGLTexture.h" />
@@ -202,6 +206,7 @@
     <ClInclude Include="..\..\include\EDriverTypes.h" />
     <ClInclude Include="..\..\include\EhardwareBufferFlags.h" />
     <ClInclude Include="..\..\include\EMaterialFlags.h" />
+    <ClInclude Include="..\..\include\ESceneNodeType.h" />
     <ClInclude Include="..\..\include\fast_atof.h" />
     <ClInclude Include="..\..\include\Heapsort.h" />
     <ClInclude Include="..\..\include\IAnimatedMesh.h" />
@@ -211,6 +216,7 @@
     <ClInclude Include="..\..\include\IFileSystem.h" />
     <ClInclude Include="..\..\include\IImage.h" />
     <ClInclude Include="..\..\include\IImageLoader.h" />
+    <ClInclude Include="..\..\include\ILightSceneNode.h" />
     <ClInclude Include="..\..\include\ILogger.h" />
     <ClInclude Include="..\..\include\IMesh.h" />
     <ClInclude Include="..\..\include\IMeshBuffer.h" />
@@ -247,6 +253,7 @@
     <ClInclude Include="..\..\include\SColor.h" />
     <ClInclude Include="..\..\include\SExposedVideoData.h" />
     <ClInclude Include="..\..\include\SKongCreationParameters.h" />
+    <ClInclude Include="..\..\include\SLight.h" />
     <ClInclude Include="..\..\include\SMaterial.h" />
     <ClInclude Include="..\..\include\SMaterialLayer.h" />
     <ClInclude Include="..\..\include\SMesh.h" />

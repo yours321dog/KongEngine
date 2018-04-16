@@ -4,6 +4,7 @@
 #ifndef _I_KONG_DEVICE_H_
 #define _I_KONG_DEVICE_H_
 #include "IVideoDriver.h"
+#include "Dimension2d.h"
 
 namespace kong
 {
@@ -25,6 +26,9 @@ namespace kong
         //! Provides access to the scene manager.
         /** \return Pointer to the scene manager. */
         virtual scene::ISceneManager* GetSceneManager() = 0;
+
+        //! Get window size
+        virtual core::Dimension2d<u32> GetWindowSize() = 0;
     };
 } // end namespace kong
 

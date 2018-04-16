@@ -4,8 +4,6 @@
 #include "COpenGLDriver.h"
 
 #include <GL/glew.h>
-//#include "GL/gl.h"
-//#include "GL/glew.h"
 #include "IMeshBuffer.h"
 #include "CImage.h"
 #include "COpenGLTexture.h"
@@ -152,13 +150,12 @@ namespace kong
         void COpenGLDriver::SetMaterial(const SMaterial& material)
         {
             material_ = material;
-            //OverrideMaterial.apply(Material);
 
-            for (s32 i = max_texture_units_ - 1; i >= 0; --i)
+            for (auto i = max_texture_units_ - 1; i >= 0; --i)
             {
                 SetActiveTexture(i, material.GetTexture(i));
-                SetTransform((E_TRANSFORMATION_STATE)(ETS_TEXTURE_0 + i),
-                    material_.GetTextureMatrix(i));
+                const u32 texture_val = ETS_TEXTURE_0 + 1;
+                SetTransform(texture_val, material_.GetTextureMatrix(i));
             }
         }
 
@@ -177,7 +174,7 @@ namespace kong
 #endif
         }
 
-        void COpenGLDriver::SetTransform(E_TRANSFORMATION_STATE state, const core::Matrixf& mat)
+        void COpenGLDriver::SetTransform(u32 state, const core::Matrixf& mat)
         {
             matrices_[state] = mat;
 
@@ -448,7 +445,7 @@ namespace kong
             if (index != -1)
                 return textures_[index].Surface;
 
-            return 0;
+            return nullptr;
         }
 
         //! loads a Texture
@@ -502,7 +499,7 @@ namespace kong
             else
             {
                 //os::Printer::log("Could not open file of texture", filename, ELL_WARNING);
-                return 0;
+                return nullptr;
             }
         }
 
@@ -758,6 +755,46 @@ namespace kong
             texture->RegenerateMipMapLevels();
         }
 
+        const core::Dimension2d<u32>& COpenGLDriver::GetScreenSize() const
+        {
+            return params_.window_size_;
+        }
+
+        const core::Dimension2d<u32>& COpenGLDriver::GetCurrentRenderTargetSize() const
+        {
+            return params_.window_size_;
+        }
+
+        void COpenGLDriver::deleteAllDynamicLights()
+        {
+            lights_.Resize(0);
+        }
+
+        s32 COpenGLDriver::addDynamicLight(const SLight& light)
+        {
+            lights_.PushBack(light);
+
+            return lights_.Size() - 1;
+        }
+
+        u32 COpenGLDriver::getMaximalDynamicLightAmount() const
+        {
+            return 8;
+        }
+
+        u32 COpenGLDriver::getDynamicLightCount() const
+        {
+            return lights_.Size();
+        }
+
+        const SLight& COpenGLDriver::getDynamicLight(u32 idx) const
+        {
+            if (idx < lights_.Size())
+                return lights_[idx];
+            else
+                return *static_cast<SLight*>(nullptr);
+        }
+
         //! draws a 2d image, using a color and the alpha channel of the texture if
         //! desired. The image is drawn at pos, clipped against clipRect (if != 0).
         //! Only the subtexture defined by sourceRect is used.
@@ -844,6 +881,7 @@ namespace kong
             io::IFileSystem* io, CKongDeviceWin32* device)
         {
             COpenGLDriver *driver = new COpenGLDriver(params, io, device);
+            //COpenGLDriver *driver = nullptr;
 #ifdef _KONG_COMPILE_WITH_OPENGL_
             if (!driver->InitDriver(device))
             {

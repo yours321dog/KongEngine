@@ -24,6 +24,11 @@ namespace kong
             delete mesh_;
         }
 
+        const core::aabbox3d<f32>& CCubeSceneNode::GetBoundingBox() const
+        {
+            return mesh_->GetMeshBuffer(0)->GetBoundingBox();
+        }
+
         void CCubeSceneNode::Render()
         {
             video::IVideoDriver *driver = scene_manager_->GetVideoDriver();
@@ -54,7 +59,7 @@ namespace kong
 
         void CCubeSceneNode::SetMesh(IMesh* mesh)
         {
-            delete mesh_;
+            //delete mesh_;
             mesh_ = mesh;
         }
 

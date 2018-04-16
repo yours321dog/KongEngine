@@ -62,6 +62,9 @@ namespace kong
             indices have changed. Otherwise, changes won't be updated
             on the GPU in the next render cycle. */
             virtual void SetDirty(E_BUFFER_TYPE buffer = EBT_VERTEX_AND_INDEX) = 0;
+
+            //! recalculates the bounding box
+            virtual void RecalculateBoundingBox() = 0;
         };
     } // end namespace scene
 } // end namespace kong

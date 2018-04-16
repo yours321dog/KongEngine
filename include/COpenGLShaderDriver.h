@@ -5,7 +5,7 @@
 #define _COPENGLSHADERDRIVER_H_
 #include "COpenGLDriver.h"
 #include "IFileSystem.h"
-#include "COpenGLShaderHelper.h"
+#include "IShaderHelper.h"
 
 namespace kong
 {
@@ -20,7 +20,7 @@ namespace kong
             bool InitDriver(CKongDeviceWin32 *device) override;
 
             //! Sets transformation matrices.
-            void SetTransform(E_TRANSFORMATION_STATE state, const core::Matrixf& mat) override;
+            void SetTransform(u32 state, const core::Matrixf& mat) override;
 
             //! Draws a mesh buffer
             void DrawMeshBuffer(const scene::IMeshBuffer* mesh_buffer) override;
@@ -30,7 +30,7 @@ namespace kong
             bool SetActiveTexture(u32 stage, const video::ITexture* texture) override;
 
         protected:
-            COpenGLShaderHelper *shader_helper_;
+            IShaderHelper *shader_helper_;
 
             u32 vao_;
             u32 vbo_;

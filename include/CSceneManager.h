@@ -39,6 +39,13 @@ namespace kong
                 const core::Vector3Df& rotation = core::Vector3Df(0, 0, 0),
                 const core::Vector3Df& scale = core::Vector3Df(1.0f, 1.0f, 1.0f));
 
+            //! Adds a scene node for rendering a static mesh.
+            virtual IMeshSceneNode* AddMeshSceneNode(IMesh* mesh, ISceneNode* parent = 0, s32 id = -1,
+                const core::vector3df& position = core::vector3df(0, 0, 0),
+                const core::vector3df& rotation = core::vector3df(0, 0, 0),
+                const core::vector3df& scale = core::vector3df(1.0f, 1.0f, 1.0f),
+                bool alsoAddIfMeshPointerZero = false);
+
             //! add camera scene node
             virtual ICameraSceneNode* AddCameraSceneNode(ISceneNode* parent = nullptr,
                 const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
@@ -87,6 +94,9 @@ namespace kong
 
             //! Get pointer to the mesh manipulator.
             virtual IMeshManipulator* GetMeshManipulator();
+
+            //! returns the axis aligned bounding box of this node
+            virtual const core::aabbox3d<f32>& GetBoundingBox() const;
 
         private:
             struct DefaultNodeEntry

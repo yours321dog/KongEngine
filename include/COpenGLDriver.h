@@ -11,6 +11,7 @@
 #include "IFileSystem.h"
 #include "Array.h"
 #include "IImageLoader.h"
+#include "Matrix.h"
 
 
 namespace kong
@@ -41,7 +42,7 @@ namespace kong
             bool EndScene() override;
 
             //! Sets transformation matrices.
-            void SetTransform(E_TRANSFORMATION_STATE state, const core::Matrixf& mat) override;
+            void SetTransform(u32 state, const core::Matrixf& mat) override;
 
             //! Draws a 3d line.
             void Draw3DLine(const core::Vector3Df& start,
@@ -107,6 +108,27 @@ namespace kong
 
             //! Creates a normal map from a height map texture.
             void MakeNormalMapTexture(video::ITexture* texture, f32 amplitude = 1.0f) const override;
+
+            //! Get the size of the screen or render window.
+            const core::Dimension2d<u32>& GetScreenSize() const override;
+
+            const core::Dimension2d<u32>& GetCurrentRenderTargetSize() const override;
+
+            //! Deletes all dynamic lights which were previously added with addDynamicLight().
+            void deleteAllDynamicLights() override;
+
+            //! adds a dynamic light, returning an index to the light
+            s32 addDynamicLight(const SLight& light) override;
+
+            //! Returns the maximal amount of dynamic lights the device can handle
+            u32 getMaximalDynamicLightAmount() const override;
+
+            //! Returns amount of dynamic lights currently set
+            u32 getDynamicLightCount() const override;
+
+            //! Returns light data which was previously set by IVideoDriver::addDynamicLight().
+            const SLight& getDynamicLight(u32 idx) const override;
+
         protected:
             //! enumeration for rendering modes such as 2d and 3d for minizing the switching of renderStates.
             enum E_RENDER_MODE
@@ -263,6 +285,9 @@ namespace kong
 
             //! mesh manipulator
             scene::IMeshManipulator* mesh_manipulator_;
+
+            //! light array
+            core::Array<SLight> lights_;
         };
     } // end namespace video
 } // end namespace kong

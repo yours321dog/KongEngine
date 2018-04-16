@@ -6,6 +6,7 @@
 
 #include "KongTypes.h"
 #include "Vector.h"
+#include "aabbox3d.h"
 
 namespace kong
 {
@@ -43,6 +44,7 @@ namespace kong
             bool operator!=(const Matrix<T>&) const;
 
             Vector<T> Apply(const Vector<T> &) const;
+            void TransformBoxEx(core::aabbox3d<f32>& box) const;
 
             void Translate(T x, T y, T z);
             void Scale(T x, T y, T z);
@@ -264,6 +266,50 @@ namespace kong
                 tmp(i) = vec(0) * m_[0 * 4 + i] + vec(1) * m_[1 * 4 + i] + vec(2) * m_[2 * 4 + i] + vec(3) * m_[3 * 4 + i];
             }
             return tmp;
+        }
+
+        template <typename T>
+        void Matrix<T>::TransformBoxEx(core::aabbox3d<f32>& box) const
+        {
+            const f32 Amin[3] = { box.MinEdge.x_, box.MinEdge.y_, box.MinEdge.z_ };
+            const f32 Amax[3] = { box.MaxEdge.x_, box.MaxEdge.y_, box.MaxEdge.z_ };
+
+            f32 Bmin[3];
+            f32 Bmax[3];
+
+            Bmin[0] = Bmax[0] = m_[12];
+            Bmin[1] = Bmax[1] = m_[13];
+            Bmin[2] = Bmax[2] = m_[14];
+
+            const Matrix<T> &m = *this;
+
+            for (u32 i = 0; i < 3; ++i)
+            {
+                for (u32 j = 0; j < 3; ++j)
+                {
+                    const f32 a = m(j, i) * Amin[j];
+                    const f32 b = m(j, i) * Amax[j];
+
+                    if (a < b)
+                    {
+                        Bmin[i] += a;
+                        Bmax[i] += b;
+                    }
+                    else
+                    {
+                        Bmin[i] += b;
+                        Bmax[i] += a;
+                    }
+                }
+            }
+
+            box.MinEdge.x_ = Bmin[0];
+            box.MinEdge.y_ = Bmin[1];
+            box.MinEdge.z_ = Bmin[2];
+
+            box.MaxEdge.x_ = Bmax[0];
+            box.MaxEdge.y_ = Bmax[1];
+            box.MaxEdge.z_ = Bmax[2];
         }
 
         template <typename T>

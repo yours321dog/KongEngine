@@ -914,7 +914,7 @@ namespace kong
         {
             for (u32 i = 0; i < Materials.Size(); ++i)
             {
-                delete Materials[i]->Meshbuffer;
+                //delete Materials[i]->Meshbuffer;
                 delete Materials[i];
             }
 
