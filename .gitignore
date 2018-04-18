@@ -45,19 +45,20 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-*.obj
+# *.obj
 *.lastbuildstate
 *.tlog
 *.opensdf
 *.pdb
 *.log
 *.idb
-*.idb
-*.idb
 *.sdf
-*.sdf
-*.idb
-*.idb
-*.sdf
-src/KongEngine/Debug/vc120.idb
+src/KongEngine/Debug/*
+src/KongEngine/Release/*
+src/Release/*
+src/Debug/*
+examples/BuildAll_v12/Debug/*
+examples/BuildAll_v12/Release/*
+examples/Release/*
+examples/Debug/*
 *.TMP
