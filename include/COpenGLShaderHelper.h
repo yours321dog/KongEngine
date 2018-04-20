@@ -26,6 +26,7 @@ namespace kong
             void SetInt(const std::string &name, s32 value) const override;
             void SetFloat(const std::string &name, f32 value) const override;
             void SetMatrix4(const std::string &name, const core::Matrixf &mat) const override;
+            void SetVec4(const std::string &name, f32 *vec4) const override;
 
         private:
             void InitShader(const io::SPath &vertex_path, const io::SPath &fragment_path);

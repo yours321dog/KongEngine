@@ -21,6 +21,30 @@ namespace kong
             SL_LIGHT1,
             SL_LIGHT2,
             SL_LIGHT3,
+            SL_COUNT
+        };
+
+        enum MATERIAL_VAL_TYPE
+        {
+            SL_MAT_AMBIENT,
+            SL_MAT_DIFFUSE,
+            SL_MAT_SPECULAR,
+            SL_MAT_EMISSIVE,
+            SL_MAT_SHININESS,
+            SL_MATERIAL_COUNT
+        };
+
+        enum LIGHT_VAL_TYPE
+        {
+            SL_LIGHT_POSITION,
+            SL_LIGHT_DIRECTION,
+            SL_LIGHT_AMBIENT,
+            SL_LIGHT_DIFFUSE,
+            SL_LIGHT_SPECULAR,
+            SL_LIGHT_ATTENUATION,
+            SL_LIGHT_EXPONENT,
+            SL_LIGHT_CUTOFF,
+            SL_LIGHT_COUNT
         };
 
         const c8 *const shader_uniform_name[] = 
@@ -33,6 +57,29 @@ namespace kong
             "light1",
             "light2",
             "light3",
+            nullptr
+        };
+
+        const c8 *const material_uniform_name[] =
+        {
+            "material.ambient",
+            "material.diffuse",
+            "material.specular",
+            "material.emissive",
+            "material.shininess",
+            nullptr
+        };
+
+        const c8 *const light_uniform_name[] =
+        {
+            "position",
+            "direction",
+            "ambient",
+            "diffuse",
+            "specular",
+            "attenuation",
+            "exponent",
+            "cutoff",
             nullptr
         };
 
@@ -54,8 +101,20 @@ namespace kong
             //! Returns whether setting was a success or not.
             bool SetActiveTexture(u32 stage, const video::ITexture* texture) override;
 
-        protected:
+            //! Deletes all dynamic lights which were previously added with addDynamicLight().
+            void deleteAllDynamicLights() override;
 
+            //! adds a dynamic light, returning an index to the light
+            s32 addDynamicLight(const SLight& light) override;
+
+        protected:
+            void UpdateMaxSupportLights() override;
+
+            void SetMaterialUniform(s32 material_val_type, void *val) const;
+            void SetLightUniform(s32 light_idx, s32 light_val_type, void *val) const;
+            void Enable(s32 idx) const;
+            void Disable(s32 idx) const;
+            const c8 *GetUniformName(s32 idx) const;
 
             IShaderHelper *shader_helper_;
 

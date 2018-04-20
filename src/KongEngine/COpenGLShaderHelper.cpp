@@ -43,6 +43,11 @@ namespace kong
             glUniformMatrix4fv(glGetUniformLocation(id_, name.c_str()), 1, GL_FALSE, mat.Pointer());
         }
 
+        void COpenGLShaderHelper::SetVec4(const std::string& name, f32* vec4) const
+        {
+            glUniform4fv(glGetUniformLocation(id_, name.c_str()), 1, vec4);
+        }
+
         void COpenGLShaderHelper::InitShader(const io::SPath& vertex_path, const io::SPath& fragment_path)
         {
             // 1. read shader files

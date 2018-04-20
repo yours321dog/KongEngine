@@ -408,8 +408,8 @@ int main()
     //TestArray();
     //TestS3DVertex();
     //TestList();
-    //TestWindow();
-    TestObjLoad();
+    TestWindow();
+    //TestObjLoad();
     //TestDrawImage();
     //TestReplace();
     //TestFindLastOf();

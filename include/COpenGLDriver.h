@@ -130,6 +130,8 @@ namespace kong
             const SLight& getDynamicLight(u32 idx) const override;
 
         protected:
+            virtual void UpdateMaxSupportLights();
+
             //! enumeration for rendering modes such as 2d and 3d for minizing the switching of renderStates.
             enum E_RENDER_MODE
             {
@@ -282,6 +284,7 @@ namespace kong
             s32 max_texture_units_;
             s32 max_supported_textures_;
             core::Matrixf texture_flip_matrix_;
+            s32 max_support_lights_;
 
             //! mesh manipulator
             scene::IMeshManipulator* mesh_manipulator_;

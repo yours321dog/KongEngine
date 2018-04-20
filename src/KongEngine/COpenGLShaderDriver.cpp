@@ -109,17 +109,14 @@ namespace kong
             shader_helper_->Use();
             if (!texture)
             {
-                //glActiveTexture(GL_TEXTURE0 + stage);
-                //core::stringc str = core::stringc("texture") + core::stringc(stage);
-                //shader_helper_->SetInt(str.c_str(), -1);
-                shader_helper_->SetBool(str_on.c_str(), false);
+                Disable(SL_TEXTURE0 + stage);
                 return true;
             }
             else
             {
                 if (texture->GetDriverType() != EDT_OPENGL)
                 {
-                    shader_helper_->SetBool(str_on.c_str(), false);
+                    Enable(SL_TEXTURE0 + stage);
                     current_texture_.Set(stage, nullptr);
                     //os::Printer::log("Fatal Error: Tried to set a texture not owned by this driver.", ELL_ERROR);
                     return false;
@@ -127,11 +124,112 @@ namespace kong
 
                 glActiveTexture(GL_TEXTURE0 + stage);
                 glBindTexture(GL_TEXTURE_2D, dynamic_cast<const COpenGLTexture*>(texture)->GetOpenGLTextureName());
-                core::stringc str = core::stringc("texture") + core::stringc(stage);
-                shader_helper_->SetInt(str.c_str(), stage);
+                shader_helper_->SetInt(GetUniformName(SL_TEXTURE0 + stage), stage);
                 shader_helper_->SetBool(str_on.c_str(), true);
             }
             return true;
+        }
+
+        void COpenGLShaderDriver::deleteAllDynamicLights()
+        {
+            for (u32 i = 0; i < max_support_lights_; i++)
+            {
+                Disable(SL_LIGHT0 + i);
+            }
+
+            COpenGLDriver::deleteAllDynamicLights();
+        }
+
+        s32 COpenGLShaderDriver::addDynamicLight(const SLight& light)
+        {
+
+
+            return COpenGLDriver::addDynamicLight(light);
+        }
+
+        void COpenGLShaderDriver::UpdateMaxSupportLights()
+        {
+            max_support_lights_ = 4;
+        }
+
+        void COpenGLShaderDriver::SetMaterialUniform(s32 material_val_type, void *val) const
+        {
+            if (material_val_type >= SL_MATERIAL_COUNT || material_val_type < 0)
+            {
+                return;
+            }
+            switch (material_val_type)
+            {
+            case SL_MAT_AMBIENT:
+            case SL_MAT_DIFFUSE:
+            case SL_MAT_SPECULAR:
+            case SL_MAT_EMISSIVE:
+                shader_helper_->SetVec4(material_uniform_name[material_val_type], static_cast<f32 *>(val));
+                break;
+            case SL_MAT_SHININESS:
+                shader_helper_->SetFloat(material_uniform_name[material_val_type], *static_cast<f32 *>(val));
+            default: break;
+            }
+            
+        }
+
+        void COpenGLShaderDriver::SetLightUniform(s32 light_idx, s32 light_val_type, void* val) const
+        {
+            if (light_idx < SL_LIGHT0 || light_idx >= SL_LIGHT0 + max_support_lights_ || 
+                light_val_type < 0 || light_val_type >= SL_LIGHT_COUNT)
+            {
+                return;
+            }
+
+            core::stringc str = core::stringc(light_idx) + light_uniform_name[light_val_type];
+
+            switch (light_val_type)
+            {
+            case SL_LIGHT_POSITION:
+            case SL_LIGHT_DIRECTION:
+            case SL_LIGHT_AMBIENT:
+            case SL_LIGHT_DIFFUSE:
+            case SL_LIGHT_SPECULAR:
+            case SL_LIGHT_ATTENUATION:
+                shader_helper_->SetVec4(str.c_str(), static_cast<f32 *>(val));
+                break;
+            case SL_LIGHT_EXPONENT:
+            case SL_LIGHT_CUTOFF:
+                shader_helper_->SetFloat(str.c_str(), *static_cast<f32 *>(val));
+            default: break;
+            }
+        }
+
+        void COpenGLShaderDriver::Enable(s32 idx) const
+        {
+            if (idx < 0 || idx >= SL_COUNT)
+            {
+                return;
+            }
+
+            core::stringc str = core::stringc(shader_uniform_name[idx]) + "_on";
+            shader_helper_->SetBool(str.c_str(), true);
+        }
+
+        void COpenGLShaderDriver::Disable(s32 idx) const
+        {
+            if (idx < 0 || idx >= SL_COUNT)
+            {
+                return;
+            }
+
+            core::stringc str = core::stringc(shader_uniform_name[idx]) + "_on";
+            shader_helper_->SetBool(str.c_str(), false);
+        }
+
+        const c8* COpenGLShaderDriver::GetUniformName(s32 idx) const
+        {
+            if (idx < 0 || idx >= SL_COUNT)
+            {
+                return nullptr;
+            }
+
+            return shader_uniform_name[idx];
         }
     } // end namespace video
 } // end namespace kong

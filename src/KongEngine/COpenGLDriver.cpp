@@ -23,7 +23,7 @@ namespace kong
 
         COpenGLDriver::COpenGLDriver(const SKongCreationParameters& params, io::IFileSystem* io, CKongDeviceWin32* device)
             : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device), params_(params),
-            io_(io), max_texture_units_(0), max_supported_textures_(0)
+              io_(io), max_texture_units_(0), max_supported_textures_(0), max_support_lights_(0)
         {
             // create manipulator
             mesh_manipulator_ = new scene::CMeshManipulator();
@@ -35,7 +35,6 @@ namespace kong
 #ifdef _KONG_COMPILE_WITH_PNG_LOADER_
             surface_loader_.PushBack(video::CreateImageLoaderPng());
 #endif
-
         }
 
         COpenGLDriver::~COpenGLDriver()
@@ -143,6 +142,7 @@ namespace kong
             glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &max_texture_units_);
             max_texture_units_ = core::min_<u32>(max_texture_units_, MATERIAL_MAX_TEXTURES);
             max_supported_textures_ = max_texture_units_;
+            UpdateMaxSupportLights();
 
             return true;
         }
@@ -779,7 +779,7 @@ namespace kong
 
         u32 COpenGLDriver::getMaximalDynamicLightAmount() const
         {
-            return 8;
+            return max_support_lights_;
         }
 
         u32 COpenGLDriver::getDynamicLightCount() const
@@ -793,6 +793,11 @@ namespace kong
                 return lights_[idx];
             else
                 return *static_cast<SLight*>(nullptr);
+        }
+
+        void COpenGLDriver::UpdateMaxSupportLights()
+        {
+            max_support_lights_ = 8;
         }
 
         //! draws a 2d image, using a color and the alpha channel of the texture if
