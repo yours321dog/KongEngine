@@ -11,6 +11,31 @@ namespace kong
 {
     namespace video
     {
+        enum SHADER_UNIFORM_TYPE
+        {
+            SL_TEXTURE0 = 0,
+            SL_TEXTURE1,
+            SL_TEXTURE2,
+            SL_TEXTURE3,
+            SL_LIGHT0,
+            SL_LIGHT1,
+            SL_LIGHT2,
+            SL_LIGHT3,
+        };
+
+        const c8 *const shader_uniform_name[] = 
+        {
+            "texture0",
+            "texutre1",
+            "texutre2",
+            "texutre3",
+            "light0",
+            "light1",
+            "light2",
+            "light3",
+            nullptr
+        };
+
         class COpenGLShaderDriver : public COpenGLDriver
         {
         public:
@@ -30,6 +55,8 @@ namespace kong
             bool SetActiveTexture(u32 stage, const video::ITexture* texture) override;
 
         protected:
+
+
             IShaderHelper *shader_helper_;
 
             u32 vao_;

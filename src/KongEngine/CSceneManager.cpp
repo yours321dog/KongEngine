@@ -176,7 +176,7 @@ namespace kong
             }
 
             const core::Dimension2d<u32> window_size = driver_->GetScreenSize();
-            f32 aspect = static_cast<f32>(window_size.width_) / window_size.height_;
+            const f32 aspect = static_cast<f32>(window_size.width_) / window_size.height_;
             ICameraSceneNode *node = new CPerspectiveCameraSceneNode(parent, this, id, position, up, lookat, 90, aspect);
 
             if (make_active)
@@ -306,14 +306,14 @@ namespace kong
                 // Lighting model in irrlicht has to be redone..
                 //if (!isCulled(node))
                 //{
-                //    LightList.push_back(node);
-                //    taken = 1;
+                    light_list_.PushBack(node);
+                    taken = 1;
                 //}
                 break;
 
             case ESNRP_SKY_BOX:
                 //SkyBoxList.push_back(node);
-                taken = 1;
+                //taken = 1;
                 break;
             case ESNRP_SOLID:
                 //if (!isCulled(node))

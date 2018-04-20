@@ -90,7 +90,7 @@ namespace kong
             E_LIGHT_TYPE type_;
 
             //! Read-ONLY! Does the light cast shadows?
-            bool cast_shadows_ : 1;
+            bool cast_shadows_;
         };
 
     } // end namespace video

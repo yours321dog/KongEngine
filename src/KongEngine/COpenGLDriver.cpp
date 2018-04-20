@@ -357,7 +357,7 @@ namespace kong
                 }
             }
 
-            return 0; // failed to load
+            return nullptr; // failed to load
         }
 
         void COpenGLDriver::ClearBuffers(bool back_buffer, bool z_buffer, bool stencil_buffer, SColor color)
