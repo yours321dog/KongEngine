@@ -160,7 +160,14 @@ namespace kong
         class SMaterial
         {
         public:
-            SMaterial(): shininess_(0), material_type_param_(0), use_mip_maps_(false)
+            SMaterial() : ambient_color_(255, 255, 255, 255), diffuse_color_(255, 255, 255, 255), specular_color_(255, 255, 255, 255), 
+                          shininess_(64.f), MaterialType(EMT_SOLID),
+                          Thickness(0), ZBuffer(0), AntiAliasing(0), ColorMask(0),
+                          ColorMaterial(0), BlendOperation(), PolygonOffsetFactor(0), PolygonOffsetDirection(),
+                          Wireframe(false), PointCloud(false), GouraudShading(false), Lighting(false),
+                          ZWriteEnable(false), BackfaceCulling(false),
+                          FrontfaceCulling(false), FogEnable(false), NormalizeNormals(false),
+                          material_type_param_(0), use_mip_maps_(false)
             {
             }
 

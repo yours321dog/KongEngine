@@ -6,6 +6,7 @@
 #include "IMeshLoader.h"
 #include "IReadFile.h"
 #include "CMeshSceneNode.h"
+#include "CLightSceneNode.h"
 
 #ifdef _KONG_COMPILE_WITH_OBJ_LOADER_
 #include "CObjMeshFileLoader.h"
@@ -187,6 +188,19 @@ namespace kong
             return node;
         }
 
+        ILightSceneNode* CSceneManager::AddLightSceneNode(ISceneNode* parent, const core::vector3df& position,
+            video::SColorf color, f32 radius, s32 id)
+        {
+            if (parent == nullptr)
+            {
+                parent = this;
+            }
+
+            ILightSceneNode* node = new CLightSceneNode(parent, this, id, position, color, radius);
+
+            return node;
+        }
+
         ISceneNode* CSceneManager::AddSceneNode(const char* scene_node_name, ISceneNode* parent)
         {
             return nullptr;
@@ -259,6 +273,27 @@ namespace kong
 
             // let all nodes register themselves
             OnRegisterSceneNode();
+
+            //render lights scenes
+            {
+                //    // Sort the lights by distance from the camera
+                //core::vector3df cam_world_pos(0, 0, 0);
+                //if (active_camera_ != nullptr)
+                //    cam_world_pos = active_camera_->GetAbsolutePosition();
+
+                driver_->DeleteAllDynamicLights();
+
+                //Driver->setAmbientLight(AmbientLight);
+
+                u32 max_lights = light_list_.Size();
+
+                max_lights = core::min_(driver_->GetMaximalDynamicLightAmount(), max_lights);
+
+                for (u32 i = 0; i< max_lights; ++i)
+                    light_list_[i]->Render();
+
+                light_list_.Resize(0);
+            }
 
             // render default objects
             {

@@ -7,6 +7,7 @@
 #include "IMeshBuffer.h"
 #include "COpenGLTexture.h"
 #include "COpenGLShaderHelper.h"
+#include "os.h"
 
 namespace kong
 {
@@ -15,7 +16,9 @@ namespace kong
 
         COpenGLShaderDriver::COpenGLShaderDriver(const SKongCreationParameters& params, io::IFileSystem* file_system, CKongDeviceWin32* device,
             io::SPath vertex_path, io::SPath fragment_path)
-            : COpenGLDriver(params, file_system, device), shader_helper_(nullptr), vertex_path_(vertex_path), fragment_path_(fragment_path)
+            : COpenGLDriver(params, file_system, device), shader_helper_(nullptr), vao_(0), vbo_(0), ebo_(0),
+              vertex_path_(vertex_path),
+              fragment_path_(fragment_path)
         {
         }
 
@@ -39,8 +42,41 @@ namespace kong
 
             shader_helper_->Use();
             shader_helper_->SetBool("texture0_on", false);
+            shader_helper_->SetBool("light_on", true);
+            shader_helper_->SetBool("light0_on", false);
 
             return true;
+        }
+
+        void COpenGLShaderDriver::SetMaterial(const SMaterial& material)
+        {
+            COpenGLDriver::SetMaterial(material);
+            GLfloat data[4];
+            data[0] = material.ambient_color_.GetRed() / 255.f;
+            data[1] = material.ambient_color_.GetGreen() / 255.f;
+            data[2] = material.ambient_color_.GetBlue() / 255.f;
+            data[3] = material.ambient_color_.GetAlpha() / 255.f;
+            SetMaterialUniform(SL_MAT_AMBIENT, data);
+
+            data[0] = material.diffuse_color_.GetRed() / 255.f;
+            data[1] = material.diffuse_color_.GetGreen() / 255.f;
+            data[2] = material.diffuse_color_.GetBlue() / 255.f;
+            data[3] = material.diffuse_color_.GetAlpha() / 255.f;
+            SetMaterialUniform(SL_MAT_DIFFUSE, data);
+
+            data[0] = material.specular_color_.GetRed() / 255.f;
+            data[1] = material.specular_color_.GetGreen() / 255.f;
+            data[2] = material.specular_color_.GetBlue() / 255.f;
+            data[3] = material.specular_color_.GetAlpha() / 255.f;
+            SetMaterialUniform(SL_MAT_SPECULAR, data);
+
+            data[0] = material.emissive_color_.GetRed() / 255.f;
+            data[1] = material.emissive_color_.GetGreen() / 255.f;
+            data[2] = material.emissive_color_.GetBlue() / 255.f;
+            data[3] = material.emissive_color_.GetAlpha() / 255.f;
+            SetMaterialUniform(SL_MAT_EMISSIVE, data);
+
+            SetMaterialUniform(SL_MAT_SHININESS, material.shininess_);
         }
 
         void COpenGLShaderDriver::SetTransform(u32 state, const core::Matrixf& mat)
@@ -85,11 +121,14 @@ namespace kong
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16) * indices_count, indices, GL_STATIC_DRAW);
 
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, pos_)));
-            glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, color_)));
-            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, texcoord_)));
+            glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, normal_)));
+            glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, color_)));
+            glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, texcoord_)));
+
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
             glEnableVertexAttribArray(2);
+            glEnableVertexAttribArray(3);
 
             shader_helper_->Use();
             glBindVertexArray(vao_);
@@ -130,21 +169,104 @@ namespace kong
             return true;
         }
 
-        void COpenGLShaderDriver::deleteAllDynamicLights()
+        void COpenGLShaderDriver::DeleteAllDynamicLights()
         {
-            for (u32 i = 0; i < max_support_lights_; i++)
+            for (auto i = 0; i < max_support_lights_; i++)
             {
                 Disable(SL_LIGHT0 + i);
             }
 
-            COpenGLDriver::deleteAllDynamicLights();
+            COpenGLDriver::DeleteAllDynamicLights();
         }
 
-        s32 COpenGLShaderDriver::addDynamicLight(const SLight& light)
+        s32 COpenGLShaderDriver::AddDynamicLight(const SLight& light)
         {
+            const int lidx = SL_LIGHT0 + GetDynamicLightCount();
+            GLfloat data[4];
 
+            switch (light.type_)
+            {
+            case video::ELT_SPOT:
+                data[0] = light.direction_.x_;
+                data[1] = light.direction_.y_;
+                data[2] = light.direction_.z_;
+                data[3] = 0.0f;
+                SetLightUniform(lidx, SL_LIGHT_DIRECTION, data);
 
-            return COpenGLDriver::addDynamicLight(light);
+                // set position
+                data[0] = light.position_.x_;
+                data[1] = light.position_.y_;
+                data[2] = light.position_.z_;
+                data[3] = 1.0f; // 1.0f for positional light
+                SetLightUniform(lidx, SL_LIGHT_POSITION, data);
+
+                SetLightUniform(lidx, SL_LIGHT_EXPONENT, light.falloff_);
+                SetLightUniform(lidx, SL_LIGHT_CUTOFF, light.outer_cone_);
+                break;
+            case video::ELT_POINT:
+                // set position
+                data[0] = light.position_.x_;
+                data[1] = light.position_.y_;
+                data[2] = light.position_.z_;
+                data[3] = 1.0f; // 1.0f for positional light
+                SetLightUniform(lidx, SL_LIGHT_POSITION, data);
+
+                SetLightUniform(lidx, SL_LIGHT_EXPONENT, 0.0f);
+                SetLightUniform(lidx, SL_LIGHT_CUTOFF, 180.0f);
+                break;
+            case video::ELT_DIRECTIONAL:
+                // set direction
+                data[0] = -light.direction_.x_;
+                data[1] = -light.direction_.y_;
+                data[2] = -light.direction_.z_;
+                data[3] = 0.0f; // 0.0f for directional light
+                SetLightUniform(lidx, SL_LIGHT_POSITION, data);
+
+                SetLightUniform(lidx, SL_LIGHT_EXPONENT, 0.0f);
+                SetLightUniform(lidx, SL_LIGHT_CUTOFF, 180.0f);
+                break;
+            default:
+                break;
+            }
+
+            // set diffuse color
+            data[0] = light.diffuse_color_.r;
+            data[1] = light.diffuse_color_.g;
+            data[2] = light.diffuse_color_.b;
+            data[3] = light.diffuse_color_.a;
+            SetLightUniform(lidx, SL_LIGHT_DIFFUSE, data);
+
+            // set specular color
+            data[0] = light.specular_color_.r;
+            data[1] = light.specular_color_.g;
+            data[2] = light.specular_color_.b;
+            data[3] = light.specular_color_.a;
+            SetLightUniform(lidx, SL_LIGHT_SPECULAR, data);
+
+            // set ambient color
+            data[0] = light.ambient_color_.r;
+            data[1] = light.ambient_color_.g;
+            data[2] = light.ambient_color_.b;
+            data[3] = light.ambient_color_.a;
+            SetLightUniform(lidx, SL_LIGHT_AMBIENT, data);
+
+            // 1.0f / (constant + linear * d + quadratic*(d*d);
+
+            // set attenuation
+            data[0] = light.attenuation_.x_;
+            data[1] = light.attenuation_.y_;
+            data[2] = light.attenuation_.z_;
+            SetLightUniform(lidx, SL_LIGHT_ATTENUATION, data);
+
+            Enable(lidx);
+
+            return COpenGLDriver::AddDynamicLight(light);
+        }
+
+        void COpenGLShaderDriver::SetActiveCameraPosition(core::Vector3Df position) const
+        {
+            void *pos_cam_world = &position;
+            shader_helper_->SetVec4("cam_position", static_cast<f32 *>(pos_cam_world));
         }
 
         void COpenGLShaderDriver::UpdateMaxSupportLights()
@@ -152,7 +274,7 @@ namespace kong
             max_support_lights_ = 4;
         }
 
-        void COpenGLShaderDriver::SetMaterialUniform(s32 material_val_type, void *val) const
+        void COpenGLShaderDriver::SetMaterialUniform(s32 material_val_type, const void *val) const
         {
             if (material_val_type >= SL_MATERIAL_COUNT || material_val_type < 0)
             {
@@ -164,16 +286,26 @@ namespace kong
             case SL_MAT_DIFFUSE:
             case SL_MAT_SPECULAR:
             case SL_MAT_EMISSIVE:
-                shader_helper_->SetVec4(material_uniform_name[material_val_type], static_cast<f32 *>(val));
+                shader_helper_->SetVec4(material_uniform_name[material_val_type], static_cast<const f32 *>(val));
                 break;
             case SL_MAT_SHININESS:
-                shader_helper_->SetFloat(material_uniform_name[material_val_type], *static_cast<f32 *>(val));
+                shader_helper_->SetFloat(material_uniform_name[material_val_type], *static_cast<const f32 *>(val));
             default: break;
             }
             
         }
 
-        void COpenGLShaderDriver::SetLightUniform(s32 light_idx, s32 light_val_type, void* val) const
+        void COpenGLShaderDriver::SetMaterialUniform(s32 material_val_type, f32 val) const
+        {
+            if (material_val_type >= SL_MATERIAL_COUNT || material_val_type < 0)
+            {
+                return;
+            }
+
+            shader_helper_->SetFloat(material_uniform_name[material_val_type], val);
+        }
+
+        void COpenGLShaderDriver::SetLightUniform(s32 light_idx, s32 light_val_type, const void* val) const
         {
             if (light_idx < SL_LIGHT0 || light_idx >= SL_LIGHT0 + max_support_lights_ || 
                 light_val_type < 0 || light_val_type >= SL_LIGHT_COUNT)
@@ -181,7 +313,8 @@ namespace kong
                 return;
             }
 
-            core::stringc str = core::stringc(light_idx) + light_uniform_name[light_val_type];
+            core::stringc str = core::stringc(shader_uniform_name[light_idx]) + "." + light_uniform_name[light_val_type];
+            //os::Printer::print(str.c_str());
 
             switch (light_val_type)
             {
@@ -191,13 +324,25 @@ namespace kong
             case SL_LIGHT_DIFFUSE:
             case SL_LIGHT_SPECULAR:
             case SL_LIGHT_ATTENUATION:
-                shader_helper_->SetVec4(str.c_str(), static_cast<f32 *>(val));
+                shader_helper_->SetVec4(str.c_str(), static_cast<const f32 *>(val));
                 break;
             case SL_LIGHT_EXPONENT:
             case SL_LIGHT_CUTOFF:
-                shader_helper_->SetFloat(str.c_str(), *static_cast<f32 *>(val));
+                shader_helper_->SetFloat(str.c_str(), *static_cast<const f32 *>(val));
             default: break;
             }
+        }
+
+        void COpenGLShaderDriver::SetLightUniform(s32 light_idx, s32 light_val_type, f32 val) const
+        {
+            if (light_idx < SL_LIGHT0 || light_idx >= SL_LIGHT0 + max_support_lights_ ||
+                light_val_type < 0 || light_val_type >= SL_LIGHT_COUNT)
+            {
+                return;
+            }
+
+            core::stringc str = core::stringc(shader_uniform_name[light_idx]) + "." + light_uniform_name[light_val_type];
+            shader_helper_->SetFloat(str.c_str(), val);
         }
 
         void COpenGLShaderDriver::Enable(s32 idx) const

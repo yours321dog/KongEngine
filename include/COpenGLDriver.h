@@ -33,7 +33,7 @@ namespace kong
             virtual bool InitDriver(CKongDeviceWin32 *device);
 
             //! Sets a material.
-            virtual void SetMaterial(const SMaterial& material);
+            void SetMaterial(const SMaterial& material) override;
 
             //! Applications must call this method before performing any rendering.
             bool BeginScene(bool back_buffer = true, bool z_buffer = true, SColor color = SColor(255, 0, 0, 0)) override;
@@ -115,19 +115,22 @@ namespace kong
             const core::Dimension2d<u32>& GetCurrentRenderTargetSize() const override;
 
             //! Deletes all dynamic lights which were previously added with addDynamicLight().
-            void deleteAllDynamicLights() override;
+            void DeleteAllDynamicLights() override;
 
             //! adds a dynamic light, returning an index to the light
-            s32 addDynamicLight(const SLight& light) override;
+            s32 AddDynamicLight(const SLight& light) override;
 
             //! Returns the maximal amount of dynamic lights the device can handle
-            u32 getMaximalDynamicLightAmount() const override;
+            u32 GetMaximalDynamicLightAmount() const override;
 
             //! Returns amount of dynamic lights currently set
-            u32 getDynamicLightCount() const override;
+            u32 GetDynamicLightCount() const override;
 
             //! Returns light data which was previously set by IVideoDriver::addDynamicLight().
-            const SLight& getDynamicLight(u32 idx) const override;
+            const SLight& GetDynamicLight(u32 idx) const override;
+
+            //! Set active camera position
+            void SetActiveCameraPosition(core::Vector3Df position) const override;
 
         protected:
             virtual void UpdateMaxSupportLights();

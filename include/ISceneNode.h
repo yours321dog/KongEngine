@@ -24,7 +24,10 @@ namespace kong
         class ISceneNode
         {
         public:
-            virtual ~ISceneNode() = default;
+            virtual ~ISceneNode()
+            {
+                children_.clear();
+            }
 
             ISceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id = -1,
                 const core::Vector3Df &position = core::Vector3Df(0.f, 0.f, 0.f),

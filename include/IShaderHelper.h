@@ -25,7 +25,7 @@ namespace kong
             virtual void SetInt(const std::string &name, s32 value) const = 0;
             virtual void SetFloat(const std::string &name, f32 value) const = 0;
             virtual void SetMatrix4(const std::string &name, const core::Matrixf &mat) const = 0;
-            virtual void SetVec4(const std::string &name, f32 *vec4) const = 0;;
+            virtual void SetVec4(const std::string &name, const f32 *vec4) const = 0;;
         };
     } // end namespace video
 } // end namespace kong

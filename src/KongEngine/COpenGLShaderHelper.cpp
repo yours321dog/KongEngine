@@ -35,7 +35,7 @@ namespace kong
 
         void COpenGLShaderHelper::SetFloat(const std::string& name, f32 value) const
         {
-            glUniform1i(glGetUniformLocation(id_, name.c_str()), value);
+            glUniform1f(glGetUniformLocation(id_, name.c_str()), value);
         }
 
         void COpenGLShaderHelper::SetMatrix4(const std::string& name, const core::Matrixf& mat) const
@@ -43,7 +43,7 @@ namespace kong
             glUniformMatrix4fv(glGetUniformLocation(id_, name.c_str()), 1, GL_FALSE, mat.Pointer());
         }
 
-        void COpenGLShaderHelper::SetVec4(const std::string& name, f32* vec4) const
+        void COpenGLShaderHelper::SetVec4(const std::string& name, const f32* vec4) const
         {
             glUniform4fv(glGetUniformLocation(id_, name.c_str()), 1, vec4);
         }

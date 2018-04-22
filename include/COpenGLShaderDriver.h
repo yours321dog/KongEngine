@@ -91,6 +91,9 @@ namespace kong
 
             bool InitDriver(CKongDeviceWin32 *device) override;
 
+            //! Sets a material.
+            void SetMaterial(const SMaterial& material) override;
+
             //! Sets transformation matrices.
             void SetTransform(u32 state, const core::Matrixf& mat) override;
 
@@ -102,16 +105,21 @@ namespace kong
             bool SetActiveTexture(u32 stage, const video::ITexture* texture) override;
 
             //! Deletes all dynamic lights which were previously added with addDynamicLight().
-            void deleteAllDynamicLights() override;
+            void DeleteAllDynamicLights() override;
 
             //! adds a dynamic light, returning an index to the light
-            s32 addDynamicLight(const SLight& light) override;
+            s32 AddDynamicLight(const SLight& light) override;
+
+            //! Set active camera position
+            void SetActiveCameraPosition(core::Vector3Df position) const override;
 
         protected:
             void UpdateMaxSupportLights() override;
 
-            void SetMaterialUniform(s32 material_val_type, void *val) const;
-            void SetLightUniform(s32 light_idx, s32 light_val_type, void *val) const;
+            void SetMaterialUniform(s32 material_val_type, const void *val) const;
+            void SetMaterialUniform(s32 material_val_type, f32 val) const;
+            void SetLightUniform(s32 light_idx, s32 light_val_type, const void *val) const;
+            void SetLightUniform(s32 light_idx, s32 light_val_type, f32 val) const;
             void Enable(s32 idx) const;
             void Disable(s32 idx) const;
             const c8 *GetUniformName(s32 idx) const;

@@ -166,10 +166,18 @@ void TestWindow()
     ISceneNode *node = smr->AddCubeSceneNode(1.f, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
 
+    ILightSceneNode *light_node = smr->AddLightSceneNode(nullptr, Vector3Df(2.f, 2.f, -2.f));
+    SLight light_data = light_node->GetLightData();
+    light_data.ambient_color_ = SColorf(0.1f, 0.1f, 0.1f, 0.1f);
+    light_data.type_ = ELT_DIRECTIONAL;
+    //light_data.type_ = ELT_SPOT;
+    light_node->SetLightData(light_data);
+    light_node->SetRotation(Vector3Df(-PI/4, PI / 4, 0.f));
+
     Vector3Df node_pos(0.f, 0.f, 0.f);
     Vector3Df node_rot(0.f, 0.f, 0.f);
-    f32 movement = 0.05;
-    f32 rotate_factor = 0.05;
+    const f32 movement = 0.05;
+    const f32 rotate_factor = 0.05;
 
     while (device->run())
     {
@@ -403,6 +411,42 @@ void TestFindLastOf()
     std::cout << found << "   " << str.substr(0, found).c_str() << std::endl;
 }
 
+void TestMatrix()
+{
+    Matrixf mat1(Matrixf::IDENTITY), mat2(Matrixf::IDENTITY), mat3(Matrixf::IDENTITY);
+    mat1.Rotate(PI / 2, PI / 2, 0);
+    mat2.Rotate(PI / 2, 0.f, 0.f);
+    mat3.Rotate(0.f, PI / 2, 0);
+    Matrixf mat4 = mat2 * mat3;
+    Matrixf mat5 = mat3 * mat2;
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            printf("%f\t", mat1(i, j));
+        }
+        printf("\n");
+    }
+    printf("\n");
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            printf("%f\t", mat4(i, j));
+        }
+        printf("\n");
+    }
+    printf("\n");
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            printf("%f\t", mat5(i, j));
+        }
+        printf("\n");
+    }
+}
+
 int main()
 {
     //TestArray();
@@ -414,6 +458,7 @@ int main()
     //TestReplace();
     //TestFindLastOf();
     //TestFileSystem();
+    //TestMatrix();
     system("pause");
     return 0;
 }

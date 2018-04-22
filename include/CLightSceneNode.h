@@ -15,7 +15,7 @@ namespace kong
         public :
             //! constructor
             CLightSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id,
-                const core::vector3df& position, video::SColorf color, f32 range);
+                const core::vector3df& position, video::SColorf color, f32 radius);
 
             virtual ~CLightSceneNode() = default;
 
@@ -52,6 +52,13 @@ namespace kong
 
             //! Returns type of the scene node
             ESCENE_NODE_TYPE GetType() const override { return ESNT_LIGHT; }
+
+            //! Sets the light's radius of influence.
+            void SetRadius(f32 radius) override;
+
+            //! Gets the light's radius of influence.
+            /** \return The current radius. */
+            f32 GetRadius() const override;
 
         private:
             void DoLightRecalc();

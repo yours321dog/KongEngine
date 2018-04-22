@@ -45,6 +45,7 @@ namespace kong
 
             Vector<T> Apply(const Vector<T> &) const;
             void TransformBoxEx(core::aabbox3d<f32>& box) const;
+            void RotateVec(Vector3Df &vec) const;
 
             void Translate(T x, T y, T z);
             void Scale(T x, T y, T z);
@@ -310,6 +311,15 @@ namespace kong
             box.MaxEdge.x_ = Bmax[0];
             box.MaxEdge.y_ = Bmax[1];
             box.MaxEdge.z_ = Bmax[2];
+        }
+
+        template <typename T>
+        void Matrix<T>::RotateVec(Vector3Df& vec) const
+        {
+            const Vector3Df tmp = vec;
+            vec.x_ = tmp.x_ * m_[0] + tmp.y_ * m_[4] + tmp.z_ * m_[8];
+            vec.y_ = tmp.x_ * m_[1] + tmp.y_ * m_[5] + tmp.z_ * m_[9];
+            vec.z_ = tmp.x_ * m_[2] + tmp.y_ * m_[6] + tmp.z_ * m_[10];
         }
 
         template <typename T>

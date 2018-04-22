@@ -60,6 +60,12 @@ namespace kong
                 const core::Vector3Df& lookat = core::Vector3Df(0, 0, 100),
                 s32 id = -1, bool make_active = true);
 
+            //! Adds a dynamic light scene node to the scene graph.
+            virtual ILightSceneNode* AddLightSceneNode(ISceneNode* parent = 0,
+                const core::vector3df& position = core::vector3df(0, 0, 0),
+                video::SColorf color = video::SColorf(1.0f, 1.0f, 1.0f),
+                f32 radius = 100.0f, s32 id = -1);
+
             //! add a normal scene node
             virtual ISceneNode* AddSceneNode(const char* scene_node_name, ISceneNode* parent = nullptr);
 

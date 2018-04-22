@@ -47,6 +47,18 @@ namespace kong
             //! Gets the light type.
             /** \return The current light type. */
             virtual video::E_LIGHT_TYPE GetLightType() const = 0;
+
+            //! Sets the light's radius of influence.
+            /** Outside this radius the light won't lighten geometry and cast no
+            shadows. Setting the radius will also influence the attenuation, setting
+            it to (0,1/radius,0). If you want to override this behavior, set the
+            attenuation after the radius.
+            \param radius The new radius. */
+            virtual void SetRadius(f32 radius) = 0;
+
+            //! Gets the light's radius of influence.
+            /** \return The current radius. */
+            virtual f32 GetRadius() const = 0;
         };
     }
 }

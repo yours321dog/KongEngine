@@ -9,6 +9,7 @@
 #include "IAnimatedMesh.h"
 #include "IEventReceiver.h"
 #include "IFileSystem.h"
+#include "ILightSceneNode.h"
 #include "IMeshSceneNode.h"
 #include "IReadFile.h"
 #include "ISceneNode.h"

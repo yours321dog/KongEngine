@@ -20,6 +20,7 @@ namespace kong
     {
         class IAnimatedMesh;
         class ICameraSceneNode;
+        class ILightSceneNode;
         class IMeshSceneNode;
         class IMeshLoader;
         class IMeshManipulator;
@@ -412,6 +413,24 @@ namespace kong
                 const core::Vector3Df& up = core::Vector3Df(0, 1, 0),
                 const core::Vector3Df& lookat = core::Vector3Df(0, 0, 100),
                 s32 id = -1, bool make_active = true) = 0;
+
+            //! Adds a dynamic light scene node to the scene graph.
+            /** The light will cast dynamic light on all
+            other scene nodes in the scene, which have the material flag video::MTF_LIGHTING
+            turned on. (This is the default setting in most scene nodes).
+            \param parent: Parent scene node of the light. Can be null. If the parent moves,
+            the light will move too.
+            \param position: Position of the space relative to its parent where the light will be placed.
+            \param color: Diffuse color of the light. Ambient or Specular colors can be set manually with
+            the ILightSceneNode::getLightData() method.
+            \param radius: Radius of the light.
+            \param id: id of the node. This id can be used to identify the node.
+            \return Pointer to the interface of the light if successful, otherwise NULL.
+            This pointer should not be dropped. See IReferenceCounted::drop() for more information. */
+            virtual ILightSceneNode* AddLightSceneNode(ISceneNode* parent = 0,
+                const core::vector3df& position = core::vector3df(0, 0, 0),
+                video::SColorf color = video::SColorf(1.0f, 1.0f, 1.0f),
+                f32 radius = 100.0f, s32 id = -1) = 0;
 
             //! Adds a scene node to the scene by name
             /** \return Pointer to the scene node added by a factory

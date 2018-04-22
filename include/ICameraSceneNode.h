@@ -74,7 +74,7 @@ namespace kong
         inline ICameraSceneNode::ICameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id, 
             const core::Vector3Df& eye, const core::Vector3Df& up,
             const core::Vector3Df &at, f32 zn, f32 zf)
-            : ISceneNode(parent, mgr, id), zn_(zn), zf_(zf), eye_(eye), up_(up), at_(at)
+            : ISceneNode(parent, mgr, id, eye), zn_(zn), zf_(zf), eye_(eye), up_(up), at_(at)
         {
             up_.Normalize();
             to_ = at_ - eye_;
@@ -179,6 +179,7 @@ namespace kong
             {
                 driver->SetTransform(video::ETS_PROJECTION, project_);
                 driver->SetTransform(video::ETS_VIEW, view_);
+                driver->SetActiveCameraPosition(GetAbsolutePosition());
             }
         }
 

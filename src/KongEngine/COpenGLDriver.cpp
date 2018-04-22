@@ -765,34 +765,38 @@ namespace kong
             return params_.window_size_;
         }
 
-        void COpenGLDriver::deleteAllDynamicLights()
+        void COpenGLDriver::DeleteAllDynamicLights()
         {
             lights_.Resize(0);
         }
 
-        s32 COpenGLDriver::addDynamicLight(const SLight& light)
+        s32 COpenGLDriver::AddDynamicLight(const SLight& light)
         {
             lights_.PushBack(light);
 
             return lights_.Size() - 1;
         }
 
-        u32 COpenGLDriver::getMaximalDynamicLightAmount() const
+        u32 COpenGLDriver::GetMaximalDynamicLightAmount() const
         {
             return max_support_lights_;
         }
 
-        u32 COpenGLDriver::getDynamicLightCount() const
+        u32 COpenGLDriver::GetDynamicLightCount() const
         {
             return lights_.Size();
         }
 
-        const SLight& COpenGLDriver::getDynamicLight(u32 idx) const
+        const SLight& COpenGLDriver::GetDynamicLight(u32 idx) const
         {
             if (idx < lights_.Size())
                 return lights_[idx];
             else
                 return *static_cast<SLight*>(nullptr);
+        }
+
+        void COpenGLDriver::SetActiveCameraPosition(core::Vector3Df position) const
+        {
         }
 
         void COpenGLDriver::UpdateMaxSupportLights()
