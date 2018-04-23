@@ -113,11 +113,24 @@ vec4 CalculateLight(Light light, bool light_n_on)
     }
 }
 
+// Does not take into account GL_TEXTURE_MIN_LOD/GL_TEXTURE_MAX_LOD/GL_TEXTURE_LOD_BIAS,
+// nor implementation-specific flexibility allowed by OpenGL spec
+float MipMapLevel(in vec2 texture_coordinate) // in texel units
+{
+    vec2  dx_vtc        = dFdx(texture_coordinate);
+    vec2  dy_vtc        = dFdy(texture_coordinate);
+    float delta_max_sqr = max(dot(dx_vtc, dx_vtc), dot(dy_vtc, dy_vtc));
+    float mml = 0.5 * log2(delta_max_sqr);
+    return max( 0, mml ); // Thanks @Nims
+}
+
 void main()
 {
     if (texture0_on)
     {
-        FragColor = texture(texture0, outTexcoord);
+        float mipmap_level = MipMapLevel(outTexcoord * textureSize(texture0, 0));
+        FragColor = textureLod(texture0, outTexcoord, mipmap_level);
+        //FragColor = texture(texture0, outTexcoord);
     }
     else
     {
