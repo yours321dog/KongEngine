@@ -6,7 +6,7 @@ namespace kong
 {
     namespace scene
     {
-        CLODSceneNode::Triangle::Triangle(Vertex* v1, Vertex* v2, Vertex* v3)
+        CLodSceneNode::Triangle::Triangle(Vertex* v1, Vertex* v2, Vertex* v3)
         {
             vertex[0] = v1;
             vertex[1] = v2;
@@ -32,12 +32,12 @@ namespace kong
             }
         }
 
-        bool CLODSceneNode::Triangle::HasVertex(Vertex* v) const
+        bool CLodSceneNode::Triangle::HasVertex(Vertex* v) const
         {
             return (v->position == vertex[0]->position || v->position == vertex[1]->position || v->position == vertex[2]->position);
         }
 
-        void CLODSceneNode::Triangle::ReplaceVertex(Vertex* target, Vertex* v)
+        void CLodSceneNode::Triangle::ReplaceVertex(Vertex* target, Vertex* v)
         {
             for (auto& x : vertex)
             {
@@ -48,8 +48,13 @@ namespace kong
             }
         }
 
-        bool CLODSceneNode::Triangle::CheckAndRemove(int num, core::Array<Triangle*>* list) const
+        bool CLodSceneNode::Triangle::CheckAndRemove(u32 num, core::Array<Triangle*>* list) const
         {
+            if (num >= list->Size())
+            {
+                return false;
+            }
+
             if (vertex[0]->position == vertex[1]->position || vertex[1]->position == vertex[2]->position || vertex[2]->position == vertex[0]->position) 
             {
                 list->Erase(num);
@@ -58,17 +63,19 @@ namespace kong
             return false;
         }
 
-        CLODSceneNode::Vertex::Vertex(): id(0)
+        CLodSceneNode::Vertex::Vertex(): id(0)
         {
         }
 
-        IMeshBuffer* CLODSceneNode::BuildMeshBufferFromTriangles(IMeshBuffer* oldmb, core::Array<Triangle*> arr)
+        IMeshBuffer* CLodSceneNode::BuildMeshBufferFromTriangles(IMeshBuffer* oldmb, core::Array<Triangle*> arr)
         {
             SMeshBuffer* newm = new SMeshBuffer();
             newm->material_ = oldmb->GetMaterial();
             u16* indices = new u16[arr.Size() * 3];
-            for (int x = 0; x < arr.Size(); x++) {
-                for (int y = 0; y < 3; y++) {
+            for (u32 x = 0; x < arr.Size(); x++)
+            {
+                for (u32 y = 0; y < 3; y++) 
+                {
                     indices[x * 3 + y] = arr[x]->vertex[y]->id;
                 }
             }
@@ -76,97 +83,123 @@ namespace kong
             return newm;
         }
 
-        CLODSceneNode::CLODSceneNode(IMesh* mesh, scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id,
+        CLodSceneNode::CLodSceneNode(IMesh* mesh, scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id,
             u32 numOfCollapseOnLast, u8 numOfLevels, f32 LODBeginDist, f32 LODLastDist,
             bool combineDuplicateVertices)
             : scene::ISceneNode(parent, mgr, id), test(nullptr)
         {
-            DefaultMesh = mesh;
-            CurrentMesh = mesh;
+            default_mesh_ = mesh;
+            current_mesh_ = mesh;
             //CurrentMesh->getMeshBuffer(0)->getMaterial().Wireframe = true;
-            LODBegin = LODBeginDist;
-            LODLast = LODLastDist;
-            LevelCount = numOfLevels;
-            CurrentLevel = 0;
-            LODMesh = new IMesh*[numOfLevels];
-            LODOn = true;
+            lod_begin_ = LODBeginDist;
+            lod_last_ = LODLastDist;
+            level_count_ = numOfLevels;
+            current_level_ = 0;
+            lod_mesh_ = new IMesh*[numOfLevels];
+            lod_on_ = true;
 
             if (combineDuplicateVertices)
             {
-                DefaultMesh = scene_manager_->GetMeshManipulator()->createMeshWelded(DefaultMesh);
+                default_mesh_ = scene_manager_->GetMeshManipulator()->createMeshWelded(default_mesh_);
             }
 
 
-            for (u32 x = 0; x < DefaultMesh->GetMeshBufferCount(); x++)
+            for (u32 x = 0; x < default_mesh_->GetMeshBufferCount(); x++)
             {
-                video::S3DVertex* verts = static_cast<video::S3DVertex*>(DefaultMesh->GetMeshBuffer(x)->GetVertices());
+                video::S3DVertex* verts = static_cast<video::S3DVertex*>(default_mesh_->GetMeshBuffer(x)->GetVertices());
 
-                for (u32 y = 0; y < DefaultMesh->GetMeshBuffer(x)->GetVertexCount(); y++)
+                for (u32 y = 0; y < default_mesh_->GetMeshBuffer(x)->GetVertexCount(); y++)
                 {
                     Vertex* vert = new Vertex();
                     vert->position = verts[y].pos_;
                     vert->id = y;
-                    Verts[x].PushBack(vert);
+                    verts_[x].PushBack(vert);
                 }
             }
 
-            for (u32 x = 0; x < DefaultMesh->GetMeshBufferCount(); x++)
+            for (u32 x = 0; x < default_mesh_->GetMeshBufferCount(); x++)
             {
-                u16* indices = DefaultMesh->GetMeshBuffer(x)->GetIndices();
+                u16* indices = default_mesh_->GetMeshBuffer(x)->GetIndices();
 
-                for (u32 y = 0; y < DefaultMesh->GetMeshBuffer(x)->GetIndexCount(); y += 3)
+                for (u32 y = 0; y < default_mesh_->GetMeshBuffer(x)->GetIndexCount(); y += 3)
                 {
-                    Triangle* tri = new Triangle(Verts[x][indices[y]], Verts[x][indices[y + 1]],
-                                                 Verts[x][indices[y + 2]]);
+                    Triangle* tri = new Triangle(verts_[x][indices[y]], verts_[x][indices[y + 1]],
+                                                 verts_[x][indices[y + 2]]);
 
-                    Tris[x].PushBack(tri);
+                    triangles_[x].PushBack(tri);
                 }
             }
 
-            for (u32 x = 0; x < LevelCount; x++)
+            for (u32 x = 0; x < level_count_; x++)
             {
-                LODMesh[x] = DefaultMesh;
+                lod_mesh_[x] = default_mesh_;
             }
 
-            const u32 collapsePerLevel = numOfCollapseOnLast / (LevelCount - 1);
-            const u32 collapsePerBuffer = collapsePerLevel / DefaultMesh->GetMeshBufferCount();
+            const u32 collapsePerLevel = numOfCollapseOnLast / (level_count_ - 1);
+            const u32 collapsePerBuffer = collapsePerLevel / default_mesh_->GetMeshBufferCount();
 
 
-            for (u32 x = 1; x < LevelCount; x++)
+            for (u32 x = 1; x < level_count_; x++)
             {
                 SMesh* newLod = new SMesh();
-                for (u32 y = 0; y < DefaultMesh->GetMeshBufferCount(); y++)
+                for (u32 y = 0; y < default_mesh_->GetMeshBufferCount(); y++)
                 {
                     for (u32 i = 0; i < collapsePerBuffer; i++)
                     {
-                        const int vert = rand() % Verts[y].Size();
-                        const int neighbor = rand() % Verts[y][vert]->neighbors.Size();
-                        for (u32 u = 0; u < Tris[y].Size(); u++)
+                        const int vert = rand() % verts_[y].Size();
+                        const int neighbor = rand() % verts_[y][vert]->neighbors.Size();
+                        for (u32 u = 0; u < triangles_[y].Size(); u++)
                         {
-                            if (Tris[y][u]->HasVertex(Verts[y][vert]))
+                            if (triangles_[y][u]->HasVertex(verts_[y][vert]))
                             {
-                                Tris[y][u]->ReplaceVertex(Verts[y][vert], Verts[y][vert]->neighbors[neighbor]);
+                                triangles_[y][u]->ReplaceVertex(verts_[y][vert], verts_[y][vert]->neighbors[neighbor]);
                             }
                         }
                     }
                     SMeshBuffer* mn = new SMeshBuffer();
-                    for (u32 xx = 0; xx < Tris[0].Size(); xx++)
+                    for (u32 xx = 0; xx < triangles_[0].Size(); xx++)
                     {
-                        if (Tris[0][xx]->CheckAndRemove(xx, &Tris[0]))
+                        if (triangles_[0][xx]->CheckAndRemove(xx, &triangles_[0]))
                         {
                             xx--;
                         }
                     }
-                    mn = dynamic_cast<SMeshBuffer*>(BuildMeshBufferFromTriangles(DefaultMesh->GetMeshBuffer(y), Tris[y])
-                    );
+                    mn = dynamic_cast<SMeshBuffer*>(BuildMeshBufferFromTriangles(default_mesh_->GetMeshBuffer(y), triangles_[y]));
                     newLod->AddMeshBuffer(mn);
                     newLod->RecalculateBoundingBox();
                 }
-                LODMesh[x] = newLod;
+                lod_mesh_[x] = newLod;
             }
         }
 
-        void CLODSceneNode::OnRegisterSceneNode()
+        CLodSceneNode::~CLodSceneNode()
+        {
+            for (u32 i = 0; i < level_count_; i++)
+            {
+                delete lod_mesh_[i];
+            }
+            delete[] lod_mesh_;
+
+            delete default_mesh_;
+
+            for (u32 i = 0; i < 8; i++)
+            {
+                for (u32 j = 0; j < verts_[i].Size(); j++)
+                {
+                    delete verts_[i][j];
+                }
+            }
+
+            for (u32 i = 0; i < 8; i++)
+            {
+                for (u32 j = 0; j < triangles_[i].Size(); j++)
+                {
+                    delete triangles_[i][j];
+                }
+            }
+        }
+
+        void CLodSceneNode::OnRegisterSceneNode()
         {
             if (IsVisible)
                 scene_manager_->RegisterNodeForRendering(this, ESNRP_SOLID);
@@ -174,49 +207,49 @@ namespace kong
             ISceneNode::OnRegisterSceneNode();
         }
 
-        void CLODSceneNode::Render()
+        void CLodSceneNode::Render()
         {
-            if (LODOn) 
+            if (lod_on_) 
             {
                 core::vector3df cameraPos = scene_manager_->GetActiveCamera()->GetPosition();
                 f32 dist = absolute_tranform_.GetTranslation().GetDistanceFrom(cameraPos);
-                CurrentLevel = 0;
-                float increment = (LODLast - LODBegin) / LevelCount;
-                for (u32 x = 0; x < LevelCount; x++) 
+                current_level_ = 0;
+                float increment = (lod_last_ - lod_begin_) / level_count_;
+                for (u32 x = 0; x < level_count_; x++) 
                 {
-                    if (dist >= (LODBegin + increment*x)*(LODBegin + increment*x))
-                        CurrentLevel = x;
+                    if (dist >= (lod_begin_ + increment*x)*(lod_begin_ + increment*x))
+                        current_level_ = x;
                 }
-                CurrentMesh = LODMesh[CurrentLevel];
+                current_mesh_ = lod_mesh_[current_level_];
 
             }
             else
             {
-                CurrentMesh = DefaultMesh;
+                current_mesh_ = default_mesh_;
             }
 
             video::IVideoDriver* driver = scene_manager_->GetVideoDriver();
             driver->SetTransform(video::ETS_WORLD, absolute_tranform_);
-            for (u32 x = 0; x < CurrentMesh->GetMeshBufferCount(); x++)
+            for (u32 x = 0; x < current_mesh_->GetMeshBufferCount(); x++)
             {
-                driver->SetMaterial(CurrentMesh->GetMeshBuffer(x)->GetMaterial());
-                driver->DrawMeshBuffer(CurrentMesh->GetMeshBuffer(x));
+                driver->SetMaterial(current_mesh_->GetMeshBuffer(x)->GetMaterial());
+                driver->DrawMeshBuffer(current_mesh_->GetMeshBuffer(x));
             }
         }
 
-        const core::aabbox3d<f32>& CLODSceneNode::GetBoundingBox() const
+        const core::aabbox3d<f32>& CLodSceneNode::GetBoundingBox() const
         {
-            return CurrentMesh->GetBoundingBox();
+            return current_mesh_->GetBoundingBox();
         }
 
-        void CLODSceneNode::SetLODOn(const bool on)
+        void CLodSceneNode::SetLODOn(const bool on)
         {
-            LODOn = on;
+            lod_on_ = on;
         }
 
-        bool CLODSceneNode::GetLODOn() const
+        bool CLodSceneNode::GetLODOn() const
         {
-            return LODOn;
+            return lod_on_;
         }
     }
 }

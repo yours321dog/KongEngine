@@ -11,8 +11,25 @@ namespace kong
 {
     namespace scene
     {
-        class CLODSceneNode : public ISceneNode
+        class CLodSceneNode : public ISceneNode
         {
+
+        public:
+
+            CLodSceneNode(IMesh* mesh, scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id, u32 numOfCollapseOnLast,
+                u8 numOfLevels = 4, f32 LODBeginDist = 10, f32 LODLastDist = 30, bool combineDuplicateVertices = true);
+
+            virtual ~CLodSceneNode();
+
+            void OnRegisterSceneNode() override;
+
+            void Render() override;
+
+            const core::aabbox3d<f32>& GetBoundingBox() const override;
+
+            void SetLODOn(bool on);
+            bool GetLODOn() const;
+
         private:
             class Vertex;
             class Triangle;
@@ -23,7 +40,7 @@ namespace kong
 
                 bool HasVertex(Vertex* v) const;
                 void ReplaceVertex(Vertex* target, Vertex* v);
-                bool CheckAndRemove(int num, core::Array<Triangle*> *list) const;
+                bool CheckAndRemove(u32 num, core::Array<Triangle*> *list) const;
             };
 
             class Vertex
@@ -40,31 +57,17 @@ namespace kong
             static IMeshBuffer* BuildMeshBufferFromTriangles(IMeshBuffer* oldmb, core::Array<Triangle*> arr);
 
 
-            IMesh* DefaultMesh;
-            IMesh** LODMesh;
-            IMesh* CurrentMesh;
+            IMesh* default_mesh_;
+            IMesh** lod_mesh_;
+            IMesh* current_mesh_;
             IMeshBuffer* test;
-            u8 CurrentLevel;
-            u8 LevelCount;
-            f32 LODBegin;
-            f32 LODLast;
-            bool LODOn;
-            core::Array<Vertex*> Verts[8];
-            core::Array<Triangle*> Tris[8];
-        public:
-
-            CLODSceneNode(IMesh* mesh, scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id, u32 numOfCollapseOnLast,
-                u8 numOfLevels = 4, f32 LODBeginDist = 10, f32 LODLastDist = 30, bool combineDuplicateVertices = true);
-
-
-            void OnRegisterSceneNode() override;
-
-            void Render() override;
-
-            const core::aabbox3d<f32>& GetBoundingBox() const override;
-
-            void SetLODOn(bool on);
-            bool GetLODOn() const;
+            u8 current_level_;
+            u8 level_count_;
+            f32 lod_begin_;
+            f32 lod_last_;
+            bool lod_on_;
+            core::Array<Vertex*> verts_[8];
+            core::Array<Triangle*> triangles_[8];
 
         };
     }
