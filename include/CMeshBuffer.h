@@ -101,6 +101,9 @@ namespace kong
             //! returns texture coord of vertex i
             virtual core::vector2df& GetTCoords(u32 i);
 
+            //! Append the vertices and indices to the current buffer
+            virtual void Append(const void* const vertices, u32 numVertices, const u16* const indices, u32 numIndices);
+
             video::SMaterial material_;
             core::Array<T>  vertices_;
             core::Array<u16> indices_;
@@ -254,6 +257,30 @@ namespace kong
         core::vector2df& CMeshBuffer<T>::GetTCoords(u32 i)
         {
             return vertices_[i].texcoord_;
+        }
+
+        template <class T>
+        void CMeshBuffer<T>::Append(const void* const vertices, u32 numVertices, const u16* const indices,
+            u32 numIndices)
+        {
+            if (vertices == GetVertices())
+                return;
+
+            const u32 vertexCount = GetVertexCount();
+            u32 i;
+
+            vertices_.Reallocate(vertexCount + numVertices);
+            for (i = 0; i<numVertices; ++i)
+            {
+                vertices_.PushBack(reinterpret_cast<const T*>(vertices)[i]);
+                bounding_box_.addInternalPoint(reinterpret_cast<const T*>(vertices)[i].pos_);
+            }
+
+            indices_.Reallocate(GetIndexCount() + numIndices);
+            for (i = 0; i<numIndices; ++i)
+            {
+                indices_.PushBack(indices[i] + vertexCount);
+            }
         }
 
         //! Standard meshbuffer

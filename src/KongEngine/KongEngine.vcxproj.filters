@@ -363,6 +363,9 @@
     <ClCompile Include="CLightSceneNode.cpp">
       <Filter>KongEngine\scene\scenenode</Filter>
     </ClCompile>
+    <ClCompile Include="CLodSceneNode.cpp">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\KongCompileConfig.h">
@@ -687,6 +690,9 @@
       <Filter>Include\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\ESceneNodeType.h">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CLodSceneNode.h">
       <Filter>KongEngine\scene\scenenode</Filter>
     </ClInclude>
   </ItemGroup>
