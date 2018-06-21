@@ -30,12 +30,17 @@ struct Material
     float shininess;
 };
 
+// texture control flags
 uniform sampler2D texture0;
 uniform bool texture0_on;
 
+// lights control flags
 uniform bool light_on;
 uniform Light light0;
 uniform bool light0_on;
+
+// wireframe control flags
+uniform bool wireframe_on;
 
 uniform vec4 cam_position;
 
@@ -104,12 +109,6 @@ vec4 CalculateLight(Light light, bool light_n_on)
         }
 
         return res_ambient + light_attenuation * (res_diffuse + res_specular);
-        //return res_ambient + (res_diffuse + res_specular);
-//        vec3 view_direction = normalize(world_position.xyz - cam_position.xyz);
-//        vec3 reflect_direction = reflect(-light_direction, world_normal.xyz);
-//        float specular_factor = pow(max(dot(view_direction, reflect_direction), 0.f), material.shininess);
-        //return  vec4(material.shininess / 128.f, 0.f, 0.f, 1.f);
-        //return vec4(0.4, 0.4, 0.4, 1.0);
     }
 }
 
@@ -126,24 +125,38 @@ float MipMapLevel(in vec2 texture_coordinate) // in texel units
 
 void main()
 {
-    if (texture0_on)
+    // wireframe mode
+    if (wireframe_on)
     {
-        float mipmap_level = MipMapLevel(outTexcoord * textureSize(texture0, 0));
-        FragColor = textureLod(texture0, outTexcoord, mipmap_level);
-        //FragColor = texture(texture0, outTexcoord);
+        if(any(lessThan(outBC, vec3(0.02))))
+        {
+            FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+        else{
+            FragColor = vec4(0.5, 0.5, 0.5, 1.0);
+        }
     }
-    else
+    else // mesh mode
     {
-        FragColor = outClr;
-    }
+        if (texture0_on)
+        {
+            float mipmap_level = MipMapLevel(outTexcoord * textureSize(texture0, 0));
+            FragColor = textureLod(texture0, outTexcoord, mipmap_level);
+            //FragColor = texture(texture0, outTexcoord);
+        }
+        else
+        {
+            FragColor = outClr;
+        }
 
-    if (light_on)
-    {
-        vec4 light_color = CalculateLight(light0, light0_on);
-        //light_color += CalculateLight(light1, light1_on);
-        //light_color += CalculateLight(light2, light2_on);
-        //light_color += CalculateLight(light3, light3_on);
-        FragColor *= light_color;
+        if (light_on)
+        {
+            vec4 light_color = CalculateLight(light0, light0_on);
+            //light_color += CalculateLight(light1, light1_on);
+            //light_color += CalculateLight(light2, light2_on);
+            //light_color += CalculateLight(light3, light3_on);
+            FragColor *= light_color;
+        }
     }
     //FragColor = vec4(1.0f, 0.f, 0.f, 1.f);
     //FragColor = vec4(world_normal.xyz, 1.f);
