@@ -132,6 +132,9 @@ namespace kong
             //! Set active camera position
             void SetActiveCameraPosition(core::Vector3Df position) const override;
 
+            //! Set rendering mode
+            void SetRenderingMode(E_RENDERING_MODE mode) override;
+
         protected:
             virtual void UpdateMaxSupportLights();
 
@@ -294,6 +297,9 @@ namespace kong
 
             //! light array
             core::Array<SLight> lights_;
+
+            //! rendering mode
+            E_RENDERING_MODE rendering_mode_;
         };
     } // end namespace video
 } // end namespace kong

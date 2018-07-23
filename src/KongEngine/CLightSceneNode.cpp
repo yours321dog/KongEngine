@@ -17,8 +17,15 @@ namespace kong
             light_data_.specular_color_ = color.GetInterpolated(video::SColor(255, 255, 255, 255), 0.7f);
             light_data_.position_ = position;
 
-            CLightSceneNode::SetRadius(radius);
+            //CLightSceneNode::SetRadius(radius);
+            //SetRadius(radius);
+            light_data_.radius_ = radius;
+            light_data_.attenuation_.Set(1.f, 1.f / radius, 0.f);
+            DoLightRecalc();
         }
+
+        CLightSceneNode::~CLightSceneNode()
+        = default;
 
         void CLightSceneNode::OnRegisterSceneNode()
         {

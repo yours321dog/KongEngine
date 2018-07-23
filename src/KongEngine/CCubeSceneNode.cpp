@@ -41,6 +41,7 @@ namespace kong
             //    }
             //    printf("\n");
             //}
+            driver->SetRenderingMode(rendering_mode_);
             driver->SetTransform(video::ETS_WORLD, absolute_tranform_);
 
             driver->SetMaterial(mesh_->GetMeshBuffer(0)->GetMaterial());
@@ -129,6 +130,16 @@ namespace kong
             buffer->vertices_.PushBack(video::S3DVertex(-len, -len, -len, 0.f, -1.f, 0.f, clr_b, 0.f, 0.f));
 
             buffer->indices_.Reallocate(36);
+
+            // reallocate the barycentric buffer
+            for (int i = 0; i < 6; i++)
+            {
+                int idx = i * 4;
+                buffer->vertices_[idx].barycentric_ = core::vector3df(1.f, 0.f, 0.f);
+                buffer->vertices_[idx + 1].barycentric_ = core::vector3df(0.f, 1.f, 0.f);
+                buffer->vertices_[idx + 2].barycentric_ = core::vector3df(0.f, 0.f, 1.f);
+                buffer->vertices_[idx + 3].barycentric_ = core::vector3df(0.f, 1.f, 0.f);
+            }
 
             for (auto indice : indices)
             {

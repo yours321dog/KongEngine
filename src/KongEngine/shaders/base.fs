@@ -3,6 +3,7 @@ out vec4 FragColor;
 
 in vec4 outClr;
 in vec2 outTexcoord;
+in vec3 outBC;
 
 in vec4 world_position;
 in vec4 world_normal;
@@ -30,6 +31,11 @@ struct Material
     float shininess;
 };
 
+//render mode enum
+const int ERM_MESH      = 0x00000000;
+const int ERM_WIREFRAME = 0x00000001;
+const int ERM_BOTH      = 0x00000002;
+
 // texture control flags
 uniform sampler2D texture0;
 uniform bool texture0_on;
@@ -40,7 +46,7 @@ uniform Light light0;
 uniform bool light0_on;
 
 // wireframe control flags
-uniform bool wireframe_on;
+uniform int wireframe_on;
 
 uniform vec4 cam_position;
 
@@ -123,18 +129,19 @@ float MipMapLevel(in vec2 texture_coordinate) // in texel units
     return max( 0, mml ); // Thanks @Nims
 }
 
+// Smooth and constant the wireframe edge
+float EdgeFactor(){
+    vec3 d = fwidth(outBC);
+    vec3 a3 = smoothstep(vec3(0.0), d*1.5, outBC);
+    return min(min(a3.x, a3.y), a3.z);
+}
+
 void main()
 {
     // wireframe mode
-    if (wireframe_on)
+    if (wireframe_on == ERM_WIREFRAME)
     {
-        if(any(lessThan(outBC, vec3(0.02))))
-        {
-            FragColor = vec4(0.0, 0.0, 0.0, 1.0);
-        }
-        else{
-            FragColor = vec4(0.5, 0.5, 0.5, 1.0);
-        }
+        FragColor.rgba = mix(vec4(0.5, 0.5, 0.5, 1.0), vec4(0.0), EdgeFactor());
     }
     else // mesh mode
     {

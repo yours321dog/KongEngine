@@ -201,7 +201,7 @@ namespace kong
 
         void CLodSceneNode::OnRegisterSceneNode()
         {
-            if (IsVisible)
+            if (is_visible_)
                 scene_manager_->RegisterNodeForRendering(this, ESNRP_SOLID);
 
             ISceneNode::OnRegisterSceneNode();

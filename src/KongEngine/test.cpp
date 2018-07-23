@@ -165,6 +165,7 @@ void TestWindow()
     smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -2.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
     ISceneNode *node = smr->AddCubeSceneNode(1.f, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
+    node->SetRenderingMode(video::ERM_WIREFRAME);
 
     ILightSceneNode *light_node = smr->AddLightSceneNode(nullptr, Vector3Df(2.f, 2.f, -2.f));
     SLight light_data = light_node->GetLightData();

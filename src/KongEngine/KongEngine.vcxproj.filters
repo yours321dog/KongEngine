@@ -695,6 +695,9 @@
     <ClInclude Include="..\..\include\CLodSceneNode.h">
       <Filter>KongEngine\scene\scenenode</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\ERenderingMode.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\base.fs">

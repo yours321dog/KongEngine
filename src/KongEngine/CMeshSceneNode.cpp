@@ -60,6 +60,7 @@ namespace kong
             //    }
             //    printf("\n");
             //}
+            driver->SetRenderingMode(rendering_mode_);
             driver->SetTransform(video::ETS_WORLD, absolute_tranform_);
 
             for (u32 i = 0; i < mesh_->GetMeshBufferCount(); i++)

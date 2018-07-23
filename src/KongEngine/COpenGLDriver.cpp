@@ -384,6 +384,10 @@ namespace kong
                 glClear(mask);
 
             glEnable(GL_DEPTH_TEST);
+
+            // Enable blending
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
 
         video::ITexture* COpenGLDriver::LoadTextureFromFile(io::IReadFile* file, const io::path& hashName)
@@ -797,6 +801,21 @@ namespace kong
 
         void COpenGLDriver::SetActiveCameraPosition(core::Vector3Df position) const
         {
+        }
+
+        void COpenGLDriver::SetRenderingMode(E_RENDERING_MODE mode)
+        {
+            rendering_mode_ = mode;
+            switch (mode)
+            {
+            default:
+            case ERM_MESH:
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                break;
+            case ERM_WIREFRAME:
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                break;
+            }
         }
 
         void COpenGLDriver::UpdateMaxSupportLights()

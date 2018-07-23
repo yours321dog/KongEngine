@@ -7,6 +7,7 @@
 #include "Matrix.h"
 #include "ITexture.h"
 #include "SLight.h"
+#include "ERenderingMode.h"
 
 namespace kong
 {
@@ -315,6 +316,11 @@ namespace kong
 
             //! Set active camera position
             virtual void SetActiveCameraPosition(core::Vector3Df position) const = 0;
+
+            //! Set rendering mode
+            /** This method will change the rendering mode.
+             * \param mode switch between wireframe and mesh rendering mode */
+            virtual void SetRenderingMode(E_RENDERING_MODE mode = ERM_MESH) = 0;
         };
     }
 }

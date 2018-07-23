@@ -17,7 +17,7 @@ namespace kong
             CLightSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id,
                 const core::vector3df& position, video::SColorf color, f32 radius);
 
-            virtual ~CLightSceneNode() = default;
+            virtual ~CLightSceneNode();
 
             //! pre render event
             void OnRegisterSceneNode() override;

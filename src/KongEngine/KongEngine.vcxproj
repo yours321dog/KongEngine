@@ -208,6 +208,7 @@
     <ClInclude Include="..\..\include\EDriverTypes.h" />
     <ClInclude Include="..\..\include\EhardwareBufferFlags.h" />
     <ClInclude Include="..\..\include\EMaterialFlags.h" />
+    <ClInclude Include="..\..\include\ERenderingMode.h" />
     <ClInclude Include="..\..\include\ESceneNodeType.h" />
     <ClInclude Include="..\..\include\fast_atof.h" />
     <ClInclude Include="..\..\include\Heapsort.h" />

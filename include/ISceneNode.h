@@ -9,6 +9,7 @@
 #include "SMaterial.h"
 #include "aabbox3d.h"
 #include "ESceneNodeType.h"
+#include "ERenderingMode.h"
 
 namespace kong
 {
@@ -34,7 +35,7 @@ namespace kong
                 const core::Vector3Df &rotation = core::Vector3Df(0.f, 0.f, 0.f),
                 const core::Vector3Df &scale = core::Vector3Df(1.f, 1.f, 1.f))
                 : relative_translation_(position), relative_rotation_(rotation), relative_scale_(scale),
-                parent_(nullptr), id_(id), scene_manager_(mgr), is_visible_(true)
+                parent_(nullptr), id_(id), scene_manager_(mgr), is_visible_(true), rendering_mode_(video::ERM_MESH)
             {
                 if (parent != nullptr)
                 {
@@ -402,12 +403,19 @@ namespace kong
             {
             }
 
-
             //! Returns type of the scene node
             /** \return The type of this node. */
             virtual ESCENE_NODE_TYPE GetType() const
             {
                 return ESNT_UNKNOWN;
+            }
+
+            //! Set rendering mode
+            /** This method will change the rendering mode.
+            * \param mode switch between wireframe and mesh rendering mode */
+            virtual void SetRenderingMode(video::E_RENDERING_MODE mode = video::ERM_MESH)
+            {
+                rendering_mode_ = mode;
             }
 
         protected:
@@ -437,6 +445,10 @@ namespace kong
 
             bool is_visible_;
 
+            //! rendering mode
+            video::E_RENDERING_MODE rendering_mode_;
+
+            static core::Array<core::Vector3Df> barycentric_;
         };
     } // end namespace scene
 } // end namespace kong

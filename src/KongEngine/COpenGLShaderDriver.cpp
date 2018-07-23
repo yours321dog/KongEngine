@@ -130,6 +130,12 @@ namespace kong
             glEnableVertexAttribArray(2);
             glEnableVertexAttribArray(3);
 
+            if (rendering_mode_ == ERM_WIREFRAME)
+            {
+                glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, barycentric_)));
+                glEnableVertexAttribArray(4);
+            }
+
             shader_helper_->Use();
             glBindVertexArray(vao_);
             glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_SHORT, nullptr);
@@ -267,6 +273,12 @@ namespace kong
         {
             void *pos_cam_world = &position;
             shader_helper_->SetVec4("cam_position", static_cast<f32 *>(pos_cam_world));
+        }
+
+        void COpenGLShaderDriver::SetRenderingMode(E_RENDERING_MODE mode)
+        {
+            rendering_mode_ = mode;
+            shader_helper_->SetInt("wireframe_on", mode);
         }
 
         void COpenGLShaderDriver::UpdateMaxSupportLights()

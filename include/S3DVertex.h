@@ -51,6 +51,9 @@ namespace kong
             S3DVertex(const core::Vector3Df &pos, const core::Vector3Df & normal, 
                 const SColor &color, const core::Vector2Df &texcoord);
 
+            S3DVertex(const core::Vector3Df &pos, const core::Vector3Df & normal,
+                const SColor &color, const core::Vector2Df &texcoord, const core::Vector3Df &barycentric);
+
             bool operator==(const S3DVertex &other) const;
 
             bool operator!=(const S3DVertex& other) const;
@@ -64,6 +67,7 @@ namespace kong
             core::Vector3Df pos_;
             core::Vector3Df normal_;
             core::Vector2Df texcoord_;
+            core::Vector3Df barycentric_;
             SColor color_;
         };
 
@@ -78,6 +82,13 @@ namespace kong
         inline S3DVertex::S3DVertex(const core::Vector3Df& pos, const core::Vector3Df& normal, const SColor& color,
             const core::Vector2Df& texcoord)
             : pos_(pos), normal_(normal), texcoord_(texcoord), color_(color)
+        {
+
+        }
+
+        inline S3DVertex::S3DVertex(const core::Vector3Df& pos, const core::Vector3Df& normal, const SColor& color,
+            const core::Vector2Df& texcoord, const core::Vector3Df& barycentric)
+            : pos_(pos), normal_(normal), texcoord_(texcoord), barycentric_(barycentric), color_(color)
         {
 
         }
