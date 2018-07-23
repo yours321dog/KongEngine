@@ -9,7 +9,7 @@ namespace kong
     namespace scene
     {
         CLightSceneNode::CLightSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id,
-            const core::vector3df& position, video::SColorf color, f32 radius)
+            const core::vector3df& position, video::SColorf& color, f32 radius)
             : ILightSceneNode(parent, mgr, id, position), driver_light_index_(-1), light_is_on_(true)
         {
             light_data_.diffuse_color_ = color;

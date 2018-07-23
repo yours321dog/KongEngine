@@ -10,6 +10,9 @@
 #include "aabbox3d.h"
 #include "ESceneNodeType.h"
 #include "ERenderingMode.h"
+#include "SMesh.h"
+#include "CMeshBuffer.h"
+#include "../src/KongEngine/include/SBoundingBoxMesh.h"
 
 namespace kong
 {
@@ -35,7 +38,7 @@ namespace kong
                 const core::Vector3Df &rotation = core::Vector3Df(0.f, 0.f, 0.f),
                 const core::Vector3Df &scale = core::Vector3Df(1.f, 1.f, 1.f))
                 : relative_translation_(position), relative_rotation_(rotation), relative_scale_(scale),
-                parent_(nullptr), id_(id), scene_manager_(mgr), is_visible_(true), rendering_mode_(video::ERM_MESH)
+                parent_(nullptr), id_(id), scene_manager_(mgr), is_visible_(true), rendering_mode_(video::ERM_MESH), draw_bounding_box_(false)
             {
                 if (parent != nullptr)
                 {
@@ -418,6 +421,14 @@ namespace kong
                 rendering_mode_ = mode;
             }
 
+            //! Draw bounding box
+            /** This method will enable the bounding box drawing
+             * \param draw_bounding_box Draw bounding box or not */
+            virtual void EnableDrawBoundingBox(const bool draw_bounding_box = true)
+            {
+                draw_bounding_box_ = draw_bounding_box;
+            }
+
         protected:
             //! Sets the new scene manager for this node and all children.
             //! Called by addChild when moving nodes between scene managers
@@ -449,6 +460,11 @@ namespace kong
             video::E_RENDERING_MODE rendering_mode_;
 
             static core::Array<core::Vector3Df> barycentric_;
+
+            //! draw bounding box
+            bool draw_bounding_box_;
+
+            SBoundingBoxMesh bounding_box_mesh_;
         };
     } // end namespace scene
 } // end namespace kong

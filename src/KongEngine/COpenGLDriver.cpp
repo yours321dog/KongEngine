@@ -383,6 +383,9 @@ namespace kong
             if (mask)
                 glClear(mask);
 
+            glEnable(GL_CULL_FACE); // enables face culling    
+            glCullFace(GL_BACK); // tells OpenGL to cull back faces (the sane default setting)
+
             glEnable(GL_DEPTH_TEST);
 
             // Enable blending

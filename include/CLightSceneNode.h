@@ -12,10 +12,10 @@ namespace kong
     {
         class CLightSceneNode : public ILightSceneNode
         {
-        public :
+        public:
             //! constructor
             CLightSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id,
-                const core::vector3df& position, video::SColorf color, f32 radius);
+                const core::vector3df& position, video::SColorf& color, f32 radius);
 
             virtual ~CLightSceneNode();
 
