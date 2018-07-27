@@ -366,6 +366,9 @@
     <ClCompile Include="CLodSceneNode.cpp">
       <Filter>KongEngine\scene\scenenode</Filter>
     </ClCompile>
+    <ClCompile Include="CImageLoaderTGA.cpp">
+      <Filter>KongEngine\video\Null\Loader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\KongCompileConfig.h">
@@ -697,6 +700,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\ERenderingMode.h">
       <Filter>Include\video</Filter>
+    </ClInclude>
+    <ClInclude Include="CImageLoaderTGA.h">
+      <Filter>KongEngine\video\Null\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\KongPack.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SBoundingBoxMesh.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\KongUnpack.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

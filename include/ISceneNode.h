@@ -12,7 +12,7 @@
 #include "ERenderingMode.h"
 #include "SMesh.h"
 #include "CMeshBuffer.h"
-#include "../src/KongEngine/include/SBoundingBoxMesh.h"
+#include "SBoundingBoxMesh.h"
 
 namespace kong
 {
@@ -427,6 +427,12 @@ namespace kong
             virtual void EnableDrawBoundingBox(const bool draw_bounding_box = true)
             {
                 draw_bounding_box_ = draw_bounding_box;
+            }
+
+            //! Rebuild the boundingbox
+            virtual void RebuildBoundingBoxMesh() const
+            {
+                bounding_box_mesh_.RebuildBoundingBoxMesh(getTransformedBoundingBox());
             }
 
         protected:

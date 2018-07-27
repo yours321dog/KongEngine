@@ -1018,6 +1018,85 @@ namespace kong
             return clone;
         }
 
+        void CMeshManipulator::addMeshBufferhWithTangents(SMesh* clone, IMesh* mesh, bool recalculateNormals, bool smooth, bool angleWeighted, bool recalculateTangents) const
+        {
+            if (!mesh)
+                return;
+
+            // copy mesh and fill data into SMeshBufferLightMap
+
+            const u32 meshBufferCount = mesh->GetMeshBufferCount();
+
+            for (u32 b = 0; b<meshBufferCount; ++b)
+            {
+                const IMeshBuffer* const original = mesh->GetMeshBuffer(b);
+                const u32 idxCnt = original->GetIndexCount();
+                const u16* idx = original->GetIndices();
+
+                SMeshBufferLightMap* buffer = new SMeshBufferLightMap();
+                buffer->material_ = original->GetMaterial();
+                buffer->vertices_.Reallocate(idxCnt);
+                buffer->indices_.Reallocate(idxCnt);
+
+                core::Map<video::S3DVertex2TCoords, int> vertMap;
+                int vertLocation;
+
+                // copy vertices
+
+                const video::E_VERTEX_TYPE vType = original->GetVertexType();
+                video::S3DVertex2TCoords vNew;
+                for (u32 i = 0; i<idxCnt; ++i)
+                {
+                    switch (vType)
+                    {
+                    case video::EVT_STANDARD:
+                    {
+                        const video::S3DVertex* v =
+                            (const video::S3DVertex*)original->GetVertices();
+                        vNew = video::S3DVertex2TCoords(
+                            v[idx[i]].pos_, v[idx[i]].normal_, v[idx[i]].color_, v[idx[i]].texcoord_, v[idx[i]].texcoord_);
+                    }
+                    break;
+                    case video::EVT_2TCOORDS:
+                    {
+                        const video::S3DVertex2TCoords* v =
+                            (const video::S3DVertex2TCoords*)original->GetVertices();
+                        vNew = v[idx[i]];
+                    }
+                    break;
+                    case video::EVT_TANGENTS:
+                    {
+                        const video::S3DVertexTangents* v =
+                            (const video::S3DVertexTangents*)original->GetVertices();
+                        vNew = video::S3DVertex2TCoords(
+                            v[idx[i]].pos_, v[idx[i]].normal_, v[idx[i]].color_, v[idx[i]].texcoord_, v[idx[i]].texcoord_);
+                    }
+                    break;
+                    }
+                    core::Map<video::S3DVertex2TCoords, int>::Node* n = vertMap.find(vNew);
+                    if (n)
+                    {
+                        vertLocation = n->getValue();
+                    }
+                    else
+                    {
+                        vertLocation = buffer->vertices_.Size();
+                        buffer->vertices_.PushBack(vNew);
+                        vertMap.insert(vNew, vertLocation);
+                    }
+
+                    // create new indices
+                    buffer->indices_.PushBack(vertLocation);
+                }
+                buffer->RecalculateBoundingBox();
+
+                // add new buffer
+                clone->AddMeshBuffer(buffer);
+                //buffer->drop();
+            }
+
+            clone->RecalculateBoundingBox();
+        }
 
         //! Creates a copy of the mesh, which will only consist of S3DVertex2TCoords vertices.
         // not yet 32bit

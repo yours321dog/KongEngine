@@ -37,6 +37,9 @@ namespace kong
 
             void NormalizeVertice() override;
 
+            //! normalize vertices to (1, 1, 1)
+            void NormalizeVerticeToCube();
+
         protected:
             void CopyMaterials();
 

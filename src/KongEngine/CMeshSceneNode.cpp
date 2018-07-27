@@ -68,6 +68,24 @@ namespace kong
                 driver->SetMaterial(mesh_->GetMeshBuffer(i)->GetMaterial());
                 driver->DrawMeshBuffer(mesh_->GetMeshBuffer(i));
             }
+
+            if (draw_bounding_box_)
+            {
+                for (u32 i = 0; i < mesh_->GetMeshBufferCount(); i++)
+                {
+                    IMeshBuffer *mesh_buffer = mesh_->GetMeshBuffer(i);
+                    mesh_buffer->RecalculateBoundingBox();
+                }
+
+                mesh_->RecalculateBoundingBox();
+                RebuildBoundingBoxMesh();
+
+                driver->SetRenderingMode(video::ERM_WIREFRAME);
+                driver->SetTransform(video::ETS_WORLD, core::identity_matrix);
+                //driver->SetTransform(video::ETS_WORLD, absolute_tranform_);
+                driver->SetMaterial(bounding_box_mesh_.GetBoundingBoxMesh()->GetMeshBuffer(0)->GetMaterial());
+                driver->DrawMeshBuffer(bounding_box_mesh_.GetBoundingBoxMesh()->GetMeshBuffer(0));
+            }
         }
 
         const core::aabbox3d<f32>& CMeshSceneNode::GetBoundingBox() const
@@ -76,6 +94,57 @@ namespace kong
         }
 
         void CMeshSceneNode::NormalizeVertice()
+        {
+            if (mesh_ == nullptr)
+            {
+                return;
+            }
+
+            core::Vector3Df min_point(1e10, 1e10, 1e10), max_point(-1e10, -1e10, -1e10);
+            for (u32 i = 0; i < mesh_->GetMeshBufferCount(); i++)
+            {
+                IMeshBuffer *mesh_buffer = mesh_->GetMeshBuffer(i);
+                for (u32 j = 0; j < mesh_buffer->GetVertexCount(); ++j)
+                {
+                    const core::Vector3Df pos = mesh_buffer->GetPosition(j);
+                    min_point.x_ = core::min_(min_point.x_, pos.x_);
+                    min_point.y_ = core::min_(min_point.y_, pos.y_);
+                    min_point.z_ = core::min_(min_point.z_, pos.z_);
+
+                    max_point.x_ = core::max_(max_point.x_, pos.x_);
+                    max_point.y_ = core::max_(max_point.y_, pos.y_);
+                    max_point.z_ = core::max_(max_point.z_, pos.z_);
+                }
+            }
+
+            core::Vector3Df mid_point = (min_point + max_point) * 0.5f;
+            const f32 len_x_inv = 1.f / (max_point.x_ - min_point.x_);
+            const f32 len_y_inv = 1.f / (max_point.y_ - min_point.y_);
+            const f32 len_z_inv = 1.f / (max_point.z_ - min_point.z_);
+
+            f32 len_inv = core::min_(len_x_inv, len_y_inv, len_z_inv);
+
+            for (u32 i = 0; i < mesh_->GetMeshBufferCount(); i++)
+            {
+                IMeshBuffer *mesh_buffer = mesh_->GetMeshBuffer(i);
+                for (u32 j = 0; j < mesh_buffer->GetVertexCount(); ++j)
+                {
+                    core::Vector3Df &pos = mesh_buffer->GetPosition(j);
+                    pos -= mid_point;
+                    pos *= len_inv;
+                }
+            }
+
+            for (u32 i = 0; i < mesh_->GetMeshBufferCount(); i++)
+            {
+                IMeshBuffer *mesh_buffer = mesh_->GetMeshBuffer(i);
+                mesh_buffer->RecalculateBoundingBox();
+            }
+
+            mesh_->RecalculateBoundingBox();
+        }
+
+        void CMeshSceneNode::NormalizeVerticeToCube()
         {
             if (mesh_ == nullptr)
             {

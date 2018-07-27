@@ -42,6 +42,8 @@ namespace kong
 
             void AddMeshBuffer(IMeshBuffer *mesh_buffer);
 
+            void AddMeshBufferClone(IMeshBuffer *mesh_buffer);
+
             //! returns an axis aligned bounding box
             const core::aabbox3d<f32>& GetBoundingBox() const override;
 
@@ -118,6 +120,15 @@ namespace kong
             {
                 mesh_buffer_.PushBack(mesh_buffer);
             }
+        }
+
+        inline void SMesh::AddMeshBufferClone(IMeshBuffer* mesh_buffer)
+        {
+            //IMeshBuffer *new_buffer = new 
+            //if (mesh_buffer != nullptr)
+            //{
+            //    mesh_buffer_.PushBack(mesh_buffer);
+            //}
         }
 
         inline const core::aabbox3d<f32>& SMesh::GetBoundingBox() const

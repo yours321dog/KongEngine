@@ -41,11 +41,30 @@ namespace kong
             //    }
             //    printf("\n");
             //}
+
             driver->SetRenderingMode(rendering_mode_);
             driver->SetTransform(video::ETS_WORLD, absolute_tranform_);
 
             driver->SetMaterial(mesh_->GetMeshBuffer(0)->GetMaterial());
             driver->DrawMeshBuffer(mesh_->GetMeshBuffer(0));
+
+            if (draw_bounding_box_)
+            {
+                for (u32 i = 0; i < mesh_->GetMeshBufferCount(); i++)
+                {
+                    IMeshBuffer *mesh_buffer = mesh_->GetMeshBuffer(i);
+                    mesh_buffer->RecalculateBoundingBox();
+                }
+
+                mesh_->RecalculateBoundingBox();
+                RebuildBoundingBoxMesh();
+
+                driver->SetRenderingMode(video::ERM_WIREFRAME);
+                driver->SetTransform(video::ETS_WORLD, core::identity_matrix);
+                //driver->SetTransform(video::ETS_WORLD, absolute_tranform_);
+                driver->SetMaterial(bounding_box_mesh_.GetBoundingBoxMesh()->GetMeshBuffer(0)->GetMaterial());
+                driver->DrawMeshBuffer(bounding_box_mesh_.GetBoundingBoxMesh()->GetMeshBuffer(0));
+            }
         }
 
         video::SMaterial& CCubeSceneNode::GetMaterial(u32 num)

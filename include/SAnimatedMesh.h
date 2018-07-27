@@ -107,6 +107,9 @@ namespace kong
                 if (Meshes.Empty())
                     return;
 
+                for (u32 i = 0; i < Meshes.Size(); ++i)
+                    Meshes[i]->RecalculateBoundingBox();
+
                 Box = Meshes[0]->GetBoundingBox();
 
                 for (u32 i = 1; i<Meshes.Size(); ++i)

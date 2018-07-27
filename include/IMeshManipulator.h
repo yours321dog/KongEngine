@@ -231,6 +231,28 @@ namespace kong
                 bool recalculateNormals = false, bool smooth = false,
                 bool angleWeighted = false, bool recalculateTangents = true) const = 0;
 
+            //! Creates a copy of the mesh buffer, which will only consist of S3DVertexTangents vertices.
+            /** This is useful if you want to draw tangent space normal
+            mapped geometry because it calculates the tangent and binormal
+            data which is needed there.
+            \param clone Output mesh
+            \param mesh Input mesh
+            \param recalculateNormals The normals are recalculated if set,
+            otherwise the original ones are kept. Note that keeping the
+            normals may introduce inaccurate tangents if the normals are
+            very different to those calculated from the faces.
+            \param smooth The normals/tangents are smoothed across the
+            meshbuffer's faces if this flag is set.
+            \param angleWeighted Improved smoothing calculation used
+            \param recalculateTangents Whether are actually calculated, or just the mesh with proper type is created.
+            \return Mesh consisting only of S3DVertexTangents vertices. If
+            you no longer need the cloned mesh, you should call
+            IMesh::drop(). See IReferenceCounted::drop() for more
+            information. */
+            virtual void addMeshBufferhWithTangents(SMesh* clone, IMesh* mesh,
+                bool recalculateNormals = false, bool smooth = false,
+                bool angleWeighted = false, bool recalculateTangents = true) const = 0;
+
             //! Creates a copy of the mesh, which will only consist of S3DVertex2TCoord vertices.
             /** \param mesh Input mesh
             \return Mesh consisting only of S3DVertex2TCoord vertices. If

@@ -282,15 +282,16 @@ namespace kong
                     Materials[m]->Meshbuffer->RecalculateBoundingBox();
                     if (Materials[m]->RecalculateNormals)
                         SceneManager->GetMeshManipulator()->recalculateNormals(Materials[m]->Meshbuffer);
-                    if (Materials[m]->Meshbuffer->material_.MaterialType == video::EMT_PARALLAX_MAP_SOLID)
-                    {
-                        SMesh tmp;
-                        tmp.AddMeshBuffer(Materials[m]->Meshbuffer);
-                        IMesh* tangentMesh = SceneManager->GetMeshManipulator()->createMeshWithTangents(&tmp);
-                        mesh->AddMeshBuffer(tangentMesh->GetMeshBuffer(0));
-                        delete tangentMesh;
-                    }
-                    else
+                    //if (Materials[m]->Meshbuffer->material_.MaterialType == video::EMT_PARALLAX_MAP_SOLID)
+                    //{
+                    //    SMesh tmp;
+                    //    tmp.AddMeshBuffer(Materials[m]->Meshbuffer);
+                    //    //IMesh* tangentMesh = SceneManager->GetMeshManipulator()->createMeshWithTangents(&tmp);
+                    //    //mesh->AddMeshBuffer(tangentMesh->GetMeshBuffer(0));
+                    //    //delete tangentMesh;
+                    //    SceneManager->GetMeshManipulator()->addMeshBufferhWithTangents(mesh, &tmp);
+                    //}
+                    //else
                         mesh->AddMeshBuffer(Materials[m]->Meshbuffer);
                 }
             }

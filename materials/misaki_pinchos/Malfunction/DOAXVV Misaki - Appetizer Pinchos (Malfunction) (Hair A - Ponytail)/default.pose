@@ -1,0 +1,390 @@
+root ground: 0 0 0 0 0 0 1 1 1
+root hips: 0 0 0 0 0 0 1 1 1
+pelvis: 0 0 0 0 0 0 1 1 1
+leg left thigh: 0 0 0 0 0 0 1 1 1
+leg left knee: 0 0 0 0 0 0 1 1 1
+leg left ankle: 0 0 0 0 0 0 1 1 1
+leg left toes: 0 0 0 0 0 0 1 1 1
+accessory_attach ankle_left: 0 0 0 0 0 0 1 1 1
+leg left knee ctr: 0 0 0 0 0 0 1 1 1
+ribbon leg left 1 a: 0 0 0 0 0 0 1 1 1
+ribbon leg left 1 b: 0 0 0 0 0 0 1 1 1
+ribbon leg left 1 c: 0 0 0 0 0 0 1 1 1
+ribbon leg left 1 d: 0 0 0 0 0 0 1 1 1
+ribbon leg left 1 e: 0 0 0 0 0 0 1 1 1
+ribbon leg left 1 f: 0 0 0 0 0 0 1 1 1
+ribbon leg left 2 a: 0 0 0 0 0 0 1 1 1
+ribbon leg left 2 b: 0 0 0 0 0 0 1 1 1
+ribbon leg left 2 c: 0 0 0 0 0 0 1 1 1
+ribbon leg left 2 d: 0 0 0 0 0 0 1 1 1
+ribbon leg left 2 e: 0 0 0 0 0 0 1 1 1
+ribbon leg left 2 f: 0 0 0 0 0 0 1 1 1
+leg left thigh ctr: 0 0 0 0 0 0 1 1 1
+leg left thigh ctr 2: 0 0 0 0 0 0 1 1 1
+leg left thigh adj a: 0 0 0 0 0 0 1 1 1
+leg left thigh adj b: 0 0 0 0 0 0 1 1 1
+leg left thigh adj c: 0 0 0 0 0 0 1 1 1
+leg left thigh adj d: 0 0 0 0 0 0 1 1 1
+leg left thigh adj e: 0 0 0 0 0 0 1 1 1
+leg left thigh adj f: 0 0 0 0 0 0 1 1 1
+leg right thigh: 0 0 0 0 0 0 1 1 1
+leg right knee: 0 0 0 0 0 0 1 1 1
+leg right ankle: 0 0 0 0 0 0 1 1 1
+leg right toes: 0 0 0 0 0 0 1 1 1
+accessory_attach ankle_right: 0 0 0 0 0 0 1 1 1
+leg right knee ctr: 0 0 0 0 0 0 1 1 1
+leg right thigh ctr: 0 0 0 0 0 0 1 1 1
+leg right thigh ctr 2: 0 0 0 0 0 0 1 1 1
+leg right thigh adj a: 0 0 0 0 0 0 1 1 1
+leg right thigh adj b: 0 0 0 0 0 0 1 1 1
+leg right thigh adj c: 0 0 0 0 0 0 1 1 1
+leg right thigh adj d: 0 0 0 0 0 0 1 1 1
+leg right thigh adj e: 0 0 0 0 0 0 1 1 1
+leg right thigh adj f: 0 0 0 0 0 0 1 1 1
+ribbon leg right 1 a: 0 0 0 0 0 0 1 1 1
+ribbon leg right 1 b: 0 0 0 0 0 0 1 1 1
+ribbon leg right 1 c: 0 0 0 0 0 0 1 1 1
+ribbon leg right 1 d: 0 0 0 0 0 0 1 1 1
+ribbon leg right 1 e: 0 0 0 0 0 0 1 1 1
+ribbon leg right 2 a: 0 0 0 0 0 0 1 1 1
+ribbon leg right 2 b: 0 0 0 0 0 0 1 1 1
+ribbon leg right 2 c: 0 0 0 0 0 0 1 1 1
+ribbon leg right 2 d: 0 0 0 0 0 0 1 1 1
+ribbon leg right 2 e: 0 0 0 0 0 0 1 1 1
+leg left thigh ctr 3: 0 0 0 0 0 0 1 1 1
+leg right thigh ctr 3: 0 0 0 0 0 0 1 1 1
+leg left butt base: 0 0 0 0 0 0 1 1 1
+leg left butt ctr a: 0 0 0 0 0 0 1 1 1
+leg left butt ctr b: 0 0 0 0 0 0 1 1 1
+leg left butt ctr c: 0 0 0 0 0 0 1 1 1
+leg left butt ctr d: 0 0 0 0 0 0 1 1 1
+leg left butt ctr e: 0 0 0 0 0 0 1 1 1
+leg left butt ctr f: 0 0 0 0 0 0 1 1 1
+leg left butt ctr g: 0 0 0 0 0 0 1 1 1
+leg left butt ctr h: 0 0 0 0 0 0 1 1 1
+leg left butt ctr i: 0 0 0 0 0 0 1 1 1
+leg left butt ctr j: 0 0 0 0 0 0 1 1 1
+leg left butt ctr k: 0 0 0 0 0 0 1 1 1
+leg left butt ctr l: 0 0 0 0 0 0 1 1 1
+leg left butt ctr m: 0 0 0 0 0 0 1 1 1
+leg left butt ctr n: 0 0 0 0 0 0 1 1 1
+leg right butt base: 0 0 0 0 0 0 1 1 1
+leg right butt ctr a: 0 0 0 0 0 0 1 1 1
+leg right butt ctr b: 0 0 0 0 0 0 1 1 1
+leg right butt ctr c: 0 0 0 0 0 0 1 1 1
+leg right butt ctr d: 0 0 0 0 0 0 1 1 1
+leg right butt ctr e: 0 0 0 0 0 0 1 1 1
+leg right butt ctr f: 0 0 0 0 0 0 1 1 1
+leg right butt ctr g: 0 0 0 0 0 0 1 1 1
+leg right butt ctr h: 0 0 0 0 0 0 1 1 1
+leg right butt ctr i: 0 0 0 0 0 0 1 1 1
+leg right butt ctr j: 0 0 0 0 0 0 1 1 1
+leg right butt ctr k: 0 0 0 0 0 0 1 1 1
+leg right butt ctr l: 0 0 0 0 0 0 1 1 1
+leg right butt ctr m: 0 0 0 0 0 0 1 1 1
+leg right butt ctr n: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu front left c: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu back left b: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu front right a: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu front right c: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu back right b: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu front left a: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu back middle: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu front middle: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu front left b: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu front right b: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu back left a: 0 0 0 0 0 0 1 1 1
+outfit pull pantsu back right a: 0 0 0 0 0 0 1 1 1
+spine lower: 0 0 0 0 0 0 1 1 1
+spine upper: 0 0 0 0 0 0 1 1 1
+head neck lower: 0 0 0 0 0 0 1 1 1
+head neck upper: 0 0 0 0 0 0 1 1 1
+head face root: 0 0 0 0 0 0 1 1 1
+head eyebrow middle: 0 0 0 0 0 0 1 1 1
+head lip upper middle: 0 0 0 0 0 0 1 1 1
+head nose middle: 0 0 0 0 0 0 1 1 1
+head jaw: 0 0 0 0 0 0 1 1 1
+head lip lower middle: 0 0 0 0 0 0 1 1 1
+head tongue a: 0 0 0 0 0 0 1 1 1
+head tongue b: 0 0 0 0 0 0 1 1 1
+head lip lower left: 0 0 0 0 0 0 1 1 1
+head lip lower right: 0 0 0 0 0 0 1 1 1
+head cheek left a: 0 0 0 0 0 0 1 1 1
+head cheek left b: 0 0 0 0 0 0 1 1 1
+head cheek left c: 0 0 0 0 0 0 1 1 1
+head eyeball left: 0 0 0 0 0 0 1 1 1
+head eyelid lower left a: 0 0 0 0 0 0 1 1 1
+head eyelid lower left b: 0 0 0 0 0 0 1 1 1
+head eyebrow left a: 0 0 0 0 0 0 1 1 1
+head eyebrow left b: 0 0 0 0 0 0 1 1 1
+head eyebrow left c: 0 0 0 0 0 0 1 1 1
+head eyelid upper left: 0 0 0 0 0 0 1 1 1
+head forehead left: 0 0 0 0 0 0 1 1 1
+head lip corner left: 0 0 0 0 0 0 1 1 1
+head lip upper left: 0 0 0 0 0 0 1 1 1
+head nose left a: 0 0 0 0 0 0 1 1 1
+head nose left b: 0 0 0 0 0 0 1 1 1
+head nose left c: 0 0 0 0 0 0 1 1 1
+head nose left d: 0 0 0 0 0 0 1 1 1
+head cheek right a: 0 0 0 0 0 0 1 1 1
+head cheek right b: 0 0 0 0 0 0 1 1 1
+head cheek right c: 0 0 0 0 0 0 1 1 1
+head eyeball right: 0 0 0 0 0 0 1 1 1
+head eyelid lower right a: 0 0 0 0 0 0 1 1 1
+head eyelid lower right b: 0 0 0 0 0 0 1 1 1
+head eyebrow right a: 0 0 0 0 0 0 1 1 1
+head eyebrow right b: 0 0 0 0 0 0 1 1 1
+head eyebrow right c: 0 0 0 0 0 0 1 1 1
+head eyelid upper right: 0 0 0 0 0 0 1 1 1
+head forehead right: 0 0 0 0 0 0 1 1 1
+head lip corner right: 0 0 0 0 0 0 1 1 1
+head lip upper right: 0 0 0 0 0 0 1 1 1
+head nose right a: 0 0 0 0 0 0 1 1 1
+head nose right b: 0 0 0 0 0 0 1 1 1
+head nose right c: 0 0 0 0 0 0 1 1 1
+head nose right d: 0 0 0 0 0 0 1 1 1
+arm left shoulder 1: 0 0 0 0 0 0 1 1 1
+arm left shoulder 2: 0 0 0 0 0 0 1 1 1
+arm left elbow: 0 0 0 0 0 0 1 1 1
+arm left wrist: 0 0 0 0 0 0 1 1 1
+arm left hand root: 0 0 0 0 0 0 1 1 1
+arm left finger 2a: 0 0 0 0 0 0 1 1 1
+arm left finger 2b: 0 0 0 0 0 0 1 1 1
+arm left finger 2c: 0 0 0 0 0 0 1 1 1
+arm left metacarpal: 0 0 0 0 0 0 1 1 1
+arm left finger 5a: 0 0 0 0 0 0 1 1 1
+arm left finger 5b: 0 0 0 0 0 0 1 1 1
+arm left finger 5c: 0 0 0 0 0 0 1 1 1
+arm left finger 4a: 0 0 0 0 0 0 1 1 1
+arm left finger 4b: 0 0 0 0 0 0 1 1 1
+arm left finger 4c: 0 0 0 0 0 0 1 1 1
+arm left finger 3a: 0 0 0 0 0 0 1 1 1
+arm left finger 3b: 0 0 0 0 0 0 1 1 1
+arm left finger 3c: 0 0 0 0 0 0 1 1 1
+arm left finger 1a: 0 0 0 0 0 0 1 1 1
+arm left finger 1b: 0 0 0 0 0 0 1 1 1
+arm left finger 1c: 0 0 0 0 0 0 1 1 1
+arm left elbow ctr: 0 0 0 0 0 0 1 1 1
+arm left elbow ctr 2: 0 0 0 0 0 0 1 1 1
+arm left wrist ctr: 0 0 0 0 0 0 1 1 1
+accessory_attach wrist_left: 0 0 0 0 0 0 1 1 1
+arm left shoulder 2 ctr: 0 0 0 0 0 0 1 1 1
+arm left shoulder 2 ctr 2: 0 0 0 0 0 0 1 1 1
+ribbon arm left 1 a: 0 0 0 0 0 0 1 1 1
+ribbon arm left 1 b: 0 0 0 0 0 0 1 1 1
+ribbon arm left 1 c: 0 0 0 0 0 0 1 1 1
+ribbon arm left 1 d: 0 0 0 0 0 0 1 1 1
+ribbon arm left 1 e: 0 0 0 0 0 0 1 1 1
+ribbon arm left 1 f: 0 0 0 0 0 0 1 1 1
+ribbon arm left 2 a: 0 0 0 0 0 0 1 1 1
+ribbon arm left 2 b: 0 0 0 0 0 0 1 1 1
+ribbon arm left 2 c: 0 0 0 0 0 0 1 1 1
+ribbon arm left 2 d: 0 0 0 0 0 0 1 1 1
+ribbon arm left 2 e: 0 0 0 0 0 0 1 1 1
+ribbon arm left 2 f: 0 0 0 0 0 0 1 1 1
+arm right shoulder 1: 0 0 0 0 0 0 1 1 1
+arm right shoulder 2: 0 0 0 0 0 0 1 1 1
+arm right elbow: 0 0 0 0 0 0 1 1 1
+arm right wrist: 0 0 0 0 0 0 1 1 1
+arm right hand root: 0 0 0 0 0 0 1 1 1
+arm right finger 2a: 0 0 0 0 0 0 1 1 1
+arm right finger 2b: 0 0 0 0 0 0 1 1 1
+arm right finger 2c: 0 0 0 0 0 0 1 1 1
+arm right metacarpal: 0 0 0 0 0 0 1 1 1
+arm right finger 5a: 0 0 0 0 0 0 1 1 1
+arm right finger 5b: 0 0 0 0 0 0 1 1 1
+arm right finger 5c: 0 0 0 0 0 0 1 1 1
+arm right finger 4a: 0 0 0 0 0 0 1 1 1
+arm right finger 4b: 0 0 0 0 0 0 1 1 1
+arm right finger 4c: 0 0 0 0 0 0 1 1 1
+arm right finger 3a: 0 0 0 0 0 0 1 1 1
+arm right finger 3b: 0 0 0 0 0 0 1 1 1
+arm right finger 3c: 0 0 0 0 0 0 1 1 1
+arm right finger 1a: 0 0 0 0 0 0 1 1 1
+arm right finger 1b: 0 0 0 0 0 0 1 1 1
+arm right finger 1c: 0 0 0 0 0 0 1 1 1
+arm right elbow ctr: 0 0 0 0 0 0 1 1 1
+arm right elbow ctr 2: 0 0 0 0 0 0 1 1 1
+arm right wrist ctr: 0 0 0 0 0 0 1 1 1
+accessory_attach wrist_right: 0 0 0 0 0 0 1 1 1
+arm right shoulder 2 ctr: 0 0 0 0 0 0 1 1 1
+arm right shoulder 2 ctr 2: 0 0 0 0 0 0 1 1 1
+ribbon arm right 1 a: 0 0 0 0 0 0 1 1 1
+ribbon arm right 1 b: 0 0 0 0 0 0 1 1 1
+ribbon arm right 1 c: 0 0 0 0 0 0 1 1 1
+ribbon arm right 1 d: 0 0 0 0 0 0 1 1 1
+ribbon arm right 1 e: 0 0 0 0 0 0 1 1 1
+ribbon arm right 1 f: 0 0 0 0 0 0 1 1 1
+ribbon arm right 2 a: 0 0 0 0 0 0 1 1 1
+ribbon arm right 2 b: 0 0 0 0 0 0 1 1 1
+ribbon arm right 2 c: 0 0 0 0 0 0 1 1 1
+ribbon arm right 2 d: 0 0 0 0 0 0 1 1 1
+ribbon arm right 2 e: 0 0 0 0 0 0 1 1 1
+ribbon arm right 2 f: 0 0 0 0 0 0 1 1 1
+breast left base: 0 0 0 0 0 0 1 1 1
+breast left a: 0 0 0 0 0 0 1 1 1
+breast left b: 0 0 0 0 0 0 1 1 1
+breast left c: 0 0 0 0 0 0 1 1 1
+breast left d: 0 0 0 0 0 0 1 1 1
+breast left e: 0 0 0 0 0 0 1 1 1
+breast left f: 0 0 0 0 0 0 1 1 1
+breast left g: 0 0 0 0 0 0 1 1 1
+breast left h: 0 0 0 0 0 0 1 1 1
+breast left i: 0 0 0 0 0 0 1 1 1
+breast left j: 0 0 0 0 0 0 1 1 1
+breast left k: 0 0 0 0 0 0 1 1 1
+breast left l: 0 0 0 0 0 0 1 1 1
+breast left m: 0 0 0 0 0 0 1 1 1
+breast left n: 0 0 0 0 0 0 1 1 1
+breast left o: 0 0 0 0 0 0 1 1 1
+breast left p: 0 0 0 0 0 0 1 1 1
+breast left q: 0 0 0 0 0 0 1 1 1
+breast left r: 0 0 0 0 0 0 1 1 1
+breast right base: 0 0 0 0 0 0 1 1 1
+breast right a: 0 0 0 0 0 0 1 1 1
+breast right b: 0 0 0 0 0 0 1 1 1
+breast right c: 0 0 0 0 0 0 1 1 1
+breast right d: 0 0 0 0 0 0 1 1 1
+breast right e: 0 0 0 0 0 0 1 1 1
+breast right f: 0 0 0 0 0 0 1 1 1
+breast right g: 0 0 0 0 0 0 1 1 1
+breast right h: 0 0 0 0 0 0 1 1 1
+breast right i: 0 0 0 0 0 0 1 1 1
+breast right j: 0 0 0 0 0 0 1 1 1
+breast right k: 0 0 0 0 0 0 1 1 1
+breast right l: 0 0 0 0 0 0 1 1 1
+breast right m: 0 0 0 0 0 0 1 1 1
+breast right n: 0 0 0 0 0 0 1 1 1
+breast right o: 0 0 0 0 0 0 1 1 1
+breast right p: 0 0 0 0 0 0 1 1 1
+breast right q: 0 0 0 0 0 0 1 1 1
+breast right r: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra left a: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra left b: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra left c: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra left d: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra left e: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra left f: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra left g: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra left h: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra left i: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra left j: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra right a: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra right b: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra right c: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra right d: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra right e: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra right f: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra right g: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra right h: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra right i: 0 0 0 0 0 0 1 1 1
+outfit malfunction bra right j: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail root ground: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail root hips: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail head neck lower: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail head neck upper: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair back root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair back left b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair back left a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair back right b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair back right a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front middle root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front middle a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front middle b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front middle c: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front middle d: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front middle e: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front middle f: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 1 root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 1 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 1 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 1 c: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 1 d: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 1 e: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 1 f: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front sided root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front sided a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front sided b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front sided c: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front sided d: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front sided e: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 2 root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 2 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 2 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 2 c: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 2 d: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 2 e: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 2 f: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 2 g: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 3 root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 3 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 3 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 3 c: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front left 3 d: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 2 root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 2 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 2 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 2 c: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 2 d: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 2 e: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 2 f: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 2 g: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 2 h: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 3 root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 3 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 3 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 3 c: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 3 d: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 3 e: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 3 f: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair front right 3 g: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair back side right root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair back side right a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair back side right b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair back side right c: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair back side right d: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair back side right e: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 1 root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 1a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 1 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 1 c: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 1 d: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 1 e: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 1 f: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 1 g: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 1 h: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 1 i: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 2 root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 2 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 2 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 2 c: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 2 d: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 2 e: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 2 f: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 2 g: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 2 h: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 2 i: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 3 root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 3 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 3 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 3 c: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 3 d: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 3 e: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 3 f: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 3 g: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 3 h: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ponytail 3 i: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon root: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 1 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 1 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 2 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 2 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 3 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 3 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 4 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 4 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 5 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 5 b: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 6 a: 0 0 0 0 0 0 1 1 1
+head neck upper attached_Hair A - Ponytail hair ribbon 6 b: 0 0 0 0 0 0 1 1 1

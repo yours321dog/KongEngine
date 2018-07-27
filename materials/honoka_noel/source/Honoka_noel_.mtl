@@ -1,0 +1,387 @@
+# Blender MTL File: 'Honoka_noel_.blend'
+# Material Count: 32
+
+newmtl 24_body_0.9_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_body_base.tga
+map_d hon_body_base.tga
+
+newmtl 24_costume1_0.5_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd DLC_HTM_108_01_base.tga
+map_d DLC_HTM_108_01_base.tga
+
+newmtl 24_costume2_0.5_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd DLC_HTM_108_01_base.tga
+map_d DLC_HTM_108_01_base.tga
+
+newmtl 24_eyes_5_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_face_base.tga
+map_d hon_face_base.tga
+
+newmtl 24_face_0.9_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_face_base.tga
+map_d hon_face_base.tga
+
+newmtl 24_glove_0.5_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_cos_001_cloth03_base.tga
+map_d hon_cos_001_cloth03_base.tga
+
+newmtl 24_shoes_0.5_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd mildl002_shoes_base.tga
+map_Bump mildl002_shoes_nrm_N.tga
+map_d mildl002_shoes_base.tga
+
+newmtl 24_underwear_0.5_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_cos_001_underwear_base.tga
+map_d hon_cos_001_underwear_base.tga
+
+newmtl 25_+alpha14.alpha14_1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_glasses_lenz_base.tga
+map_d hon_glasses_lenz_base.tga
+
+newmtl 25_+alpha15.alpha15_1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_glasses_lenz_base.tga
+map_d hon_glasses_lenz_base.tga
+
+newmtl 25_alpha10_1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_matuge_base_PP1.tga
+map_d hon_matuge_base_PP1.tga
+
+newmtl 25_alpha11_1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_sitamatuge.tga
+map_d hon_sitamatuge.tga
+
+newmtl 25_alpha12_1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_sitamatuge.tga
+map_d hon_sitamatuge.tga
+
+newmtl 25_alpha13_1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_eye_sdw.tga
+map_d hon_eye_sdw.tga
+
+newmtl 25_alpha1_0.3_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_hair_head_base.tga
+map_d hon_hair_head_base.tga
+
+newmtl 25_alpha2_0.3_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_hair_head_base.tga
+map_d hon_hair_head_base.tga
+
+newmtl 25_alpha3_0.3_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_backhair_base.tga
+map_d hon_backhair_base.tga
+
+newmtl 25_alpha4_0.3_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_backhair_base.tga
+map_d hon_backhair_base.tga
+
+newmtl 25_alpha5_0.3_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_pony_base_PP5.tga
+map_d hon_pony_base_PP5.tga
+
+newmtl 25_alpha6_0.3_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_pony_base_PP5.tga
+map_d hon_pony_base_PP5.tga
+
+newmtl 25_alpha7_0.3_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_front_hair_base.tga
+map_d hon_front_hair_base.tga
+
+newmtl 25_alpha8_0.3_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_front_hair_base.tga
+map_d hon_front_hair_base.tga
+
+newmtl 25_alpha9_1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_matuge_base_PP1.tga
+map_d hon_matuge_base_PP1.tga
+
+newmtl 26_ref_0.3_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd kin.tga
+map_d kin.tga
+
+newmtl 4_+glasses.glasses_0.3_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_glasses_base.tga
+map_d hon_glasses_base.tga
+
+newmtl 4_fu_0.1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd usafarr_w_base_00.tga
+map_d usafarr_w_base_00.tga
+
+newmtl 4_ribb_0.1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd hon_cos_002_other02_base.tga
+map_d hon_cos_002_other02_base.tga
+
+newmtl 4_socks_0.2_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd taitu.tga
+map_d taitu.tga
+
+newmtl 7_fur1_1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd santa_far_base.tga
+map_d santa_far_base.tga
+
+newmtl 7_fur2_1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd santa_far_base.tga
+map_d santa_far_base.tga
+
+newmtl 7_fur3_1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd santa_far_base.tga
+map_d santa_far_base.tga
+
+newmtl 7_fur4_1_1_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd santa_far_base.tga
+map_d santa_far_base.tga

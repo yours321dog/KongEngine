@@ -42,7 +42,7 @@ namespace kong
 
             shader_helper_->Use();
             shader_helper_->SetBool("texture0_on", false);
-            shader_helper_->SetBool("light_on", true);
+            shader_helper_->SetBool("light_on", false);
             shader_helper_->SetBool("light0_on", false);
 
             return true;
@@ -152,7 +152,7 @@ namespace kong
             core::stringc str_on = core::stringc("texture") + core::stringc(stage) + "_on";
             
             shader_helper_->Use();
-            if (!texture)
+            if (texture == nullptr)
             {
                 Disable(SL_TEXTURE0 + stage);
                 return true;
@@ -266,6 +266,7 @@ namespace kong
 
             Enable(lidx);
 
+            shader_helper_->SetBool("light_on", true);
             return COpenGLDriver::AddDynamicLight(light);
         }
 

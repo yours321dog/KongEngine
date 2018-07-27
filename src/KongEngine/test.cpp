@@ -164,12 +164,14 @@ void TestWindow()
 
     smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -2.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
     ISceneNode *node = smr->AddCubeSceneNode(1.f, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
-    node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
-    node->SetRenderingMode(video::ERM_WIREFRAME);
+    //node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
+    node->SetMaterialTexture(0, driver->GetTexture("../../materials/hon_eye_ref.tga"));
+    //node->SetRenderingMode(video::ERM_WIREFRAME);
+    node->EnableDrawBoundingBox(true);
 
     ILightSceneNode *light_node = smr->AddLightSceneNode(nullptr, Vector3Df(2.f, 2.f, -2.f));
     SLight light_data = light_node->GetLightData();
-    light_data.ambient_color_ = SColorf(0.1f, 0.1f, 0.1f, 0.1f);
+    light_data.ambient_color_ = SColorf(0.1f, 0.1f, 0.1f, 1.f);
     light_data.type_ = ELT_DIRECTIONAL;
     //light_data.type_ = ELT_SPOT;
     light_node->SetLightData(light_data);
@@ -271,11 +273,24 @@ void TestObjLoad()
     ISceneManager *smr = device->GetSceneManager();
 
     smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -2.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
-    IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
+    //IMesh * mesh = smr->getMesh("../../materials/honoka_noel.obj");
+    //IMesh * mesh = smr->getMesh("../../materials/honoka_noel/source/Honoka_noel_.obj");
+    //IMesh * mesh = smr->getMesh("../../materials/misaki_dress_sr/misaki.obj");
+    IMesh * mesh = smr->getMesh("../../materials/misaki_pinchos/Normal/Ponytail/misaki.obj");
+    //IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
     //ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(0.0003f, 0.0003f, 0.0003f));
     ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     node->NormalizeVertice();
     //node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
+    //node->EnableDrawBoundingBox(true);
+
+    //ILightSceneNode *light_node = smr->AddLightSceneNode(nullptr, Vector3Df(0.f, 0.f, -2.f));
+    //SLight light_data = light_node->GetLightData();
+    //light_data.ambient_color_ = SColorf(0.5f, 0.5f, 0.5f, 1.f);
+    //light_data.type_ = ELT_DIRECTIONAL;
+    ////light_data.type_ = ELT_SPOT;
+    //light_node->SetLightData(light_data);
+    ////light_node->SetRotation(Vector3Df(-PI / 4, PI / 4, 0.f));
 
     Vector3Df node_pos(0.f, 0.f, 0.f);
     Vector3Df node_rot(0.f, 0.f, 0.f);
@@ -453,8 +468,8 @@ int main()
     //TestArray();
     //TestS3DVertex();
     //TestList();
-    TestWindow();
-    //TestObjLoad();
+    //TestWindow();
+    TestObjLoad();
     //TestDrawImage();
     //TestReplace();
     //TestFindLastOf();

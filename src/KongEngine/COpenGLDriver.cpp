@@ -21,9 +21,12 @@ namespace kong
         //! creates a loader which is able to load jpeg images
         IImageLoader* CreateImageLoaderJpg();
 
+        //! creates a loader which is able to load tga images
+        IImageLoader* CreateImageLoaderTGA();
+
         COpenGLDriver::COpenGLDriver(const SKongCreationParameters& params, io::IFileSystem* io, CKongDeviceWin32* device)
             : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device), params_(params),
-              io_(io), max_texture_units_(0), max_supported_textures_(0), max_support_lights_(0)
+            io_(io), max_texture_units_(0), max_supported_textures_(0), max_support_lights_(0), rendering_mode_(ERM_MESH)
         {
             // create manipulator
             mesh_manipulator_ = new scene::CMeshManipulator();
@@ -34,6 +37,9 @@ namespace kong
 #endif
 #ifdef _KONG_COMPILE_WITH_PNG_LOADER_
             surface_loader_.PushBack(video::CreateImageLoaderPng());
+#endif
+#ifdef _KONG_COMPILE_WITH_TGA_LOADER_
+            surface_loader_.PushBack(video::CreateImageLoaderTGA());
 #endif
         }
 
@@ -154,7 +160,7 @@ namespace kong
             for (auto i = max_texture_units_ - 1; i >= 0; --i)
             {
                 SetActiveTexture(i, material.GetTexture(i));
-                const u32 texture_val = ETS_TEXTURE_0 + 1;
+                const u32 texture_val = ETS_TEXTURE_0 + i;
                 SetTransform(texture_val, material_.GetTextureMatrix(i));
             }
         }
@@ -383,10 +389,12 @@ namespace kong
             if (mask)
                 glClear(mask);
 
-            glEnable(GL_CULL_FACE); // enables face culling    
-            glCullFace(GL_BACK); // tells OpenGL to cull back faces (the sane default setting)
+            //glEnable(GL_CULL_FACE); // enables face culling    
+            //glCullFace(GL_BACK); // tells OpenGL to cull back faces (the sane default setting)
 
+            // Enable depth
             glEnable(GL_DEPTH_TEST);
+            glDepthFunc(GL_LESS);
 
             // Enable blending
             glEnable(GL_BLEND);

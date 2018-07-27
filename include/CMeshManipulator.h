@@ -63,6 +63,9 @@ namespace kong
             //! Creates a copy of the mesh, which will only consist of S3DVertexTangents vertices.
             virtual IMesh* createMeshWithTangents(IMesh* mesh, bool recalculateNormals = false, bool smooth = false, bool angleWeighted = false, bool recalculateTangents = true) const;
 
+            //! Creates a copy of the mesh buffer, which will only consist of S3DVertexTangents vertices.
+            virtual void addMeshBufferhWithTangents(SMesh* clone, IMesh* mesh, bool recalculateNormals = false, bool smooth = false, bool angleWeighted = false, bool recalculateTangents = true) const;
+
             //! Creates a copy of the mesh, which will only consist of S3D2TCoords vertices.
             virtual IMesh* createMeshWith2TCoords(IMesh* mesh) const;
 

@@ -165,6 +165,6 @@ void main()
             FragColor *= light_color;
         }
     }
-    //FragColor = vec4(1.0f, 0.f, 0.f, 1.f);
+//    FragColor = vec4(1.0f, 0.f, 0.f, 1.f);
     //FragColor = vec4(world_normal.xyz, 1.f);
 } 

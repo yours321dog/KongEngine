@@ -84,6 +84,7 @@
     <ClCompile Include="CImage.cpp" />
     <ClCompile Include="CImageLoaderJpg.cpp" />
     <ClCompile Include="CImageLoaderPng.cpp" />
+    <ClCompile Include="CImageLoaderTGA.cpp" />
     <ClCompile Include="CKongDeviceStub.cpp" />
     <ClCompile Include="CKongDeviceWin32.cpp" />
     <ClCompile Include="CLightSceneNode.cpp" />
@@ -241,8 +242,10 @@
     <ClInclude Include="..\..\include\KongDevice.h" />
     <ClInclude Include="..\..\include\KongEngine.h" />
     <ClInclude Include="..\..\include\KongMath.h" />
+    <ClInclude Include="..\..\include\KongPack.h" />
     <ClInclude Include="..\..\include\KongString.h" />
     <ClInclude Include="..\..\include\KongTypes.h" />
+    <ClInclude Include="..\..\include\KongUnpack.h" />
     <ClInclude Include="..\..\include\line2d.h" />
     <ClInclude Include="..\..\include\line3d.h" />
     <ClInclude Include="..\..\include\List.h" />
@@ -255,6 +258,7 @@
     <ClInclude Include="..\..\include\Rect.h" />
     <ClInclude Include="..\..\include\S3DVertex.h" />
     <ClInclude Include="..\..\include\SAnimatedMesh.h" />
+    <ClInclude Include="..\..\include\SBoundingBoxMesh.h" />
     <ClInclude Include="..\..\include\SColor.h" />
     <ClInclude Include="..\..\include\SExposedVideoData.h" />
     <ClInclude Include="..\..\include\SKongCreationParameters.h" />
@@ -266,6 +270,7 @@
     <ClInclude Include="..\..\include\SPath.h" />
     <ClInclude Include="..\..\include\SVertexManipulator.h" />
     <ClInclude Include="..\..\include\Vector.h" />
+    <ClInclude Include="CImageLoaderTGA.h" />
     <ClInclude Include="jpeglib\cderror.h" />
     <ClInclude Include="jpeglib\EMaterialTypes.h" />
     <ClInclude Include="jpeglib\jconfig.h" />

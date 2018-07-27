@@ -1,0 +1,88 @@
+newmtl Model001_Material001
+map_Kd rib_base.png
+map_bump rib_nrm.png
+
+newmtl Model001_Material002
+map_Kd rib_base.png
+map_bump rib_nrm.png
+
+newmtl Model001_Material003
+map_Kd acs_base.png
+map_bump acs_nrm.png
+
+newmtl Model001_Material004
+map_Kd body_base.png
+map_bump body_nrm.png
+
+newmtl Model001_Material005
+map_Kd dress_base.png
+map_bump dress_nrm.png
+
+newmtl Model001_Material006
+map_Kd dress_base.png
+map_bump dress_nrm.png
+
+newmtl Model001_Material007
+map_Kd face_base.png
+map_bump face_nrm.png
+
+newmtl Model001_Material008
+map_Kd face_base.png
+map_bump face_nrm.png
+
+newmtl Model001_Material009
+map_Kd face_base.png
+map_bump face_nrm.png
+
+newmtl Model001_Material010
+map_Kd panty_base.png
+map_bump panty_nrm.png
+
+newmtl Model001_Material011
+map_Kd lace_base.png
+map_bump lace_nrm.png
+
+newmtl Model001_Material012
+map_Kd lace_base.png
+map_bump lace_nrm.png
+
+newmtl Model001_Material013
+map_Kd lace_base.png
+map_bump lace_nrm.png
+
+newmtl Model001_Material014
+map_Kd face_base.png
+map_bump face_nrm.png
+
+newmtl Model001_Material015
+map_Kd dress_base.png
+map_bump dress_nrm.png
+
+newmtl Model001_Material016
+map_Kd face_base.png
+map_bump face_nrm.png
+
+newmtl Model001_Material017
+map_Kd haira_base.png
+map_bump haira_nrm.png
+
+newmtl Model001_Material018
+map_Kd lace_base.png
+map_bump lace_nrm.png
+
+newmtl Model001_Material019
+map_Kd haira_base.png
+map_bump haira_nrm.png
+
+newmtl Model001_Material020
+map_Kd eyeshadow.png
+
+newmtl Model001_Material021
+map_Kd eyelashes_lower.png
+
+newmtl Model001_Material022
+map_Kd eyelashes_upper.png
+
+newmtl Model001_Material023
+map_Kd mole.png
+
