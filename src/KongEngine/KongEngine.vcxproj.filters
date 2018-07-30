@@ -369,6 +369,12 @@
     <ClCompile Include="CImageLoaderTGA.cpp">
       <Filter>KongEngine\video\Null\Loader</Filter>
     </ClCompile>
+    <ClCompile Include="CPlaneSceneNode.cpp">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\CPlaneSceneNode.h">
+      <Filter>KongEngine\scene\scenenode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\KongCompileConfig.h">
@@ -719,6 +725,18 @@
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>
     <None Include="shaders\base.vs">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
+    <None Include="base.fs.backup">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
+    <None Include="base.vs.backup">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
+    <None Include="shadow.vs">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
+    <None Include="shadow.fs">
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>
   </ItemGroup>

@@ -39,6 +39,12 @@ namespace kong
                 const core::Vector3Df& rotation = core::Vector3Df(0, 0, 0),
                 const core::Vector3Df& scale = core::Vector3Df(1.0f, 1.0f, 1.0f));
 
+            //! add plane scene node
+            virtual IMeshSceneNode* AddPlaneSceneNode(f32 size = 10.0f, ISceneNode* parent = nullptr, s32 id = -1,
+                const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& rotation = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& scale = core::Vector3Df(1.0f, 1.0f, 1.0f));
+
             //! Adds a scene node for rendering a static mesh.
             virtual IMeshSceneNode* AddMeshSceneNode(IMesh* mesh, ISceneNode* parent = 0, s32 id = -1,
                 const core::vector3df& position = core::vector3df(0, 0, 0),
@@ -60,6 +66,13 @@ namespace kong
                 const core::Vector3Df& lookat = core::Vector3Df(0, 0, 100),
                 s32 id = -1, bool make_active = true);
 
+            //! Adds a perspective camera scene node to the scene graph and sets it as active camera.
+            virtual ICameraSceneNode* AddOrthogonalCameraSceneNode(ISceneNode* parent = nullptr,
+                const core::Vector3Df& position = core::Vector3Df(0, 0, 0),
+                const core::Vector3Df& up = core::Vector3Df(0, 1, 0),
+                const core::Vector3Df& lookat = core::Vector3Df(0, 0, 100),
+                s32 id = -1, bool make_active = true);
+
             //! Adds a dynamic light scene node to the scene graph.
             virtual ILightSceneNode* AddLightSceneNode(ISceneNode* parent = 0,
                 const core::vector3df& position = core::vector3df(0, 0, 0),
@@ -71,6 +84,9 @@ namespace kong
 
             //! Sets the color of stencil buffers shadows drawn by the scene manager.
             virtual void SetShadowColor(video::SColor color);
+
+            //! Enable shadows.
+            virtual void EnableShadow(bool flag);
 
             //! Returns the current color of shadows.
             virtual video::SColor GetShadowColor() const;

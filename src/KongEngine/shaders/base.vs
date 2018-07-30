@@ -1,11 +1,15 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec4 aNormal;
+layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec4 aClr;
 layout (location = 3) in vec2 aTexcoord;
 
 //switch between wireframe and meshframe
 layout (location = 4) in vec3 aBC;
+
+//tangent used for normal mapping
+layout (location = 5) in vec3 aTangent;
+layout (location = 6) in vec3 aBitangent;
 
 uniform mat4 world_transform;
 uniform mat4 view_transform;
@@ -17,6 +21,11 @@ out vec3 outBC;
 
 out vec4 world_position;
 out vec4 world_normal;
+out vec4 world_tangent;
+out vec4 world_bitangent;
+
+// normal mapping flag
+uniform bool normal_mapping_on;
 
 void main()
 {
@@ -26,6 +35,17 @@ void main()
 	outBC = aBC;
 
 	world_position = world_transform * vec4(aPos.x, aPos.y, aPos.z, 1.0);
-	world_normal = transpose(inverse(world_transform)) * aNormal;
-	//world_normal = (world_normal + vec4(2.f, 2.f, 2.f, 2.f)) * 0.5f;
+	
+//	world_normal = transpose(inverse(world_transform)) * vec4(aNormal.xyz, 0.0);
+	world_normal = world_transform * vec4(aNormal.xyz, 0.0);
+	if (normal_mapping_on)
+	{
+		world_tangent = world_transform * vec4(aTangent, 0.0);
+		world_bitangent = world_transform * vec4(aBitangent, 0.0);
+		world_normal = world_transform * vec4(aNormal.xyz, 0.0);
+	}
+//	else
+//	{
+//		world_normal = transpose(inverse(world_transform)) * vec4(aNormal.xyz, 0.0);
+//	}
 }
