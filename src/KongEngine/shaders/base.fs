@@ -7,8 +7,6 @@ in vec3 outBC;
 
 in vec4 world_position;
 in vec4 world_normal;
-in vec4 world_tangent;
-in vec4 world_bitangent;
 
 struct Light
 {
@@ -40,12 +38,7 @@ const int ERM_BOTH      = 0x00000002;
 
 // texture control flags
 uniform sampler2D texture0;
-uniform sampler2D texture1;
 uniform bool texture0_on;
-uniform bool texture1_on;
-
-// normal mapping flag
-uniform bool normal_mapping_on;
 
 // lights control flags
 uniform bool light_on;
@@ -106,30 +99,15 @@ vec4 CalculateLight(Light light, bool light_n_on)
         // ambient color
         res_ambient = light.ambient * material.ambient;
         
-        light_direction = normalize(light_direction);
-        vec3 view_direction = normalize(cam_position.xyz - world_position.xyz);
-        vec3 normal_direction = world_normal.xyz;
-        if (texture1_on && normal_mapping_on)
-        {
-            vec3 N = normalize(normal_direction);
-            vec3 T = normalize(world_tangent.xyz - dot(normal_direction, world_tangent.xyz) * normal_direction);
-            vec3 B = cross(N,T);
-            mat3 TBN = transpose(mat3(T, B, N));
-
-//            mat3 TBN = transpose(mat3(world_tangent.xyz, world_bitangent.xyz, normal_direction));
-            view_direction = TBN * view_direction;
-            light_direction = TBN * light_direction;
-            normal_direction = normalize(texture(texture1, outTexcoord).rgb * 2.0 - 1.0);
-        }
-
         // diffuse factor
-        float diffuse_factor = dot(light_direction, normal_direction);
+        light_direction = normalize(light_direction);
+        float diffuse_factor = dot(light_direction, world_normal.xyz);
 
         // ignore back face
         if (diffuse_factor > 0.f)
         {
-//            vec3 view_direction = normalize(cam_position.xyz - world_position.xyz);
-            vec3 reflect_direction = reflect(-light_direction, normal_direction);
+            vec3 view_direction = normalize(cam_position.xyz - world_position.xyz);
+            vec3 reflect_direction = reflect(-light_direction, world_normal.xyz);
             float specular_factor = pow(max(dot(view_direction, reflect_direction), 0.f), material.shininess);
 
             res_diffuse = diffuse_factor * (light.diffuse * material.diffuse);
@@ -137,7 +115,6 @@ vec4 CalculateLight(Light light, bool light_n_on)
         }
 
         return res_ambient + light_attenuation * (res_diffuse + res_specular);
-//        return res_diffuse;
     }
 }
 
@@ -181,11 +158,11 @@ void main()
 
         if (light_on)
         {
-            vec3 light_color = CalculateLight(light0, light0_on).xyz;
+            vec4 light_color = CalculateLight(light0, light0_on);
             //light_color += CalculateLight(light1, light1_on);
             //light_color += CalculateLight(light2, light2_on);
             //light_color += CalculateLight(light3, light3_on);
-            FragColor *= vec4(light_color, 1.0);
+            FragColor *= light_color;
         }
     }
 //    FragColor = vec4(1.0f, 0.f, 0.f, 1.f);

@@ -16,9 +16,9 @@ namespace kong
 
         COpenGLShaderDriver::COpenGLShaderDriver(const SKongCreationParameters& params, io::IFileSystem* file_system, CKongDeviceWin32* device,
             io::SPath vertex_path, io::SPath fragment_path)
-            : COpenGLDriver(params, file_system, device), shader_helper_(nullptr), shadow_shader_helper_(nullptr),
-              base_shader_helper_(nullptr), vao_(0), vbo_(0), ebo_(0),
-              vertex_path_(vertex_path), fragment_path_(fragment_path)
+            : COpenGLDriver(params, file_system, device), shader_helper_(nullptr), vao_(0), vbo_(0), ebo_(0),
+              vertex_path_(vertex_path),
+              fragment_path_(fragment_path)
         {
         }
 
@@ -30,8 +30,6 @@ namespace kong
             }
 
             shader_helper_ = new COpenGLShaderHelper(io_, vertex_path_, fragment_path_);
-            base_shader_helper_ = shader_helper_;
-            shadow_shader_helper_ = new COpenGLShaderHelper(io_, io::SPath("./shader/shadow.vs"), io::SPath("./shader/shadow.fs"));
 
             glGenVertexArrays(1, &vao_);
             glGenBuffers(1, &vbo_);
@@ -44,8 +42,6 @@ namespace kong
 
             shader_helper_->Use();
             shader_helper_->SetBool("texture0_on", false);
-            shader_helper_->SetBool("texture1_on", false);
-            shader_helper_->SetBool("normal_mapping_on", false);
             shader_helper_->SetBool("light_on", false);
             shader_helper_->SetBool("light0_on", false);
 
@@ -81,16 +77,6 @@ namespace kong
             SetMaterialUniform(SL_MAT_EMISSIVE, data);
 
             SetMaterialUniform(SL_MAT_SHININESS, material.shininess_);
-
-            if (material.MaterialType == EMT_NORMAL_MAP_SOLID || material.MaterialType == EMT_PARALLAX_MAP_SOLID
-                || material.MaterialType == EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR || material.MaterialType == EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR)
-            {
-                shader_helper_->SetBool("normal_mapping_on", true);
-            }
-            else
-            {
-                shader_helper_->SetBool("normal_mapping_on", false);
-            }
         }
 
         void COpenGLShaderDriver::SetTransform(u32 state, const core::Matrixf& mat)
@@ -122,15 +108,38 @@ namespace kong
 
         void COpenGLShaderDriver::DrawMeshBuffer(const scene::IMeshBuffer* mesh_buffer)
         {
-            if (material_.MaterialType == EMT_NORMAL_MAP_SOLID || material_.MaterialType == EMT_PARALLAX_MAP_SOLID
-                || material_.MaterialType == EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR || material_.MaterialType == EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR)
+            const S3DVertex *vertices = static_cast<const S3DVertex*>(mesh_buffer->GetVertices());
+            u32 vertice_count = mesh_buffer->GetVertexCount();
+            const u16 *indices = mesh_buffer->GetIndices();
+            const GLsizei indices_count = mesh_buffer->GetIndexCount();
+
+            glBindVertexArray(vao_);
+            glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(S3DVertex) * vertice_count, vertices, GL_STATIC_DRAW);
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16) * indices_count, indices, GL_STATIC_DRAW);
+
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, pos_)));
+            glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, normal_)));
+            glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, color_)));
+            glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, texcoord_)));
+
+            glEnableVertexAttribArray(0);
+            glEnableVertexAttribArray(1);
+            glEnableVertexAttribArray(2);
+            glEnableVertexAttribArray(3);
+
+            if (rendering_mode_ == ERM_WIREFRAME)
             {
-                DrawTangentMeshBuffer(mesh_buffer);
+                glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, barycentric_)));
+                glEnableVertexAttribArray(4);
             }
-            else
-            {
-                DrawNormalMeshBuffer(mesh_buffer);
-            }
+
+            shader_helper_->Use();
+            glBindVertexArray(vao_);
+            glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_SHORT, nullptr);
+            glBindVertexArray(0);
         }
 
         bool COpenGLShaderDriver::SetActiveTexture(u32 stage, const video::ITexture* texture)
@@ -146,21 +155,21 @@ namespace kong
             if (texture == nullptr)
             {
                 Disable(SL_TEXTURE0 + stage);
-                return false;
+                return true;
             }
             else
             {
                 if (texture->GetDriverType() != EDT_OPENGL)
                 {
-                    Disable(SL_TEXTURE0 + stage);
+                    Enable(SL_TEXTURE0 + stage);
                     current_texture_.Set(stage, nullptr);
                     //os::Printer::log("Fatal Error: Tried to set a texture not owned by this driver.", ELL_ERROR);
                     return false;
                 }
 
-                shader_helper_->SetInt(GetUniformName(SL_TEXTURE0 + stage), stage);
                 glActiveTexture(GL_TEXTURE0 + stage);
                 glBindTexture(GL_TEXTURE_2D, dynamic_cast<const COpenGLTexture*>(texture)->GetOpenGLTextureName());
+                shader_helper_->SetInt(GetUniformName(SL_TEXTURE0 + stage), stage);
                 shader_helper_->SetBool(str_on.c_str(), true);
             }
             return true;
@@ -271,90 +280,6 @@ namespace kong
         {
             rendering_mode_ = mode;
             shader_helper_->SetInt("wireframe_on", mode);
-        }
-
-        void COpenGLShaderDriver::BeginShadowRender()
-        {
-        }
-
-        void COpenGLShaderDriver::EndShadowRender()
-        {
-        }
-
-        void COpenGLShaderDriver::DrawNormalMeshBuffer(const scene::IMeshBuffer* mesh_buffer)
-        {
-            const S3DVertex *vertices = static_cast<const S3DVertex*>(mesh_buffer->GetVertices());
-            u32 vertice_count = mesh_buffer->GetVertexCount();
-            const u16 *indices = mesh_buffer->GetIndices();
-            const GLsizei indices_count = mesh_buffer->GetIndexCount();
-
-            glBindVertexArray(vao_);
-            glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(S3DVertex)* vertice_count, vertices, GL_STATIC_DRAW);
-
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16)* indices_count, indices, GL_STATIC_DRAW);
-
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, pos_)));
-            glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, normal_)));
-            glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, color_)));
-            glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, texcoord_)));
-
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
-            glEnableVertexAttribArray(3);
-
-            if (rendering_mode_ == ERM_WIREFRAME)
-            {
-                glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertex), reinterpret_cast<void *>(offsetof(S3DVertex, barycentric_)));
-                glEnableVertexAttribArray(4);
-            }
-
-            shader_helper_->Use();
-            glBindVertexArray(vao_);
-            glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_SHORT, nullptr);
-            glBindVertexArray(0);
-        }
-
-        void COpenGLShaderDriver::DrawTangentMeshBuffer(const scene::IMeshBuffer* mesh_buffer)
-        {
-            const S3DVertexTangents *vertices = static_cast<const S3DVertexTangents*>(mesh_buffer->GetVertices());
-            u32 vertice_count = mesh_buffer->GetVertexCount();
-            const u16 *indices = mesh_buffer->GetIndices();
-            const GLsizei indices_count = mesh_buffer->GetIndexCount();
-
-            glBindVertexArray(vao_);
-            glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(S3DVertexTangents)* vertice_count, vertices, GL_STATIC_DRAW);
-
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16)* indices_count, indices, GL_STATIC_DRAW);
-
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertexTangents), reinterpret_cast<void *>(offsetof(S3DVertexTangents, pos_)));
-            glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(S3DVertexTangents), reinterpret_cast<void *>(offsetof(S3DVertexTangents, normal_)));
-            glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(S3DVertexTangents), reinterpret_cast<void *>(offsetof(S3DVertexTangents, color_)));
-            glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(S3DVertexTangents), reinterpret_cast<void *>(offsetof(S3DVertexTangents, texcoord_)));
-            glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertexTangents), reinterpret_cast<void *>(offsetof(S3DVertexTangents, tangent_)));
-            glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertexTangents), reinterpret_cast<void *>(offsetof(S3DVertexTangents, binormal_)));
-
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
-            glEnableVertexAttribArray(3);
-            glEnableVertexAttribArray(5);
-            glEnableVertexAttribArray(6);
-
-            if (rendering_mode_ == ERM_WIREFRAME)
-            {
-                glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(S3DVertexTangents), reinterpret_cast<void *>(offsetof(S3DVertexTangents, barycentric_)));
-                glEnableVertexAttribArray(4);
-            }
-
-            shader_helper_->Use();
-            glBindVertexArray(vao_);
-            glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_SHORT, nullptr);
-            glBindVertexArray(0);
         }
 
         void COpenGLShaderDriver::UpdateMaxSupportLights()

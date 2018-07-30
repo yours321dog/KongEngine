@@ -5,7 +5,6 @@
 #define _CLIGHTSCENENODE_H_
 
 #include "ILightSceneNode.h"
-#include "ICameraSceneNode.h"
 
 namespace kong
 {
@@ -61,22 +60,14 @@ namespace kong
             /** \return The current radius. */
             f32 GetRadius() const override;
 
-            //! Get lihgt's transform matrix
-            core::Matrixf GetLightTransform() const override;
-
-            //! Render shadows
-            void RenderShadow() override;
-
         private:
             void DoLightRecalc();
-            void ResetCamera(bool delete_camera = false);
 
             video::SLight light_data_;
             core::aabbox3d<f32> box_;
             s32 driver_light_index_;
             bool light_is_on_;
 
-            ICameraSceneNode *camera_;
         };
     }
 }

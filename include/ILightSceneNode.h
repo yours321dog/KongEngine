@@ -59,13 +59,6 @@ namespace kong
             //! Gets the light's radius of influence.
             /** \return The current radius. */
             virtual f32 GetRadius() const = 0;
-
-            //! Get lihgt's transform matrix
-            /** \return The current light transform. */
-            virtual core::Matrixf GetLightTransform() const = 0;
-
-            //! Render shadows
-            virtual void RenderShadow() = 0;
         };
     }
 }

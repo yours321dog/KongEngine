@@ -3,8 +3,6 @@
 
 #include "ISceneManager.h"
 #include "CLightSceneNode.h"
-#include "COrthogonalCameraSceneNode.h"
-#include "CPerspectiveCameraSceneNode.h"
 
 namespace kong
 {
@@ -12,7 +10,7 @@ namespace kong
     {
         CLightSceneNode::CLightSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id,
             const core::vector3df& position, video::SColorf& color, f32 radius)
-            : ILightSceneNode(parent, mgr, id, position), driver_light_index_(-1), light_is_on_(true), camera_(nullptr)
+            : ILightSceneNode(parent, mgr, id, position), driver_light_index_(-1), light_is_on_(true)
         {
             light_data_.diffuse_color_ = color;
             // set some useful specular color
@@ -24,15 +22,10 @@ namespace kong
             light_data_.radius_ = radius;
             light_data_.attenuation_.Set(1.f, 1.f / radius, 0.f);
             DoLightRecalc();
-
-            // Init camera type
-            ResetCamera();
         }
 
         CLightSceneNode::~CLightSceneNode()
-        {
-            delete camera_;
-        }
+        = default;
 
         void CLightSceneNode::OnRegisterSceneNode()
         {
@@ -61,9 +54,7 @@ namespace kong
 
         void CLightSceneNode::SetLightData(const video::SLight& light)
         {
-            const bool delete_camera = light.type_ != light_data_.type_;
             light_data_ = light;
-            ResetCamera(delete_camera);
         }
 
         const video::SLight& CLightSceneNode::GetLightData() const
@@ -103,48 +94,6 @@ namespace kong
             return light_data_.radius_;
         }
 
-        core::Matrixf CLightSceneNode::GetLightTransform() const
-        {
-            core::vector3df to = light_data_.direction_;
-            to.Normalize();
-            core::vector3df up = to + core::vector3df(0.f, 1.f, 0.f);
-            core::vector3df right;
-            right.CrossProduct(up, to);
-            right.Normalize();
-            up.CrossProduct(to, right);
-
-            core::Matrixf res;
-
-            res(0, 0) = right(0);
-            res(1, 0) = right(1);
-            res(2, 0) = right(2);
-            res(3, 0) = -(right.DotProduct(light_data_.position_));
-
-            res(0, 1) = up(0);
-            res(1, 1) = up(1);
-            res(2, 1) = up(2);
-            res(3, 1) = -(up.DotProduct(light_data_.position_));
-
-            res(0, 2) = to(0);
-            res(1, 2) = to(1);
-            res(2, 2) = to(2);
-            res(3, 2) = -(to.DotProduct(light_data_.position_));
-
-            return camera_->GetProjectTransform();
-        }
-
-        void CLightSceneNode::RenderShadow()
-        {
-            video::IVideoDriver* driver = scene_manager_->GetVideoDriver();
-            if (!driver)
-                return;
-
-            driver->SetTransform(video::ETS_VIEW, camera_->GetViewTransform());
-            driver->SetTransform(video::ETS_PROJECTION, camera_->GetProjectTransform());
-
-            driver_light_index_ = driver->AddDynamicLight(light_data_);
-        }
-
         void CLightSceneNode::DoLightRecalc()
         {
             if ((light_data_.type_ == video::ELT_SPOT) || (light_data_.type_ == video::ELT_DIRECTIONAL))
@@ -167,35 +116,6 @@ namespace kong
             //    BBox.reset(0, 0, 0);
             //    setAutomaticCulling(scene::EAC_OFF);
             //}
-        }
-
-        void CLightSceneNode::ResetCamera(bool delete_camera)
-        {
-            if (delete_camera)
-            {
-                delete camera_;
-            }
-            if (light_data_.type_ == video::ELT_DIRECTIONAL)
-            {
-                camera_ = new COrthogonalCameraSceneNode(this, scene_manager_, -1, 10, 1, -1e2, 1e2);
-            }
-            else
-            {
-                camera_ = new CPerspectiveCameraSceneNode(this, scene_manager_, -1, 360, 1.f, 0.0001, 50);
-            }
-
-            camera_->LookAt(light_data_.position_ + light_data_.direction_);
-            camera_->SetUp(light_data_.direction_ + core::vector3df(0.f, 1.f, 0.f));
-            switch (light_data_.type_)
-            {
-            case video::ELT_DIRECTIONAL:
-                camera_->SetEye(light_data_.direction_ * -1e2);
-                break;
-            case video::ELT_SPOT:
-            case video::ELT_POINT:
-                camera_->SetEye(light_data_.position_);
-            default: ;
-            }
         }
     } // end namespace scene
 } // end namespace kong

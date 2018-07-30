@@ -135,18 +135,6 @@ namespace kong
             //! Set rendering mode
             void SetRenderingMode(E_RENDERING_MODE mode) override;
 
-            //! Get the current color format of the color buffer
-            ECOLOR_FORMAT GetColorFormat() const override;
-
-            //! Enable shadows.
-            void EnableShadow(bool flag) override;
-
-            //! Begin shadow rendering
-            void BeginShadowRender() override;
-
-            //! End shadow rendering
-            void EndShadowRender() override;
-
         protected:
             virtual void UpdateMaxSupportLights();
 
@@ -304,9 +292,6 @@ namespace kong
             core::Matrixf texture_flip_matrix_;
             s32 max_support_lights_;
 
-            //! shadow depth texture
-            ITexture *shadow_depth_texture_;
-
             //! mesh manipulator
             scene::IMeshManipulator* mesh_manipulator_;
 
@@ -315,12 +300,6 @@ namespace kong
 
             //! rendering mode
             E_RENDERING_MODE rendering_mode_;
-
-            //! Color buffer format
-            ECOLOR_FORMAT color_format_;
-
-            // ! shadow enable flag
-            bool shadow_enable_;
         };
     } // end namespace video
 } // end namespace kong

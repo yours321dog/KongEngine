@@ -7,8 +7,6 @@
 #include "IReadFile.h"
 #include "CMeshSceneNode.h"
 #include "CLightSceneNode.h"
-#include "CPlaneSceneNode.h"
-#include "COrthogonalCameraSceneNode.h"
 
 #ifdef _KONG_COMPILE_WITH_OBJ_LOADER_
 #include "CObjMeshFileLoader.h"
@@ -145,19 +143,6 @@ namespace kong
             return node;
         }
 
-        IMeshSceneNode* CSceneManager::AddPlaneSceneNode(f32 size, ISceneNode* parent, s32 id,
-            const core::Vector3Df& position, const core::Vector3Df& rotation, const core::Vector3Df& scale)
-        {
-            if (parent == nullptr)
-            {
-                parent = this;
-            }
-
-            IMeshSceneNode *node = new CPlaneSceneNode(size, parent, this, id, position, rotation, scale);
-
-            return node;
-        }
-
         IMeshSceneNode* CSceneManager::AddMeshSceneNode(IMesh* mesh, ISceneNode* parent, s32 id,
             const core::vector3df& position, const core::vector3df& rotation, const core::vector3df& scale,
             bool alsoAddIfMeshPointerZero)
@@ -203,27 +188,6 @@ namespace kong
             return node;
         }
 
-        ICameraSceneNode* CSceneManager::AddOrthogonalCameraSceneNode(ISceneNode* parent,
-            const core::Vector3Df& position, const core::Vector3Df& up, const core::Vector3Df& lookat, s32 id,
-            bool make_active)
-        {
-            if (parent == nullptr)
-            {
-                parent = this;
-            }
-
-            const core::Dimension2d<u32> window_size = driver_->GetScreenSize();
-            const f32 aspect = static_cast<f32>(window_size.width_) / window_size.height_;
-            ICameraSceneNode *node = new COrthogonalCameraSceneNode(parent, this, id, position, up, lookat, 1.f, aspect);
-
-            if (make_active)
-            {
-                SetActiveCamera(node);
-            }
-
-            return node;
-        }
-
         ILightSceneNode* CSceneManager::AddLightSceneNode(ISceneNode* parent, const core::vector3df& position,
             video::SColorf color, f32 radius, s32 id)
         {
@@ -245,11 +209,6 @@ namespace kong
         void CSceneManager::SetShadowColor(video::SColor color)
         {
             shadow_color_ = color;
-        }
-
-        void CSceneManager::EnableShadow(bool flag)
-        {
-            driver_->EnableShadow(flag);
         }
 
         video::SColor CSceneManager::GetShadowColor() const

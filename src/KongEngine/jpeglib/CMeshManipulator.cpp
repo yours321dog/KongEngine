@@ -192,7 +192,7 @@ namespace kong
                 if (txb.DotProduct(normal) < 0.0f)
                 {
                     tangent *= -1.0f;
-                    //binormal *= -1.0f;
+                    binormal *= -1.0f;
                 }
 
 #endif // USE_IRR_VERSION
@@ -254,13 +254,9 @@ namespace kong
             template <typename T>
             void recalculateTangentsT(IMeshBuffer* buffer, bool recalculateNormals, bool smooth, bool angleWeighted)
             {
-
                 if (!buffer || (buffer->GetVertexType() != video::EVT_TANGENTS))
                     return;
 
-#define TANGENT_KONG_VERSION
-
-#ifdef TANGENT_IRR_VERSION
                 const u32 vtxCnt = buffer->GetVertexCount();
                 const u32 idxCnt = buffer->GetIndexCount();
 
@@ -408,56 +404,6 @@ namespace kong
                             v[idx[i + 2]].normal_ = localNormal;
                     }
                 }
-#endif
-
-#ifdef TANGENT_KONG_VERSION
-                const u32 vtxCnt = buffer->GetVertexCount();
-                const u32 idxCnt = buffer->GetIndexCount();
-
-                T* idx = reinterpret_cast<T*>(buffer->GetIndices());
-                video::S3DVertexTangents* v = static_cast<video::S3DVertexTangents*>(buffer->GetVertices());
-
-                for (u32 i = 0; i < idxCnt; i += 3)
-                {
-                    video::S3DVertexTangents& v0 = v[idx[i]];
-                    video::S3DVertexTangents& v1 = v[idx[i + 1]];
-                    video::S3DVertexTangents& v2 = v[idx[i + 2]];
-
-                    core::Vector3Df edge1 = v1.pos_ - v0.pos_;
-                    core::Vector3Df edge2 = v2.pos_ - v0.pos_;
-
-                    f32 delta_u1 = v1.texcoord_.x_ - v0.texcoord_.x_;
-                    f32 delta_v1 = v1.texcoord_.y_ - v0.texcoord_.y_;
-                    f32 delta_u2 = v2.texcoord_.x_ - v0.texcoord_.x_;
-                    f32 delta_v2 = v2.texcoord_.y_ - v0.texcoord_.y_;
-
-                    f32 f = 1.0f / (delta_u1 * delta_v2 - delta_u2 * delta_v1);
-
-                    core::Vector3Df tangent, binormal;
-
-                    tangent.x_ = f * (delta_v2 * edge1.x_ - delta_v1 * edge2.x_);
-                    tangent.y_ = f * (delta_v2 * edge1.y_ - delta_v1 * edge2.y_);
-                    tangent.z_ = f * (delta_v2 * edge1.z_ - delta_v1 * edge2.z_);
-
-                    binormal.x_ = f * (-delta_u2 * edge1.x_ + delta_u1 * edge2.x_);
-                    binormal.y_ = f * (-delta_u2 * edge1.y_ + delta_u1 * edge2.y_);
-                    binormal.z_ = f * (-delta_u2 * edge1.z_ + delta_u1 * edge2.z_);
-
-                    v0.tangent_ += tangent;
-                    v1.tangent_ += tangent;
-                    v2.tangent_ += tangent;
-
-                    v0.binormal_ += binormal;
-                    v1.binormal_ += binormal;
-                    v2.binormal_ += binormal;
-                }
-
-                for (u32 i = 0; i < vtxCnt; i++)
-                {
-                    v[i].tangent_.Normalize();
-                    v[i].binormal_.Normalize();
-                }
-#endif
             }
         }
 
@@ -1072,12 +1018,12 @@ namespace kong
             return clone;
         }
 
-        void CMeshManipulator::addMeshBufferhWithTangents(SMesh* clone, IMesh* mesh, bool recalculateNormals, bool smooth, bool angleWeighted, bool calculateTangents) const
+        void CMeshManipulator::addMeshBufferhWithTangents(SMesh* clone, IMesh* mesh, bool recalculateNormals, bool smooth, bool angleWeighted, bool recalculateTangents) const
         {
             if (!mesh)
                 return;
 
-            // copy mesh and fill data into SMeshBufferTangents
+            // copy mesh and fill data into SMeshBufferLightMap
 
             const u32 meshBufferCount = mesh->GetMeshBufferCount();
 
@@ -1087,19 +1033,18 @@ namespace kong
                 const u32 idxCnt = original->GetIndexCount();
                 const u16* idx = original->GetIndices();
 
-                SMeshBufferTangents* buffer = new SMeshBufferTangents();
-
+                SMeshBufferLightMap* buffer = new SMeshBufferLightMap();
                 buffer->material_ = original->GetMaterial();
                 buffer->vertices_.Reallocate(idxCnt);
                 buffer->indices_.Reallocate(idxCnt);
 
-                core::Map<video::S3DVertexTangents, int> vertMap;
+                core::Map<video::S3DVertex2TCoords, int> vertMap;
                 int vertLocation;
 
                 // copy vertices
 
                 const video::E_VERTEX_TYPE vType = original->GetVertexType();
-                video::S3DVertexTangents vNew;
+                video::S3DVertex2TCoords vNew;
                 for (u32 i = 0; i<idxCnt; ++i)
                 {
                     switch (vType)
@@ -1108,27 +1053,27 @@ namespace kong
                     {
                         const video::S3DVertex* v =
                             (const video::S3DVertex*)original->GetVertices();
-                        vNew = video::S3DVertexTangents(
-                            v[idx[i]].pos_, v[idx[i]].normal_, v[idx[i]].color_, v[idx[i]].texcoord_);
+                        vNew = video::S3DVertex2TCoords(
+                            v[idx[i]].pos_, v[idx[i]].normal_, v[idx[i]].color_, v[idx[i]].texcoord_, v[idx[i]].texcoord_);
                     }
-                        break;
+                    break;
                     case video::EVT_2TCOORDS:
                     {
                         const video::S3DVertex2TCoords* v =
                             (const video::S3DVertex2TCoords*)original->GetVertices();
-                        vNew = video::S3DVertexTangents(
-                            v[idx[i]].pos_, v[idx[i]].normal_, v[idx[i]].color_, v[idx[i]].texcoord_);
+                        vNew = v[idx[i]];
                     }
-                        break;
+                    break;
                     case video::EVT_TANGENTS:
                     {
                         const video::S3DVertexTangents* v =
                             (const video::S3DVertexTangents*)original->GetVertices();
-                        vNew = v[idx[i]];
+                        vNew = video::S3DVertex2TCoords(
+                            v[idx[i]].pos_, v[idx[i]].normal_, v[idx[i]].color_, v[idx[i]].texcoord_, v[idx[i]].texcoord_);
                     }
-                        break;
+                    break;
                     }
-                    core::Map<video::S3DVertexTangents, int>::Node* n = vertMap.find(vNew);
+                    core::Map<video::S3DVertex2TCoords, int>::Node* n = vertMap.find(vNew);
                     if (n)
                     {
                         vertLocation = n->getValue();
@@ -1151,8 +1096,6 @@ namespace kong
             }
 
             clone->RecalculateBoundingBox();
-            if (calculateTangents)
-                recalculateTangents(clone, recalculateNormals, smooth, angleWeighted);
         }
 
         //! Creates a copy of the mesh, which will only consist of S3DVertex2TCoords vertices.

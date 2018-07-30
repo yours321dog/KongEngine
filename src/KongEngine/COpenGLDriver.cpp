@@ -25,10 +25,8 @@ namespace kong
         IImageLoader* CreateImageLoaderTGA();
 
         COpenGLDriver::COpenGLDriver(const SKongCreationParameters& params, io::IFileSystem* io, CKongDeviceWin32* device)
-            : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device),
-              params_(params), io_(io), max_texture_units_(0), max_supported_textures_(0), max_support_lights_(0),
-              shadow_depth_texture_(nullptr), rendering_mode_(ERM_MESH), color_format_(ECF_A8R8G8B8),
-              shadow_enable_(false)
+            : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device), params_(params),
+            io_(io), max_texture_units_(0), max_supported_textures_(0), max_support_lights_(0), rendering_mode_(ERM_MESH)
         {
             // create manipulator
             mesh_manipulator_ = new scene::CMeshManipulator();
@@ -48,7 +46,6 @@ namespace kong
         COpenGLDriver::~COpenGLDriver()
         {
             delete mesh_manipulator_;
-            delete shadow_depth_texture_;
         }
 
         bool COpenGLDriver::InitDriver(CKongDeviceWin32* device)
@@ -152,23 +149,6 @@ namespace kong
             max_texture_units_ = core::min_<u32>(max_texture_units_, MATERIAL_MAX_TEXTURES);
             max_supported_textures_ = max_texture_units_;
             UpdateMaxSupportLights();
-
-            int pf = GetPixelFormat(hdc_);
-            DescribePixelFormat(hdc_, pf, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
-            if (pfd.cAlphaBits != 0)
-            {
-                if (pfd.cRedBits == 8)
-                    color_format_ = ECF_A8R8G8B8;
-                else
-                    color_format_ = ECF_A1R5G5B5;
-            }
-            else
-            {
-                if (pfd.cRedBits == 8)
-                    color_format_ = ECF_R8G8B8;
-                else
-                    color_format_ = ECF_R5G6B5;
-            }
 
             return true;
         }
@@ -827,7 +807,7 @@ namespace kong
             if (idx < lights_.Size())
                 return lights_[idx];
             else
-                return *(static_cast<SLight*>(nullptr));
+                return *static_cast<SLight*>(nullptr);
         }
 
         void COpenGLDriver::SetActiveCameraPosition(core::Vector3Df position) const
@@ -847,29 +827,6 @@ namespace kong
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                 break;
             }
-        }
-
-        ECOLOR_FORMAT COpenGLDriver::GetColorFormat() const
-        {
-            return color_format_;
-        }
-
-        void COpenGLDriver::EnableShadow(bool flag)
-        {
-            shadow_enable_ = flag;
-
-            if (shadow_depth_texture_ == nullptr)
-            {
-                shadow_depth_texture_ = new COpenGLFBOTexture(core::Dimension2d<u32>(2048, 2048), io::path(), this);
-            }
-        }
-
-        void COpenGLDriver::BeginShadowRender()
-        {
-        }
-
-        void COpenGLDriver::EndShadowRender()
-        {
         }
 
         void COpenGLDriver::UpdateMaxSupportLights()

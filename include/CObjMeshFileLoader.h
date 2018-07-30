@@ -46,9 +46,9 @@ namespace kong
                 RecalculateNormals(false)
                 {
                     Meshbuffer = new SMeshBuffer();
-                    Meshbuffer->material_.shininess_ = 64.0f;
-                    Meshbuffer->material_.ambient_color_ = video::SColorf(1.0f, 1.0f, 1.0f, 1.0f).ToSColor();
-                    Meshbuffer->material_.diffuse_color_ = video::SColorf(1.0f, 1.0f, 1.0f, 1.0f).ToSColor();
+                    Meshbuffer->material_.shininess_ = 0.0f;
+                    Meshbuffer->material_.ambient_color_ = video::SColorf(0.2f, 0.2f, 0.2f, 1.0f).ToSColor();
+                    Meshbuffer->material_.diffuse_color_ = video::SColorf(0.8f, 0.8f, 0.8f, 1.0f).ToSColor();
                     Meshbuffer->material_.specular_color_ = video::SColorf(1.0f, 1.0f, 1.0f, 1.0f).ToSColor();
                 }
 
@@ -80,17 +80,12 @@ namespace kong
             // returns a pointer to the next printable character after the first line break
             const c8* goNextLine(const c8* buf, const c8* const bufEnd);
             // copies the current word from the inBuf to the outBuf
-            u32 copyWord(c8* outBuf, const c8* inBuf, u32 outBufLength, const c8* const pBufEnd);   
-            // copies the current word from the inBuf to the outBuf
-            u32 copyWordIgnorSpace(c8* outBuf, const c8* inBuf, u32 outBufLength, const c8* const pBufEnd);
+            u32 copyWord(c8* outBuf, const c8* inBuf, u32 outBufLength, const c8* const pBufEnd);
             // copies the current line from the inBuf to the outBuf
             core::stringc copyLine(const c8* inBuf, const c8* const bufEnd);
 
             // combination of goNextWord followed by copyWord
             const c8* goAndCopyNextWord(c8* outBuf, const c8* inBuf, u32 outBufLength, const c8* const pBufEnd);
-            // combination of goNextWord followed by copyWord
-            const c8* goAndCopyNextWordIgnorSpace(c8* outBuf, const c8* inBuf, u32 outBufLength, const c8* const pBufEnd);
-
 
             //! Read the material from the given file
             void readMTL(const c8* fileName, const io::path& relPath);

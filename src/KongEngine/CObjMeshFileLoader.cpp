@@ -97,8 +97,7 @@ namespace kong
                     if (useMaterials)
                     {
                         c8 name[WORD_BUFFER_LENGTH];
-                        //bufPtr = goAndCopyNextWord(name, bufPtr, WORD_BUFFER_LENGTH, bufEnd);
-                        bufPtr = goAndCopyNextWordIgnorSpace(name, bufPtr, WORD_BUFFER_LENGTH, bufEnd);
+                        bufPtr = goAndCopyNextWord(name, bufPtr, WORD_BUFFER_LENGTH, bufEnd);
 #ifdef _KONG_DEBUG_OBJ_LOADER_
                         os::Printer::log("Reading material file", name);
 #endif
@@ -283,16 +282,16 @@ namespace kong
                     Materials[m]->Meshbuffer->RecalculateBoundingBox();
                     if (Materials[m]->RecalculateNormals)
                         SceneManager->GetMeshManipulator()->recalculateNormals(Materials[m]->Meshbuffer);
-                    if (Materials[m]->Meshbuffer->material_.MaterialType == video::EMT_PARALLAX_MAP_SOLID)
-                    {
-                        SMesh tmp;
-                        tmp.AddMeshBuffer(Materials[m]->Meshbuffer);
-                        //IMesh* tangentMesh = SceneManager->GetMeshManipulator()->createMeshWithTangents(&tmp);
-                        //mesh->AddMeshBuffer(tangentMesh->GetMeshBuffer(0));
-                        //delete tangentMesh;
-                        SceneManager->GetMeshManipulator()->addMeshBufferhWithTangents(mesh, &tmp);
-                    }
-                    else
+                    //if (Materials[m]->Meshbuffer->material_.MaterialType == video::EMT_PARALLAX_MAP_SOLID)
+                    //{
+                    //    SMesh tmp;
+                    //    tmp.AddMeshBuffer(Materials[m]->Meshbuffer);
+                    //    //IMesh* tangentMesh = SceneManager->GetMeshManipulator()->createMeshWithTangents(&tmp);
+                    //    //mesh->AddMeshBuffer(tangentMesh->GetMeshBuffer(0));
+                    //    //delete tangentMesh;
+                    //    SceneManager->GetMeshManipulator()->addMeshBufferhWithTangents(mesh, &tmp);
+                    //}
+                    //else
                         mesh->AddMeshBuffer(Materials[m]->Meshbuffer);
                 }
             }
@@ -817,32 +816,6 @@ namespace kong
             return length;
         }
 
-        u32 COBJMeshFileLoader::copyWordIgnorSpace(c8* outBuf, const c8* const inBuf, u32 outBufLength, const c8* const bufEnd)
-        {
-            if (!outBufLength)
-                return 0;
-            if (!inBuf)
-            {
-                *outBuf = 0;
-                return 0;
-            }
-
-            u32 i = 0;
-            while (inBuf[i])
-            {
-                if (core::isnextline(inBuf[i]) || &(inBuf[i]) == bufEnd)
-                    break;
-                ++i;
-            }
-
-            u32 length = core::min_(i, outBufLength - 1);
-            for (u32 j = 0; j<length; ++j)
-                outBuf[j] = inBuf[j];
-
-            outBuf[length] = 0;
-            return length;
-        }
-
 
         core::stringc COBJMeshFileLoader::copyLine(const c8* inBuf, const c8* bufEnd)
         {
@@ -865,13 +838,6 @@ namespace kong
         {
             inBuf = goNextWord(inBuf, bufEnd, false);
             copyWord(outBuf, inBuf, outBufLength, bufEnd);
-            return inBuf;
-        }
-
-        const c8* COBJMeshFileLoader::goAndCopyNextWordIgnorSpace(c8* outBuf, const c8* inBuf, u32 outBufLength, const c8* bufEnd)
-        {
-            inBuf = goNextWord(inBuf, bufEnd, false);
-            copyWordIgnorSpace(outBuf, inBuf, outBufLength, bufEnd);
             return inBuf;
         }
 
