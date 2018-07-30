@@ -89,6 +89,8 @@ namespace kong
             COpenGLShaderDriver(const SKongCreationParameters &params, io::IFileSystem* file_system, CKongDeviceWin32* device,
                 io::SPath vertex_path = "./Shaders/base.vs", io::SPath fragment_path = "./Shaders/base.fs");
 
+            virtual ~COpenGLShaderDriver();
+
             bool InitDriver(CKongDeviceWin32 *device) override;
 
             //! Sets a material.

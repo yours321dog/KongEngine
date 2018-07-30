@@ -707,9 +707,6 @@
     <ClInclude Include="..\..\include\ERenderingMode.h">
       <Filter>Include\video</Filter>
     </ClInclude>
-    <ClInclude Include="CImageLoaderTGA.h">
-      <Filter>KongEngine\video\Null\Loader</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\KongPack.h">
       <Filter>Include</Filter>
     </ClInclude>
@@ -719,6 +716,9 @@
     <ClInclude Include="..\..\include\KongUnpack.h">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\CImageLoaderTGA.h">
+      <Filter>KongEngine\video\Null\Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\base.fs">
@@ -727,16 +727,16 @@
     <None Include="shaders\base.vs">
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>
-    <None Include="base.fs.backup">
+    <None Include="shaders\base.fs.backup">
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>
-    <None Include="base.vs.backup">
+    <None Include="shaders\base.vs.backup">
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>
-    <None Include="shadow.vs">
+    <None Include="shaders\shadow.fs">
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>
-    <None Include="shadow.fs">
+    <None Include="shaders\shadow.vs">
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>
   </ItemGroup>

@@ -22,6 +22,12 @@ namespace kong
         {
         }
 
+        COpenGLShaderDriver::~COpenGLShaderDriver()
+        {
+            delete shadow_shader_helper_;
+            delete base_shader_helper_;
+        }
+
         bool COpenGLShaderDriver::InitDriver(CKongDeviceWin32* device)
         {
             if (!COpenGLDriver::InitDriver(device))
@@ -29,9 +35,10 @@ namespace kong
                 return false;
             }
 
-            shader_helper_ = new COpenGLShaderHelper(io_, vertex_path_, fragment_path_);
+            //shader_helper_ = new COpenGLShaderHelper(io_, vertex_path_, fragment_path_);
+            shader_helper_ = new COpenGLShaderHelper(io_, io::SPath("./shaders/shadow.vs"), io::SPath("./shaders/shadow.fs"));
             base_shader_helper_ = shader_helper_;
-            shadow_shader_helper_ = new COpenGLShaderHelper(io_, io::SPath("./shader/shadow.vs"), io::SPath("./shader/shadow.fs"));
+            shadow_shader_helper_ = new COpenGLShaderHelper(io_, io::SPath("./shaders/shadow.vs"), io::SPath("./shaders/shadow.fs"));
 
             glGenVertexArrays(1, &vao_);
             glGenBuffers(1, &vbo_);
@@ -275,10 +282,24 @@ namespace kong
 
         void COpenGLShaderDriver::BeginShadowRender()
         {
+            shader_helper_ = shadow_shader_helper_;
+            shader_helper_->Use();
+            if (shadow_depth_texture_ != nullptr && shadow_depth_texture_->isFrameBufferObject())
+            {
+                shadow_depth_texture_->bindRTT();
+            }
+
+            DeleteAllDynamicLights();
         }
 
         void COpenGLShaderDriver::EndShadowRender()
         {
+            shader_helper_ = base_shader_helper_;
+            shader_helper_->Use();
+            shadow_depth_texture_->unbindRTT();
+
+            DeleteAllDynamicLights();
+
         }
 
         void COpenGLShaderDriver::DrawNormalMeshBuffer(const scene::IMeshBuffer* mesh_buffer)

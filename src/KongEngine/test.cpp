@@ -278,8 +278,8 @@ void TestObjLoad()
     //IMesh * mesh = smr->getMesh("../../materials/honoka_noel/source/Honoka_noel_.obj");
     //IMesh * mesh = smr->getMesh("../../materials/misaki_dress_sr/misaki.obj");
     //IMesh * mesh = smr->getMesh("../../materials/misaki_pinchos/Normal/Ponytail/misaki.obj");
-    IMesh * mesh = smr->getMesh("../../materials/Misaki_Pemole/Models/Hairstyle A/misaki.obj");
-    //IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
+    //IMesh * mesh = smr->getMesh("../../materials/Misaki_Pemole/Models/Hairstyle A/misaki.obj");
+    IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
     //ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(0.0003f, 0.0003f, 0.0003f));
     ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     node->NormalizeVertice();
@@ -295,8 +295,8 @@ void TestObjLoad()
     light_data.diffuse_color_ = SColorf(0.8f, 0.8f, 0.8f, 1.f);
     light_data.specular_color_ = SColorf(0.4f, 0.4f, 0.4f, 1.f);
     //light_data.type_ = ELT_DIRECTIONAL;
-    light_data.type_ = ELT_SPOT;
-    //light_data.type_ = ELT_POINT;
+    //light_data.type_ = ELT_SPOT;
+    light_data.type_ = ELT_POINT;
     light_node->SetLightData(light_data);
     light_node->SetRotation(Vector3Df(-PI / 8, PI / 4, 0.f));
 

@@ -13,7 +13,6 @@
 #include "IImageLoader.h"
 #include "Matrix.h"
 
-
 namespace kong
 {
     class CKongDeviceWin32;
@@ -23,6 +22,8 @@ namespace kong
 {
     namespace video
     {
+        class COpenGLFBOTexture;
+
         class COpenGLDriver : public IVideoDriver
         {
         public:
@@ -305,7 +306,7 @@ namespace kong
             s32 max_support_lights_;
 
             //! shadow depth texture
-            ITexture *shadow_depth_texture_;
+            COpenGLFBOTexture *shadow_depth_texture_;
 
             //! mesh manipulator
             scene::IMeshManipulator* mesh_manipulator_;
