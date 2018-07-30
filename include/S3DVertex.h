@@ -257,12 +257,12 @@ namespace kong
                     ((static_cast<S3DVertex>(*this) == other) && (tangent_ == other.tangent_) && (binormal_ < other.binormal_)));
             }
 
-            E_VERTEX_TYPE getType() const
+            E_VERTEX_TYPE GetType() const
             {
                 return EVT_TANGENTS;
             }
 
-            S3DVertexTangents getInterpolated(const S3DVertexTangents& other, f32 d)
+            S3DVertexTangents GetInterpolated(const S3DVertexTangents& other, f32 d)
             {
                 d = core::clamp(d, 0.0f, 1.0f);
                 return S3DVertexTangents(pos_.GetInterpolation(other.pos_, d),

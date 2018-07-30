@@ -1,0 +1,168 @@
+newmtl Model001_Material001
+map_Kd Misaki_face_base.png
+map_bump Misaki_face_nrm.png
+
+newmtl Model001_Material002
+map_Kd Misaki_face_base.png
+map_bump Misaki_face_nrm.png
+
+newmtl Model001_Material003
+map_Kd Misaki_face_base.png
+map_bump Misaki_face_nrm.png
+
+newmtl Model001_Material004
+map_Kd Misaki_face_base.png
+map_bump Misaki_face_nrm.png
+
+newmtl Model001_Material005
+map_Kd All_body_base.png
+map_bump All_body_nrm.png
+
+newmtl Model001_Material006
+map_Kd All_pantsu_base.png
+map_bump All_pantsu_nrm.png
+
+newmtl Model001_Material007
+map_Kd All_pantsu_base.png
+map_bump All_pantsu_nrm.png
+
+newmtl Model001_Material008
+map_Kd All_shirt_base.png
+map_bump All_shirt_nrm.png
+
+newmtl Model001_Material009
+map_Kd All_shirt_base.png
+map_bump All_shirt_nrm.png
+
+newmtl Model001_Material010
+map_Kd All_shirt_base.png
+map_bump All_shirt_nrm.png
+
+newmtl Model001_Material011
+map_Kd All_shirt_base.png
+map_bump All_shirt_nrm.png
+
+newmtl Model001_Material012
+map_Kd All_shirt_base.png
+map_bump All_shirt_nrm.png
+
+newmtl Model001_Material013
+map_Kd All_shirt_base.png
+map_bump All_shirt_nrm.png
+
+newmtl Model001_Material014
+map_Kd All_shirt_base.png
+map_bump All_shirt_nrm.png
+
+newmtl Model001_Material015
+map_Kd All_shirt_base.png
+map_bump All_shirt_nrm.png
+
+newmtl Model001_Material016
+map_Kd Misaki_face_base.png
+map_bump Misaki_face_nrm.png
+
+newmtl Model001_Material017
+map_Kd Misaki_face_base.png
+map_bump Misaki_face_nrm.png
+
+newmtl Model001_Material018
+map_Kd All_body_base.png
+map_bump All_body_nrm.png
+
+newmtl Model001_Material019
+map_Kd All_body_base.png
+map_bump All_body_nrm.png
+
+newmtl Model001_Material020
+map_Kd All_body_base.png
+map_bump All_body_nrm.png
+
+newmtl Model001_Material021
+map_Kd All_body_base.png
+map_bump All_body_nrm.png
+
+newmtl Model001_Material022
+map_Kd All_body_base.png
+map_bump All_body_nrm.png
+
+newmtl Model001_Material023
+map_Kd All_body_base.png
+map_bump All_body_nrm.png
+
+newmtl Model001_Material024
+map_Kd Misaki_eyesdw_base.png
+map_bump n.png
+
+newmtl Model001_Material025
+map_Kd Misaki_mole_base.png
+map_bump n.png
+
+newmtl Model001_Material026
+map_Kd Misaki_matuge_base.png
+map_bump n.png
+
+newmtl Model001_Material027
+map_Kd Misaki_sitamatuge_base.png
+map_bump n.png
+
+newmtl Model001_Material028
+map_Kd Misaki_hair_base.png
+map_bump Misaki_hair_nrm.png
+
+newmtl Model001_Material029
+map_Kd Misaki_ponytail_base.png
+map_bump Misaki_ponytail_nrm.png
+
+newmtl Model001_Material030
+map_Kd Misaki_ponytail_base.png
+map_bump Misaki_ponytail_nrm.png
+
+newmtl Model001_Material031
+map_Kd Misaki_hair_base.png
+map_bump Misaki_hair_nrm.png
+
+newmtl Model001_Material032
+map_Kd Misaki_hair_base.png
+map_bump Misaki_hair_nrm.png
+
+newmtl Model001_Material033
+map_Kd Misaki_hair_base.png
+map_bump Misaki_hair_nrm.png
+
+newmtl Model001_Material034
+map_Kd Misaki_hair_base.png
+map_bump Misaki_hair_nrm.png
+
+newmtl Model001_Material035
+map_Kd Misaki_acs_base.png
+map_bump n.png
+
+newmtl Model001_Material036
+map_Kd Misaki_hairibb_base.png
+map_bump Misaki_hairibb_nrm.png
+
+newmtl Model001_Material037
+map_Kd Misaki_hair_base.png
+map_bump Misaki_hair_nrm.png
+
+newmtl Model001_Material038
+map_Kd Misaki_hair_base.png
+map_bump Misaki_hair_nrm.png
+
+newmtl Model001_Material039
+map_Kd Misaki_hair_base.png
+map_bump Misaki_hair_nrm.png
+
+newmtl Model001_Material040
+map_Kd Misaki_ponytail_base.png
+map_bump Misaki_ponytail_nrm.png
+
+newmtl Model001_Material041
+map_Kd Misaki_ponytail_base.png
+map_bump Misaki_ponytail_nrm.png
+
+newmtl Model001_Material042
+map_Kd Misaki_hair_base.png
+map_bump Misaki_hair_nrm.png
+

@@ -109,7 +109,7 @@ namespace kong
             COpenGLTexture(const io::path& name, COpenGLDriver* driver);
 
             //! get the desired color format based on texture creation flags and the input format.
-            ECOLOR_FORMAT getBestColorFormat(ECOLOR_FORMAT format);
+            ECOLOR_FORMAT GetBestColorFormat(ECOLOR_FORMAT format);
 
             //! Get the OpenGL color format parameters based on the given Irrlicht color format
             GLint getOpenGLFormatAndParametersFromColorFormat(
@@ -132,9 +132,9 @@ namespace kong
             IImage* MipImage;
 
             GLuint texture_name_;
-            GLint InternalFormat;
-            GLenum PixelFormat;
-            GLenum PixelType;
+            GLint internal_format_;
+            GLenum pixel_format_;
+            GLenum pixel_type_;
 
             u8 MipLevelStored;
             bool has_mip_maps_;
@@ -166,9 +166,9 @@ namespace kong
             //! Unbind RenderTargetTexture
             virtual void unbindRTT();
 
-            ITexture* DepthTexture;
+            ITexture* depth_texture_;
         protected:
-            GLuint ColorFrameBuffer;
+            GLuint color_frame_buffer_;
         };
 
 

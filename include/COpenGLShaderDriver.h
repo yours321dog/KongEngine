@@ -50,9 +50,9 @@ namespace kong
         const c8 *const shader_uniform_name[] = 
         {
             "texture0",
-            "texutre1",
-            "texutre2",
-            "texutre3",
+            "texture1",
+            "texture2",
+            "texture3",
             "light0",
             "light1",
             "light2",
@@ -116,7 +116,19 @@ namespace kong
             //! Set rendering mode
             void SetRenderingMode(E_RENDERING_MODE mode) override;
 
+            //! Begin shadow rendering
+            void BeginShadowRender() override;
+
+            //! End shadow rendering
+            void EndShadowRender() override;
+
         protected:
+            //! draw a normal mesh buffer depended on its type
+            virtual void DrawNormalMeshBuffer(const scene::IMeshBuffer* mesh_buffer);
+
+            //! draw a tangent mesh buffer depended on its type
+            virtual void DrawTangentMeshBuffer(const scene::IMeshBuffer* mesh_buffer);
+
             void UpdateMaxSupportLights() override;
 
             void SetMaterialUniform(s32 material_val_type, const void *val) const;
@@ -128,6 +140,8 @@ namespace kong
             const c8 *GetUniformName(s32 idx) const;
 
             IShaderHelper *shader_helper_;
+            IShaderHelper *shadow_shader_helper_;
+            IShaderHelper *base_shader_helper_;
 
             u32 vao_;
             u32 vbo_;

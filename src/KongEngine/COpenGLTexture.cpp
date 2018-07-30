@@ -3,6 +3,7 @@
 
 #include "KongCompileConfig.h"
 #include <GL/glew.h>
+#include "os.h"
 
 #ifdef _KONG_COMPILE_WITH_OPENGL_
 
@@ -22,8 +23,8 @@ namespace kong
         //! constructor for usual textures
         COpenGLTexture::COpenGLTexture(IImage* origImage, const io::path& name, void* mipmapData, COpenGLDriver* driver)
             : ITexture(name), ColorFormat(ECF_A8R8G8B8), driver_(driver), image_(nullptr), MipImage(nullptr),
-            texture_name_(0), InternalFormat(GL_RGBA), PixelFormat(GL_BGRA_EXT),
-            PixelType(GL_UNSIGNED_BYTE), MipLevelStored(0), MipmapLegacyMode(true),
+            texture_name_(0), internal_format_(GL_RGBA), pixel_format_(GL_BGRA_EXT),
+            pixel_type_(GL_UNSIGNED_BYTE), MipLevelStored(0), MipmapLegacyMode(true),
             is_render_target_(false), AutomaticMipmapUpdate(false),
             ReadOnlyLock(false), KeepImage(true)
         {
@@ -47,8 +48,8 @@ namespace kong
         //! constructor for basic setup (only for derived classes)
         COpenGLTexture::COpenGLTexture(const io::path& name, COpenGLDriver* driver)
             : ITexture(name), ColorFormat(ECF_A8R8G8B8), driver_(driver), image_(0), MipImage(0),
-            texture_name_(0), InternalFormat(GL_RGBA), PixelFormat(GL_BGRA_EXT),
-            PixelType(GL_UNSIGNED_BYTE), MipLevelStored(0), has_mip_maps_(true),
+            texture_name_(0), internal_format_(GL_RGBA), pixel_format_(GL_BGRA_EXT),
+            pixel_type_(GL_UNSIGNED_BYTE), MipLevelStored(0), has_mip_maps_(true),
             MipmapLegacyMode(true), is_render_target_(false), AutomaticMipmapUpdate(false),
             ReadOnlyLock(false), KeepImage(true)
         {
@@ -68,7 +69,7 @@ namespace kong
 
 
         //! Choose best matching color format, based on texture creation flags
-        ECOLOR_FORMAT COpenGLTexture::getBestColorFormat(ECOLOR_FORMAT format)
+        ECOLOR_FORMAT COpenGLTexture::GetBestColorFormat(ECOLOR_FORMAT format)
         {
             return format;
         }
@@ -365,14 +366,50 @@ namespace kong
         COpenGLFBOTexture::COpenGLFBOTexture(const core::Dimension2d<u32>& size,
             const io::path& name, COpenGLDriver* driver,
             ECOLOR_FORMAT format)
-            : COpenGLTexture(name, driver), DepthTexture(0), ColorFrameBuffer(0)
+            : COpenGLTexture(name, driver), depth_texture_(0), color_frame_buffer_(0)
         {
+            image_size_ = size;
+            texture_size_ = size;
+
+            if (ECF_UNKNOWN == format)
+                format = GetBestColorFormat(driver->GetColorFormat());
+
+            ColorFormat = format;
+
+            GLint filtering_type;
+            internal_format_ = getOpenGLFormatAndParametersFromColorFormat(format, filtering_type, pixel_format_, pixel_type_);
+
+            has_mip_maps_ = false;
+            is_render_target_ = true;
+
+            // generate frame buffer
+            glGenFramebuffers(1, &color_frame_buffer_);
+            COpenGLFBOTexture::bindRTT();
+
+            // generate color texture
+            glGenTextures(1, &texture_name_);
+            glBindTexture(GL_TEXTURE_2D, texture_name_);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering_type);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering_type);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexImage2D(GL_TEXTURE_2D, 0, internal_format_, image_size_.width_,
+                image_size_.height_, 0, pixel_format_, pixel_type_, 0);
+
+            // attach color texture to frame buffer
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture_name_, 0);
+
+#ifdef _DEBUG
+            checkFBOStatus(driver);
+#endif
+            COpenGLFBOTexture::unbindRTT();
         }
 
 
         //! destructor
         COpenGLFBOTexture::~COpenGLFBOTexture()
         {
+            glDeleteFramebuffers(1, &color_frame_buffer_);
         }
 
 
@@ -385,12 +422,17 @@ namespace kong
         //! Bind Render Target Texture
         void COpenGLFBOTexture::bindRTT()
         {
+            if (color_frame_buffer_ != 0)
+                glBindFramebuffer(GL_FRAMEBUFFER, color_frame_buffer_);
+            glDrawBuffer(GL_COLOR_ATTACHMENT0);
         }
 
 
         //! Unbind Render Target Texture
         void COpenGLFBOTexture::unbindRTT()
         {
+            if (color_frame_buffer_ != 0)
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
 
 
@@ -435,6 +477,62 @@ namespace kong
 
         bool checkFBOStatus(COpenGLDriver* Driver)
         {
+#ifdef GL_EXT_framebuffer_object
+            GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER_EXT);
+
+            switch (status)
+            {
+                //Our FBO is perfect, return true
+            case GL_FRAMEBUFFER_COMPLETE_EXT:
+                return true;
+
+            case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
+                os::Printer::log("FBO has invalid read buffer", ELL_ERROR);
+                break;
+
+            case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
+                os::Printer::log("FBO has invalid draw buffer", ELL_ERROR);
+                break;
+
+            case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+                os::Printer::log("FBO has one or several incomplete image attachments", ELL_ERROR);
+                break;
+
+            case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
+                os::Printer::log("FBO has one or several image attachments with different internal formats", ELL_ERROR);
+                break;
+
+            case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+                os::Printer::log("FBO has one or several image attachments with different dimensions", ELL_ERROR);
+                break;
+
+                // not part of fbo_object anymore, but won't harm as it is just a return value
+#ifdef GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT
+            case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT:
+                os::Printer::log("FBO has a duplicate image attachment", ELL_ERROR);
+                break;
+#endif
+
+            case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
+                os::Printer::log("FBO missing an image attachment", ELL_ERROR);
+                break;
+
+#ifdef GL_EXT_framebuffer_multisample
+            case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
+                os::Printer::log("FBO wrong multisample setup", ELL_ERROR);
+                break;
+#endif
+
+            case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
+                os::Printer::log("FBO format unsupported", ELL_ERROR);
+                break;
+
+            default:
+                break;
+            }
+#endif
+            os::Printer::log("FBO error", ELL_ERROR);
+            //	_IRR_DEBUG_BREAK_IF(true);
             return false;
         }
 

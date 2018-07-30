@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\include\CLightSceneNode.h" />
+    <ClCompile Include="..\..\include\CPlaneSceneNode.h" />
     <ClCompile Include="..\..\include\IMeshLoader.h" />
     <ClCompile Include="CFileSystem.cpp" />
     <ClCompile Include="CImage.cpp" />
@@ -97,6 +98,7 @@
     <ClCompile Include="COpenGLTexture.cpp" />
     <ClCompile Include="COrthogonalCameraSceneNode.cpp" />
     <ClCompile Include="CPerspectiveCameraSceneNode.cpp" />
+    <ClCompile Include="CPlaneSceneNode.cpp" />
     <ClCompile Include="CReadFile.cpp" />
     <ClCompile Include="CSceneManager.cpp" />
     <ClCompile Include="CWriteFile.cpp" />
@@ -296,8 +298,12 @@
     <ClInclude Include="zlib\zutil.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="base.fs.backup" />
+    <None Include="base.vs.backup" />
     <None Include="shaders\base.fs" />
     <None Include="shaders\base.vs" />
+    <None Include="shadow.fs" />
+    <None Include="shadow.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

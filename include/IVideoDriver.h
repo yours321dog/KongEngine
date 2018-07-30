@@ -321,6 +321,19 @@ namespace kong
             /** This method will change the rendering mode.
              * \param mode switch between wireframe and mesh rendering mode */
             virtual void SetRenderingMode(E_RENDERING_MODE mode = ERM_MESH) = 0;
+
+            //! Get the current color format of the color buffer
+            /** \return Color format of the color buffer. */
+            virtual ECOLOR_FORMAT GetColorFormat() const = 0;
+
+            //! Enable shadows.
+            virtual void EnableShadow(bool flag = true) = 0;
+
+            //! Begin shadow rendering
+            virtual void BeginShadowRender() = 0;
+
+            //! End shadow rendering
+            virtual void EndShadowRender() = 0;
         };
     }
 }
