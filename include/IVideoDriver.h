@@ -65,6 +65,11 @@ namespace kong
 #endif
 #endif
 #endif
+            //! Light view transform
+            ETS_LIGHT_VIEW,
+            //! Light projection trasform
+            ETS_LIGHT_PROJECTION,
+            
             //! Not used
             ETS_COUNT
         };
@@ -334,6 +339,16 @@ namespace kong
 
             //! End shadow rendering
             virtual void EndShadowRender() = 0;
+
+            //! Sets a new viewport.
+            /** Every rendering operation is done into this new area.
+            \param area: Rectangle defining the new area of rendering
+            operations. */
+            virtual void setViewPort(const core::rect<s32>& area) = 0;
+
+            //! Gets the area of the current viewport.
+            /** \return Rectangle of the current viewport. */
+            virtual const core::rect<s32>& getViewPort() const = 0;
         };
     }
 }

@@ -120,31 +120,89 @@ void TestFileSystem()
 class MyEventReceiver : public IEventReceiver
 {
 public:
+    enum MY_KEY_STATE
+    {
+        EKS_UP,
+        EKS_DOWN,
+        EKS_PRESSED,
+        EKS_RELEASED
+    };
     // This is the one method that we have to implement
     virtual bool OnEvent(const SEvent& event)
     {
         // Remember whether each key is down or up
         if (event.EventType == kong::EET_KEY_INPUT_EVENT)
-            KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
+        {
+            if (event.KeyInput.PressedDown)
+            {
+                if (key_state_[event.KeyInput.Key] == EKS_DOWN)
+                {
+                    key_state_[event.KeyInput.Key] = EKS_PRESSED;
+                }
+                else
+                {
+                    key_state_[event.KeyInput.Key] = EKS_DOWN;
+                }
+            }
+            else
+            {
+                if (key_state_[event.KeyInput.Key] != EKS_UP)
+                {
+                    key_state_[event.KeyInput.Key] = EKS_RELEASED;
+                }
+                else
+                {
+                    key_state_[event.KeyInput.Key] = EKS_UP;
+                }
+            }
+        }
 
         return false;
+    }
+
+    virtual bool StartEventProcess()
+    {
+        for (u32 i = 0; i < KEY_KEY_CODES_COUNT; ++i)
+        {
+            if (key_state_[i] == EKS_PRESSED)
+            {
+                key_state_[i] = EKS_DOWN;
+            }
+            if (key_state_[i] == EKS_RELEASED)
+            {
+                key_state_[i] = EKS_UP;
+            }
+        }
+
+        return true;
     }
 
     // This is used to check whether a key is being held down
     virtual bool IsKeyDown(EKEY_CODE keyCode) const
     {
-        return KeyIsDown[keyCode];
+        return key_state_[keyCode] == EKS_PRESSED || key_state_[keyCode] == EKS_DOWN;
+    }
+    virtual bool IsKeyUp(EKEY_CODE keyCode) const
+    {
+        return key_state_[keyCode] == EKS_UP || key_state_[keyCode] == EKS_RELEASED;
+    }
+
+    virtual bool IsKeyRelease(EKEY_CODE keyCode) const
+    {
+        return key_state_[keyCode] == EKS_RELEASED;
     }
 
     MyEventReceiver()
     {
-        for (u32 i = 0; i<KEY_KEY_CODES_COUNT; ++i)
-            KeyIsDown[i] = false;
+        for (u32 i = 0; i < KEY_KEY_CODES_COUNT; ++i)
+        {
+            key_state_[i] = EKS_UP;
+        }
     }
 
 private:
     // We use this array to store the current state of each key
-    bool KeyIsDown[KEY_KEY_CODES_COUNT];
+    MY_KEY_STATE key_state_[KEY_KEY_CODES_COUNT];
 };
 
 void TestWindow()
@@ -181,6 +239,7 @@ void TestWindow()
     Vector3Df node_rot(0.f, 0.f, 0.f);
     const f32 movement = 0.05;
     const f32 rotate_factor = 0.05;
+    bool shadow_on = false;
 
     while (device->run())
     {
@@ -246,6 +305,12 @@ void TestWindow()
             node_rot.z_ += rotate_factor;
         }
 
+        if (receiver.IsKeyRelease(kong::KEY_KEY_1))
+        {
+            smr->EnableShadow(shadow_on);
+            shadow_on = ~shadow_on;
+        }
+
 
         node->SetPosition(node_pos);
         node->SetRotation(node_rot);
@@ -272,38 +337,40 @@ void TestObjLoad()
     IVideoDriver *driver = device->GetVideoDriver();
     ISceneManager *smr = device->GetSceneManager();
 
-    //smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.3f, -1.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
-    smr->AddOrthogonalCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -1.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
+    smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.4f, -0.9f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
+    //smr->AddOrthogonalCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -1.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
     //IMesh * mesh = smr->getMesh("../../materials/honoka_noel.obj");
     //IMesh * mesh = smr->getMesh("../../materials/honoka_noel/source/Honoka_noel_.obj");
     //IMesh * mesh = smr->getMesh("../../materials/misaki_dress_sr/misaki.obj");
     //IMesh * mesh = smr->getMesh("../../materials/misaki_pinchos/Normal/Ponytail/misaki.obj");
-    //IMesh * mesh = smr->getMesh("../../materials/Misaki_Pemole/Models/Hairstyle A/misaki.obj");
-    IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
+    IMesh * mesh = smr->getMesh("../../materials/Misaki_Pemole/Models/Hairstyle A/misaki.obj");
+    //IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
     //ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(0.0003f, 0.0003f, 0.0003f));
     ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     node->NormalizeVertice();
     f32 distance = 5.f;
-    ISceneNode *bottom_plane_node = smr->AddPlaneSceneNode(distance * 2.f, nullptr, -1, Vector3Df(0.0f, 0.f, distance), Vector3Df(0.f, 0.f, 0.f), Vector3Df(5.f, 1.f, 1.f));
-    ISceneNode *back_plane_node = smr->AddPlaneSceneNode(distance * 2.f, nullptr, -1, Vector3Df(0.0f, -0.5f, 0.0f), Vector3Df(-PI / 2, 0.f, 0.f), Vector3Df(5.f, 1.f, 1.f));
+    ISceneNode *bottom_plane_node = smr->AddPlaneSceneNode(distance * 5.f, nullptr, -1, Vector3Df(0.0f, 0.f, distance), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
+    ISceneNode *back_plane_node = smr->AddPlaneSceneNode(distance * 5.f, nullptr, -1, Vector3Df(0.0f, -0.5f, 0.0f), Vector3Df(-PI / 2, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     //node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
     //node->EnableDrawBoundingBox(true);
 
-    ILightSceneNode *light_node = smr->AddLightSceneNode(nullptr, Vector3Df(2.f, 2.f, -2.f));
+    ILightSceneNode *light_node = smr->AddLightSceneNode(nullptr, Vector3Df(0.f, 0.f, -2.f));
     SLight light_data = light_node->GetLightData();
     light_data.ambient_color_ = SColorf(0.4f, 0.4f, 0.4f, 1.f);
     light_data.diffuse_color_ = SColorf(0.8f, 0.8f, 0.8f, 1.f);
     light_data.specular_color_ = SColorf(0.4f, 0.4f, 0.4f, 1.f);
-    //light_data.type_ = ELT_DIRECTIONAL;
+    light_data.type_ = ELT_DIRECTIONAL;
     //light_data.type_ = ELT_SPOT;
-    light_data.type_ = ELT_POINT;
+    //light_data.type_ = ELT_POINT;
     light_node->SetLightData(light_data);
-    light_node->SetRotation(Vector3Df(-PI / 8, PI / 4, 0.f));
+    //light_node->SetRotation(Vector3Df(-PI / 8, PI / 4, 0.f));
 
     Vector3Df node_pos(0.f, 0.f, 0.f);
     Vector3Df node_rot(0.f, PI, 0.f);
     f32 movement = 0.05;
     f32 rotate_factor = 0.05;
+    bool shadow_on = true;
+    smr->EnableShadow(shadow_on);
 
     while (device->run())
     {
@@ -369,6 +436,11 @@ void TestObjLoad()
             node_rot.z_ += rotate_factor;
         }
 
+        if (receiver.IsKeyRelease(kong::KEY_KEY_1))
+        {
+            smr->EnableShadow(shadow_on);
+            shadow_on = ~shadow_on;
+        }
 
         node->SetPosition(node_pos);
         node->SetRotation(node_rot);

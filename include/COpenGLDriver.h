@@ -148,6 +148,12 @@ namespace kong
             //! End shadow rendering
             void EndShadowRender() override;
 
+            //! Sets a new viewport.
+            void setViewPort(const core::rect<s32>& area) override;
+
+            //! Gets the area of the current viewport.
+            const core::rect<s32>& getViewPort() const override;
+
         protected:
             virtual void UpdateMaxSupportLights();
 
@@ -322,6 +328,14 @@ namespace kong
 
             // ! shadow enable flag
             bool shadow_enable_;
+
+            // clear buffer
+            bool color_buffer_clear_;
+            bool z_buffer_clear_;
+            SColor color_clear_;
+
+            // viewport
+            core::rect<s32> view_port_;
         };
     } // end namespace video
 } // end namespace kong

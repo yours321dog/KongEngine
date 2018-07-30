@@ -34,7 +34,7 @@ namespace kong
             const float fax = 2.f / height_;
             project_(0, 0) = fax / aspect_;
             project_(1, 1) = fax;
-            project_(2, 2) = 2 / (zf_ - zn_);
+            project_(2, 2) = 1 / (zf_ - zn_);
             project_(3, 2) = (zn_) / (zn_ - zf_);
             project_(3, 3) = 1;
         }

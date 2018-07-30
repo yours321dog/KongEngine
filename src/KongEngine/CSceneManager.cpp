@@ -20,7 +20,7 @@ namespace kong
     {
         CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem *fs)
             : ISceneNode(nullptr, nullptr), driver_(driver), shadow_color_(150, 0, 0, 0),
-            ambient_light_(0, 0, 0, 0), active_camera_(nullptr), file_system_(fs)
+            ambient_light_(0, 0, 0, 0), active_camera_(nullptr), file_system_(fs), shadow_enable_(false)
         {
 #ifdef _KONG_COMPILE_WITH_OBJ_LOADER_
             MeshLoaderList.PushBack(new COBJMeshFileLoader(this, fs));
@@ -249,6 +249,7 @@ namespace kong
 
         void CSceneManager::EnableShadow(bool flag)
         {
+            shadow_enable_ = flag;
             driver_->EnableShadow(flag);
         }
 
@@ -314,6 +315,27 @@ namespace kong
 
             // let all nodes register themselves
             OnRegisterSceneNode();
+
+            //render shadow
+            if (shadow_enable_)
+            {
+                driver_->BeginShadowRender();
+
+                // render lights
+                static_cast<ILightSceneNode *>(light_list_[0])->RenderShadow();
+
+                // render default objects
+                {
+                    for (u32 i = 0; i < solid_node_list_.Size(); ++i)
+                    {
+                        solid_node_list_[i].node_->Render();
+                    }
+
+                    //solid_node_list_.Resize(0);
+                }
+
+                driver_->EndShadowRender();
+            }
 
             //render lights scenes
             {

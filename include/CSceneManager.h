@@ -162,6 +162,9 @@ namespace kong
             core::Vector3Df cam_world_pos_;
 
             io::IFileSystem *file_system_;
+
+            // ! Render shadow
+            bool shadow_enable_;
         };
     }
 }

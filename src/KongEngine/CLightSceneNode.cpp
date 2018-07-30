@@ -52,6 +52,9 @@ namespace kong
 
             driver_light_index_ = driver->AddDynamicLight(light_data_);
             SetVisible(light_is_on_);
+
+            driver->SetTransform(video::ETS_LIGHT_PROJECTION, camera_->GetProjectTransform());
+            driver->SetTransform(video::ETS_LIGHT_VIEW, camera_->GetViewTransform());
         }
 
         const core::aabbox3d<f32>& CLightSceneNode::GetBoundingBox() const
@@ -142,7 +145,7 @@ namespace kong
             driver->SetTransform(video::ETS_VIEW, camera_->GetViewTransform());
             driver->SetTransform(video::ETS_PROJECTION, camera_->GetProjectTransform());
 
-            driver_light_index_ = driver->AddDynamicLight(light_data_);
+            //driver_light_index_ = driver->AddDynamicLight(light_data_);
         }
 
         void CLightSceneNode::DoLightRecalc()
@@ -167,6 +170,28 @@ namespace kong
             //    BBox.reset(0, 0, 0);
             //    setAutomaticCulling(scene::EAC_OFF);
             //}
+            DoCameraRecalc();
+        }
+
+        void CLightSceneNode::DoCameraRecalc()
+        {
+            if (camera_ == nullptr)
+                return;
+
+            camera_->LookAt(light_data_.position_ + light_data_.direction_);
+            camera_->SetUp(light_data_.direction_ + core::vector3df(0.f, 1.f, 0.f));
+            core::vector3df light_direction = light_data_.direction_;
+            light_direction.Normalize();
+            switch (light_data_.type_)
+            {
+            case video::ELT_DIRECTIONAL:
+                camera_->SetEye(light_direction * -10.f);
+                break;
+            case video::ELT_SPOT:
+            case video::ELT_POINT:
+                camera_->SetEye(light_data_.position_);
+            default:;
+            }
         }
 
         void CLightSceneNode::ResetCamera(bool delete_camera)
@@ -177,19 +202,21 @@ namespace kong
             }
             if (light_data_.type_ == video::ELT_DIRECTIONAL)
             {
-                camera_ = new COrthogonalCameraSceneNode(this, scene_manager_, -1, 10, 1, -1e2, 1e2);
+                camera_ = new COrthogonalCameraSceneNode(this, scene_manager_, -1, 5, 1, 0.1, 20);
             }
             else
             {
-                camera_ = new CPerspectiveCameraSceneNode(this, scene_manager_, -1, 360, 1.f, 0.0001, 50);
+                camera_ = new CPerspectiveCameraSceneNode(this, scene_manager_, -1, light_data_.outer_cone_ * 2, 1.f, 0.1, 20);
             }
 
             camera_->LookAt(light_data_.position_ + light_data_.direction_);
             camera_->SetUp(light_data_.direction_ + core::vector3df(0.f, 1.f, 0.f));
+            core::vector3df light_direction = light_data_.direction_;
+            light_direction.Normalize();
             switch (light_data_.type_)
             {
             case video::ELT_DIRECTIONAL:
-                camera_->SetEye(light_data_.direction_ * -1e2);
+                camera_->SetEye(light_direction * -10.f);
                 break;
             case video::ELT_SPOT:
             case video::ELT_POINT:

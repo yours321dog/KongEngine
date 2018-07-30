@@ -38,6 +38,17 @@ namespace kong
         return absorbed;
     }
 
+    bool CKongDeviceStub::StartEventFromUser() const
+    {
+        bool absorbed = false;
+        if (user_receiver_ != nullptr)
+        {
+            absorbed = user_receiver_->StartEventProcess();
+        }
+
+        return absorbed;
+    }
+
     core::Dimension2d<u32> CKongDeviceStub::GetWindowSize()
     {
         return create_params_.window_size_;

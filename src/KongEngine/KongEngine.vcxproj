@@ -299,9 +299,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\base.fs" />
-    <None Include="shaders\base.fs.backup" />
     <None Include="shaders\base.vs" />
-    <None Include="shaders\base.vs.backup" />
     <None Include="shaders\shadow.fs" />
     <None Include="shaders\shadow.vs" />
   </ItemGroup>

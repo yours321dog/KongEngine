@@ -35,8 +35,8 @@ namespace kong
                 return false;
             }
 
-            //shader_helper_ = new COpenGLShaderHelper(io_, vertex_path_, fragment_path_);
-            shader_helper_ = new COpenGLShaderHelper(io_, io::SPath("./shaders/shadow.vs"), io::SPath("./shaders/shadow.fs"));
+            shader_helper_ = new COpenGLShaderHelper(io_, vertex_path_, fragment_path_);
+            //shader_helper_ = new COpenGLShaderHelper(io_, io::SPath("./shaders/shadow.vs"), io::SPath("./shaders/shadow.fs"));
             base_shader_helper_ = shader_helper_;
             shadow_shader_helper_ = new COpenGLShaderHelper(io_, io::SPath("./shaders/shadow.vs"), io::SPath("./shaders/shadow.fs"));
 
@@ -120,6 +120,12 @@ namespace kong
                 break;
             case ETS_PROJECTION:
                 shader_helper_->SetMatrix4(std::string("project_transform"), mat);
+                break;
+            case ETS_LIGHT_VIEW:
+                shader_helper_->SetMatrix4(std::string("light_view_transform"), mat);
+                break;
+            case ETS_LIGHT_PROJECTION:
+                shader_helper_->SetMatrix4(std::string("light_projection_transform"), mat);
                 break;
             case ETS_COUNT:
             default:
@@ -282,6 +288,8 @@ namespace kong
 
         void COpenGLShaderDriver::BeginShadowRender()
         {
+            glViewport(0, 0, 1024, 1024);
+
             shader_helper_ = shadow_shader_helper_;
             shader_helper_->Use();
             if (shadow_depth_texture_ != nullptr && shadow_depth_texture_->isFrameBufferObject())
@@ -289,7 +297,7 @@ namespace kong
                 shadow_depth_texture_->bindRTT();
             }
 
-            DeleteAllDynamicLights();
+            ClearBuffers(color_buffer_clear_, z_buffer_clear_, false, color_clear_);
         }
 
         void COpenGLShaderDriver::EndShadowRender()
@@ -300,6 +308,12 @@ namespace kong
 
             DeleteAllDynamicLights();
 
+            glViewport(0, 0, params_.window_size_.width_, params_.window_size_.height_);
+
+            shader_helper_->SetInt(GetUniformName(SL_TEXTURE0 + 2), 2);
+            glActiveTexture(GL_TEXTURE0 + 2);
+            glBindTexture(GL_TEXTURE_2D, dynamic_cast<const COpenGLTexture*>(shadow_depth_texture_)->GetOpenGLTextureName());
+            shader_helper_->SetBool("shadow_on", true);
         }
 
         void COpenGLShaderDriver::DrawNormalMeshBuffer(const scene::IMeshBuffer* mesh_buffer)

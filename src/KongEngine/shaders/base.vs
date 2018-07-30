@@ -24,8 +24,17 @@ out vec4 world_normal;
 out vec4 world_tangent;
 out vec4 world_bitangent;
 
+out vec4 light_position;
+
 // normal mapping flag
 uniform bool normal_mapping_on;
+
+// shadow mapping flag
+uniform bool shadow_on;
+
+// light transform
+uniform mat4 light_view_transform;
+uniform mat4 light_projection_transform;
 
 void main()
 {
@@ -36,16 +45,15 @@ void main()
 
 	world_position = world_transform * vec4(aPos.x, aPos.y, aPos.z, 1.0);
 	
-//	world_normal = transpose(inverse(world_transform)) * vec4(aNormal.xyz, 0.0);
 	world_normal = world_transform * vec4(aNormal.xyz, 0.0);
 	if (normal_mapping_on)
 	{
 		world_tangent = world_transform * vec4(aTangent, 0.0);
 		world_bitangent = world_transform * vec4(aBitangent, 0.0);
-		world_normal = world_transform * vec4(aNormal.xyz, 0.0);
 	}
-//	else
-//	{
-//		world_normal = transpose(inverse(world_transform)) * vec4(aNormal.xyz, 0.0);
-//	}
+
+	if (shadow_on)
+	{
+		light_position = light_projection_transform * light_view_transform * world_position;
+	}
 }

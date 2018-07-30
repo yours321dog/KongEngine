@@ -188,6 +188,9 @@ namespace kong
         bool COpenGLDriver::BeginScene(bool back_buffer, bool z_buffer, SColor color)
         {
             ClearBuffers(back_buffer, z_buffer, false, color);
+            color_buffer_clear_ = back_buffer;
+            z_buffer_clear_ = z_buffer;
+            color_clear_ = color;
             return true;
         }
 
@@ -860,7 +863,7 @@ namespace kong
 
             if (shadow_depth_texture_ == nullptr)
             {
-                shadow_depth_texture_ = new COpenGLFBOTexture(core::Dimension2d<u32>(2048, 2048), io::path(), this);
+                shadow_depth_texture_ = new COpenGLFBOTexture(core::Dimension2d<u32>(1024, 1024), io::path(), this);
             }
         }
 
@@ -870,6 +873,27 @@ namespace kong
 
         void COpenGLDriver::EndShadowRender()
         {
+        }
+
+        void COpenGLDriver::setViewPort(const core::rect<s32>& area)
+        {
+            if (area == view_port_)
+                return;
+            core::rect<s32> vp = area;
+            core::rect<s32> rendert(0, 0, GetCurrentRenderTargetSize().width_, GetCurrentRenderTargetSize().height_);
+            vp.clipAgainst(rendert);
+
+            if (vp.getHeight()>0 && vp.getWidth()>0)
+            {
+                glViewport(vp.UpperLeftCorner.x_, GetCurrentRenderTargetSize().height_ - vp.UpperLeftCorner.y_ - vp.getHeight(), vp.getWidth(), vp.getHeight());
+
+                view_port_ = vp;
+            }
+        }
+
+        const core::rect<s32>& COpenGLDriver::getViewPort() const
+        {
+            return view_port_;
         }
 
         void COpenGLDriver::UpdateMaxSupportLights()

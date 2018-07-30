@@ -445,6 +445,9 @@ namespace kong
         \return True if the event was processed.
         */
         virtual bool OnEvent(const SEvent& event) = 0;
+
+        //! Called after a single loop
+        virtual bool StartEventProcess() = 0;
     };
 
 

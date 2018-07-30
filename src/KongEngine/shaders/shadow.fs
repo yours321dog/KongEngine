@@ -20,6 +20,7 @@ uniform Light light0;
 void main()
 {
     //FragColor.r = gl_Position.z;
-//    FragColor.r = gl_FragCoord.z;
     FragColor = vec4(gl_FragCoord.z, 0.0, 0.0, 1.0);
+//    FragColor = vec4(vec3(pow(gl_FragColor.z, 1)), 1.0);
+//    FragColor = vec4(pow(gl_FragCoord.z, 5), 0.0, 0.0, 1.0);
 }

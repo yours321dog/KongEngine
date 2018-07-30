@@ -10,6 +10,8 @@ in vec4 world_normal;
 in vec4 world_tangent;
 in vec4 world_bitangent;
 
+in vec4 light_position;
+
 struct Light
 {
     vec4 position;
@@ -58,6 +60,21 @@ uniform int wireframe_on;
 uniform vec4 cam_position;
 
 uniform Material material;
+
+// shadow mapping
+uniform sampler2D texture2;
+uniform bool shadow_on;
+
+float CaluateShadowFactor()
+{
+    vec2 shadow_uv = light_position.xy * 0.5 + 0.5;
+//    shadow_uv.y = 1.0 - shadow_uv.y;
+    float closest_depth = texture(texture2, shadow_uv).r;
+
+    float bias = 0.000f;
+    float shadow = pow(light_position.z, 10) + bias <= closest_depth ? 1.0 : 0.0;
+    return shadow;
+}
 
 vec4 CalculateLight(Light light, bool light_n_on)
 {
@@ -136,7 +153,14 @@ vec4 CalculateLight(Light light, bool light_n_on)
             res_specular = specular_factor * (light.specular * material.specular);
         }
 
-        return res_ambient + light_attenuation * (res_diffuse + res_specular);
+        // calculate shadow factor
+        float shadow_factor_val = 1.f;
+        if (shadow_on)
+        {
+            shadow_factor_val = CaluateShadowFactor();
+        }
+
+        return res_ambient + shadow_factor_val * light_attenuation * (res_diffuse + res_specular);
 //        return res_diffuse;
     }
 }

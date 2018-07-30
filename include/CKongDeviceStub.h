@@ -30,6 +30,9 @@ namespace kong
         // handle event
         bool PostEventFromUser(const SEvent &post_event) const;
 
+        // start event process
+        bool StartEventFromUser() const;
+
         //! Get window size
         core::Dimension2d<u32> GetWindowSize() override;
 

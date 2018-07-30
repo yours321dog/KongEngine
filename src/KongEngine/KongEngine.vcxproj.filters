@@ -727,12 +727,6 @@
     <None Include="shaders\base.vs">
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>
-    <None Include="shaders\base.fs.backup">
-      <Filter>KongEngine\video\OpenGL\shaders</Filter>
-    </None>
-    <None Include="shaders\base.vs.backup">
-      <Filter>KongEngine\video\OpenGL\shaders</Filter>
-    </None>
     <None Include="shaders\shadow.fs">
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>

@@ -245,6 +245,8 @@ namespace kong
 
     bool CKongDeviceWin32::run()
     {
+        StartEventFromUser();
+
         ScreenDispatch();
 
         if (screen_exit == 1)

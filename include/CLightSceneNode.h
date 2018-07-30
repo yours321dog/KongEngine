@@ -69,6 +69,7 @@ namespace kong
 
         private:
             void DoLightRecalc();
+            void DoCameraRecalc();
             void ResetCamera(bool delete_camera = false);
 
             video::SLight light_data_;
