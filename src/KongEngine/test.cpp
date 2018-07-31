@@ -343,12 +343,12 @@ void TestObjLoad()
     //IMesh * mesh = smr->getMesh("../../materials/honoka_noel/source/Honoka_noel_.obj");
     //IMesh * mesh = smr->getMesh("../../materials/misaki_dress_sr/misaki.obj");
     //IMesh * mesh = smr->getMesh("../../materials/misaki_pinchos/Normal/Ponytail/misaki.obj");
-    IMesh * mesh = smr->getMesh("../../materials/Misaki_Pemole/Models/Hairstyle A/misaki.obj");
-    //IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
+    //IMesh * mesh = smr->getMesh("../../materials/Misaki_Pemole/Models/Hairstyle A/misaki.obj");
+    IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
     //ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(0.0003f, 0.0003f, 0.0003f));
     ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     node->NormalizeVertice();
-    f32 distance = 5.f;
+    f32 distance = 1.f;
     ISceneNode *bottom_plane_node = smr->AddPlaneSceneNode(distance * 5.f, nullptr, -1, Vector3Df(0.0f, 0.f, distance), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     ISceneNode *back_plane_node = smr->AddPlaneSceneNode(distance * 5.f, nullptr, -1, Vector3Df(0.0f, -0.5f, 0.0f), Vector3Df(-PI / 2, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     //node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
@@ -363,7 +363,7 @@ void TestObjLoad()
     //light_data.type_ = ELT_SPOT;
     //light_data.type_ = ELT_POINT;
     light_node->SetLightData(light_data);
-    //light_node->SetRotation(Vector3Df(-PI / 8, PI / 4, 0.f));
+    light_node->SetRotation(Vector3Df(-PI / 8, PI / 4, 0.f));
 
     Vector3Df node_pos(0.f, 0.f, 0.f);
     Vector3Df node_rot(0.f, PI, 0.f);
@@ -376,11 +376,11 @@ void TestObjLoad()
     {
         driver->BeginScene();
 
-        if (receiver.IsKeyDown(kong::KEY_KEY_W))
+        if (receiver.IsKeyDown(kong::KEY_KEY_Q))
         {
             node_pos.y_ += movement;
         }
-        else if (receiver.IsKeyDown(kong::KEY_KEY_S))
+        else if (receiver.IsKeyDown(kong::KEY_KEY_E))
         {
             node_pos.y_ -= movement;
         }
@@ -394,11 +394,11 @@ void TestObjLoad()
             node_pos.x_ += movement;
         }
 
-        if (receiver.IsKeyDown(kong::KEY_KEY_Q))
+        if (receiver.IsKeyDown(kong::KEY_KEY_S))
         {
             node_pos.z_ -= movement;
         }
-        else if (receiver.IsKeyDown(kong::KEY_KEY_E))
+        else if (receiver.IsKeyDown(kong::KEY_KEY_W))
         {
             node_pos.z_ += movement;
         }

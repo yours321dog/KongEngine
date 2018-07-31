@@ -256,9 +256,12 @@ namespace kong
                     for (u32 i = 1; i < faceCorners.Size() - 1; ++i)
                     {
                         // Add a triangle
-                        currMtl->Meshbuffer->indices_.PushBack(faceCorners[i + 1]);
-                        currMtl->Meshbuffer->indices_.PushBack(faceCorners[i]);
+                        //currMtl->Meshbuffer->indices_.PushBack(faceCorners[i + 1]);
+                        //currMtl->Meshbuffer->indices_.PushBack(faceCorners[i]);
+                        //currMtl->Meshbuffer->indices_.PushBack(faceCorners[0]);
                         currMtl->Meshbuffer->indices_.PushBack(faceCorners[0]);
+                        currMtl->Meshbuffer->indices_.PushBack(faceCorners[i]);
+                        currMtl->Meshbuffer->indices_.PushBack(faceCorners[i + 1]);
                     }
                     faceCorners.Resize(0); // fast clear
                     faceCorners.Reallocate(32); 
@@ -274,6 +277,21 @@ namespace kong
             }	// end while(bufPtr && (bufPtr-buf<filesize))
 
             SMesh* mesh = new SMesh();
+
+            //// Reorder all vertices(CCW)
+            //for (u32 m = 0; m < Materials.Size(); ++m)
+            //{
+            //    if (Materials[m]->Meshbuffer->GetIndexCount() > 0)
+            //    {
+            //        const u32 count_indices = Materials[m]->Meshbuffer->GetIndexCount();
+            //        const video::S3DVertex *vtx = static_cast<video::S3DVertex*>(Materials[m]->Meshbuffer->GetVertices());
+            //        u16 *indices = Materials[m]->Meshbuffer->GetIndices();
+            //        for (u32 i = 0; i < count_indices; i++)
+            //        {
+
+            //        }
+            //    }
+            //}
 
             // Combine all the groups (meshbuffers) into the mesh
             for (u32 m = 0; m < Materials.Size(); ++m)

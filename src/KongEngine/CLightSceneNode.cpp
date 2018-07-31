@@ -202,7 +202,7 @@ namespace kong
             }
             if (light_data_.type_ == video::ELT_DIRECTIONAL)
             {
-                camera_ = new COrthogonalCameraSceneNode(this, scene_manager_, -1, 5, 1, 0.1, 20);
+                camera_ = new COrthogonalCameraSceneNode(this, scene_manager_, -1, 10, 1, 0.1, 15);
             }
             else
             {
@@ -216,7 +216,7 @@ namespace kong
             switch (light_data_.type_)
             {
             case video::ELT_DIRECTIONAL:
-                camera_->SetEye(light_direction * -10.f);
+                camera_->SetEye(light_direction * -1.f);
                 break;
             case video::ELT_SPOT:
             case video::ELT_POINT:

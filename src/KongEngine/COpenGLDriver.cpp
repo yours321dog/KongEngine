@@ -863,7 +863,7 @@ namespace kong
 
             if (shadow_depth_texture_ == nullptr)
             {
-                shadow_depth_texture_ = new COpenGLFBOTexture(core::Dimension2d<u32>(1024, 1024), io::path(), this);
+                shadow_depth_texture_ = new COpenGLFBOTexture(core::Dimension2d<u32>(1024, 1024), io::path(), this, true);
             }
         }
 

@@ -17,10 +17,12 @@ struct Light
 
 uniform Light light0;
 
+in vec4 light_position;
+
 void main()
 {
-    //FragColor.r = gl_Position.z;
-    FragColor = vec4(gl_FragCoord.z, 0.0, 0.0, 1.0);
-//    FragColor = vec4(vec3(pow(gl_FragColor.z, 1)), 1.0);
-//    FragColor = vec4(pow(gl_FragCoord.z, 5), 0.0, 0.0, 1.0);
+//    FragColor.r = 0.5;
+//    FragColor = vec4(light_position.z, 0.0, 0.0, 1.0);
+//    FragColor = vec4(vec3(0.5), 1.0);
+    FragColor = vec4(light_position.z / light_position.w, 0.0, 0.0, 1.0);
 }

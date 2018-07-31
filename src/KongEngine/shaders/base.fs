@@ -43,6 +43,8 @@ const int ERM_BOTH      = 0x00000002;
 // texture control flags
 uniform sampler2D texture0;
 uniform sampler2D texture1;
+uniform sampler2D texture2;
+uniform sampler2D texture3;
 uniform bool texture0_on;
 uniform bool texture1_on;
 
@@ -62,17 +64,17 @@ uniform vec4 cam_position;
 uniform Material material;
 
 // shadow mapping
-uniform sampler2D texture2;
+uniform sampler2D texture4;
 uniform bool shadow_on;
 
 float CaluateShadowFactor()
 {
     vec2 shadow_uv = light_position.xy * 0.5 + 0.5;
 //    shadow_uv.y = 1.0 - shadow_uv.y;
-    float closest_depth = texture(texture2, shadow_uv).r;
+    float closest_depth = texture(texture4, shadow_uv).r;
 
     float bias = 0.000f;
-    float shadow = pow(light_position.z, 10) + bias <= closest_depth ? 1.0 : 0.0;
+    float shadow = light_position.z / light_position.w - bias <= closest_depth ? 1.0 : 0.0;
     return shadow;
 }
 

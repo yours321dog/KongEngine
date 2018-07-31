@@ -298,20 +298,27 @@ namespace kong
             }
 
             ClearBuffers(color_buffer_clear_, z_buffer_clear_, false, color_clear_);
+            glEnable(GL_CULL_FACE); // enables face culling    
+            glCullFace(GL_FRONT); // tells OpenGL to cull back faces (the sane default setting)
         }
 
         void COpenGLShaderDriver::EndShadowRender()
         {
+            //glCullFace(GL_BACK); // tells OpenGL to cull back faces (the sane default setting)
+            //glDisable(GL_CULL_FACE); // enables face culling    
             shader_helper_ = base_shader_helper_;
             shader_helper_->Use();
             shadow_depth_texture_->unbindRTT();
+
+            glCullFace(GL_BACK); // tells OpenGL to cull back faces (the sane default setting)
+            glDisable(GL_CULL_FACE); // enables face culling    
 
             DeleteAllDynamicLights();
 
             glViewport(0, 0, params_.window_size_.width_, params_.window_size_.height_);
 
-            shader_helper_->SetInt(GetUniformName(SL_TEXTURE0 + 2), 2);
-            glActiveTexture(GL_TEXTURE0 + 2);
+            shader_helper_->SetInt(GetUniformName(SL_TEXTURE0 + 4), 4);
+            glActiveTexture(GL_TEXTURE0 + 4);
             glBindTexture(GL_TEXTURE_2D, dynamic_cast<const COpenGLTexture*>(shadow_depth_texture_)->GetOpenGLTextureName());
             shader_helper_->SetBool("shadow_on", true);
         }

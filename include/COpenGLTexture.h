@@ -152,7 +152,7 @@ namespace kong
 
             //! FrameBufferObject constructor
             COpenGLFBOTexture(const core::Dimension2d<u32>& size, const io::path& name,
-                COpenGLDriver* driver = 0, ECOLOR_FORMAT format = ECF_UNKNOWN);
+                COpenGLDriver* driver = 0, bool depth_test = false, ECOLOR_FORMAT format = ECF_UNKNOWN);
 
             //! destructor
             virtual ~COpenGLFBOTexture();
@@ -169,6 +169,7 @@ namespace kong
             ITexture* depth_texture_;
         protected:
             GLuint color_frame_buffer_;
+            GLuint depth_render_buffer_;
         };
 
 
@@ -191,9 +192,9 @@ namespace kong
             bool attach(ITexture*);
 
         protected:
-            GLuint DepthRenderBuffer;
-            GLuint StencilRenderBuffer;
-            bool UseStencil;
+            GLuint depth_render_buffer_;
+            GLuint stencil_render_buffer_;
+            bool use_stencil_;
         };
 
 

@@ -82,29 +82,64 @@ namespace kong
         {
             SMeshBuffer *buffer = new SMeshBuffer();
 
-            const u16 indices[6] = {
-                0, 1, 2, 0, 2, 3
+            const u16 indices[36] = {
+                0, 1, 2, 0, 2, 3,
+                4, 5, 6, 4, 6, 7,
+                8, 9, 10, 8, 10, 11,
+                12, 13, 14, 12, 14, 15,
+                16, 17, 18, 16, 18, 19,
+                20, 21, 22, 20, 22, 23
             };
 
-            const video::SColor clr_t = video::SColor(255, 128, 128, 128);
-            const video::SColor clr_b = video::SColor(255, 196, 196, 196);
+            const video::SColor clr_b = video::SColor(255, 128, 128, 128);
+            const video::SColor clr_t = video::SColor(255, 150, 150, 150);
 
             buffer->vertices_.Reallocate(24);
 
             const f32 len = size_ / 2.f;
+            const f32 height = 0.005f;
 
-            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, 0.f, 0.f, 0.f, -1.f, clr_b, 0.f, 1.f));
-            buffer->vertices_.PushBack(video::S3DVertex(len, -len, 0.f, 0.f, 0.f, -1.f, clr_b, 1.f, 1.f));
-            buffer->vertices_.PushBack(video::S3DVertex(len, len, 0.f, 0.f, 0.f, -1.f, clr_t, 1.f, 0.f));
-            buffer->vertices_.PushBack(video::S3DVertex(-len, len, 0.f, 0.f, 0.f, -1.f, clr_t, 0.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, -height, 0.f, 0.f, -1.f, clr_b, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, -len, -height, 0.f, 0.f, -1.f, clr_b, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, -height, 0.f, 0.f, -1.f, clr_t, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, -height, 0.f, 0.f, -1.f, clr_t, 0.f, 0.f));
+
+            buffer->vertices_.PushBack(video::S3DVertex(len, -len, -height, 1.f, 0.f, 0.f, clr_b, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, -len, height, 1.f, 0.f, 0.f, clr_b, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, height, 1.f, 0.f, 0.f, clr_t, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, -height, 1.f, 0.f, 0.f, clr_t, 0.f, 0.f));
+
+            buffer->vertices_.PushBack(video::S3DVertex(len, -len, height, 0.f, 0.f, 1.f, clr_b, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, height, 0.f, 0.f, 1.f, clr_b, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, height, 0.f, 0.f, 1.f, clr_t, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, height, 0.f, 0.f, 1.f, clr_t, 0.f, 0.f));
+
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, height, -1.f, 0.f, 0.f, clr_b, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, -height, -1.f, 0.f, 0.f, clr_b, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, -height, -1.f, 0.f, 0.f, clr_t, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, height, -1.f, 0.f, 0.f, clr_t, 0.f, 0.f));
+
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, -height, 0.f, 1.f, 0.f, clr_t, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, -height, 0.f, 1.f, 0.f, clr_t, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, len, height, 0.f, 1.f, 0.f, clr_t, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, len, height, 0.f, 1.f, 0.f, clr_t, 0.f, 0.f));
+
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, height, 0.f, -1.f, 0.f, clr_b, 0.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, -len, height, 0.f, -1.f, 0.f, clr_b, 1.f, 1.f));
+            buffer->vertices_.PushBack(video::S3DVertex(len, -len, -height, 0.f, -1.f, 0.f, clr_b, 1.f, 0.f));
+            buffer->vertices_.PushBack(video::S3DVertex(-len, -len, -height, 0.f, -1.f, 0.f, clr_b, 0.f, 0.f));
 
             buffer->indices_.Reallocate(36);
 
             // reallocate the barycentric buffer
-            buffer->vertices_[0].barycentric_ = core::vector3df(1.f, 0.f, 0.f);
-            buffer->vertices_[1].barycentric_ = core::vector3df(0.f, 1.f, 0.f);
-            buffer->vertices_[2].barycentric_ = core::vector3df(0.f, 0.f, 1.f);
-            buffer->vertices_[3].barycentric_ = core::vector3df(0.f, 1.f, 0.f);
+            for (int i = 0; i < 6; i++)
+            {
+                int idx = i * 4;
+                buffer->vertices_[idx].barycentric_ = core::vector3df(1.f, 0.f, 0.f);
+                buffer->vertices_[idx + 1].barycentric_ = core::vector3df(0.f, 1.f, 0.f);
+                buffer->vertices_[idx + 2].barycentric_ = core::vector3df(0.f, 0.f, 1.f);
+                buffer->vertices_[idx + 3].barycentric_ = core::vector3df(0.f, 1.f, 0.f);
+            }
 
             for (auto indice : indices)
             {

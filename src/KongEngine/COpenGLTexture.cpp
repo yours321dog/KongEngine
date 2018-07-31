@@ -364,9 +364,8 @@ namespace kong
 
         //! RTT ColorFrameBuffer constructor
         COpenGLFBOTexture::COpenGLFBOTexture(const core::Dimension2d<u32>& size,
-            const io::path& name, COpenGLDriver* driver,
-            ECOLOR_FORMAT format)
-            : COpenGLTexture(name, driver), depth_texture_(0), color_frame_buffer_(0)
+            const io::path& name, COpenGLDriver* driver, bool depth_test, ECOLOR_FORMAT format)
+            : COpenGLTexture(name, driver), depth_texture_(0), color_frame_buffer_(0), depth_render_buffer_(0)
         {
             image_size_ = size;
             texture_size_ = size;
@@ -389,12 +388,23 @@ namespace kong
             // generate color texture
             glGenTextures(1, &texture_name_);
             glBindTexture(GL_TEXTURE_2D, texture_name_);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering_type);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering_type);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering_type);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering_type);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexImage2D(GL_TEXTURE_2D, 0, internal_format_, image_size_.width_,
                 image_size_.height_, 0, pixel_format_, pixel_type_, 0);
+
+            if (depth_test)
+            {
+                // The depth buffer
+                glGenRenderbuffers(1, &depth_render_buffer_);
+                glBindRenderbuffer(GL_RENDERBUFFER, depth_render_buffer_);
+                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, image_size_.width_, image_size_.height_);
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_render_buffer_);
+            }
 
             // attach color texture to frame buffer
             glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture_name_, 0);
@@ -444,8 +454,8 @@ namespace kong
             const io::path& name,
             COpenGLDriver* driver,
             bool useStencil)
-            : COpenGLTexture(name, driver), DepthRenderBuffer(0),
-            StencilRenderBuffer(0), UseStencil(useStencil)
+            : COpenGLTexture(name, driver), depth_render_buffer_(0),
+            stencil_render_buffer_(0), use_stencil_(useStencil)
         {
         }
 
