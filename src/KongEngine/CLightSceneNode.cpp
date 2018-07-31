@@ -148,6 +148,35 @@ namespace kong
             //driver_light_index_ = driver->AddDynamicLight(light_data_);
         }
 
+        void CLightSceneNode::RecalculateLightBoundingBox(core::aabbox3df &box)
+        {
+            core::vector3df corners[8];
+
+            corners[0] = core::vector3df(box.MinEdge.x_, box.MinEdge.y_, box.MinEdge.z_);
+            corners[1] = core::vector3df(box.MinEdge.x_, box.MinEdge.y_, box.MaxEdge.z_);
+            corners[2] = core::vector3df(box.MinEdge.x_, box.MaxEdge.y_, box.MinEdge.z_);
+            corners[3] = core::vector3df(box.MinEdge.x_, box.MaxEdge.y_, box.MaxEdge.z_);
+            corners[4] = core::vector3df(box.MaxEdge.x_, box.MinEdge.y_, box.MinEdge.z_);
+            corners[5] = core::vector3df(box.MaxEdge.x_, box.MinEdge.y_, box.MaxEdge.z_);
+            corners[6] = core::vector3df(box.MaxEdge.x_, box.MaxEdge.y_, box.MinEdge.z_);
+            corners[7] = core::vector3df(box.MaxEdge.x_, box.MaxEdge.y_, box.MaxEdge.z_);
+
+            core::Matrixf view_transform = camera_->GetViewTransform();
+            corners[0] = view_transform.Apply(corners[0]);
+            corners[1] = view_transform.Apply(corners[1]);
+            corners[2] = view_transform.Apply(corners[2]);
+            corners[3] = view_transform.Apply(corners[3]);
+            corners[4] = view_transform.Apply(corners[4]);
+            corners[5] = view_transform.Apply(corners[5]);
+            corners[6] = view_transform.Apply(corners[6]);
+            corners[7] = view_transform.Apply(corners[7]);
+
+            for (u32 i = 0; i < 8; ++i)
+            {
+                light_bounding_box_.addInternalPoint(corners[i]);
+            }
+        }
+
         void CLightSceneNode::DoLightRecalc()
         {
             if ((light_data_.type_ == video::ELT_SPOT) || (light_data_.type_ == video::ELT_DIRECTIONAL))

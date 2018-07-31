@@ -292,9 +292,9 @@ namespace kong
 
             shader_helper_ = shadow_shader_helper_;
             shader_helper_->Use();
-            if (shadow_depth_texture_ != nullptr && shadow_depth_texture_->isFrameBufferObject())
+            if (shadow_color_texture_ != nullptr && shadow_color_texture_->isFrameBufferObject())
             {
-                shadow_depth_texture_->bindRTT();
+                shadow_color_texture_->bindRTT();
             }
 
             ClearBuffers(color_buffer_clear_, z_buffer_clear_, false, color_clear_);
@@ -308,7 +308,7 @@ namespace kong
             //glDisable(GL_CULL_FACE); // enables face culling    
             shader_helper_ = base_shader_helper_;
             shader_helper_->Use();
-            shadow_depth_texture_->unbindRTT();
+            shadow_color_texture_->unbindRTT();
 
             glCullFace(GL_BACK); // tells OpenGL to cull back faces (the sane default setting)
             glDisable(GL_CULL_FACE); // enables face culling    

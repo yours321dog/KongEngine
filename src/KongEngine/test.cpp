@@ -340,11 +340,11 @@ void TestObjLoad()
     smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.4f, -0.9f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
     //smr->AddOrthogonalCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -1.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
     //IMesh * mesh = smr->getMesh("../../materials/honoka_noel.obj");
-    //IMesh * mesh = smr->getMesh("../../materials/honoka_noel/source/Honoka_noel_.obj");
+    IMesh * mesh = smr->getMesh("../../materials/honoka_noel/source/Honoka_noel_.obj");
     //IMesh * mesh = smr->getMesh("../../materials/misaki_dress_sr/misaki.obj");
     //IMesh * mesh = smr->getMesh("../../materials/misaki_pinchos/Normal/Ponytail/misaki.obj");
     //IMesh * mesh = smr->getMesh("../../materials/Misaki_Pemole/Models/Hairstyle A/misaki.obj");
-    IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
+    //IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
     //ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(0.0003f, 0.0003f, 0.0003f));
     ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     node->NormalizeVertice();

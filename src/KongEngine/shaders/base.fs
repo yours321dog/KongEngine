@@ -71,10 +71,10 @@ float CaluateShadowFactor()
 {
     vec2 shadow_uv = light_position.xy * 0.5 + 0.5;
 //    shadow_uv.y = 1.0 - shadow_uv.y;
-    float closest_depth = texture(texture4, shadow_uv).r;
+    float closest_depth = texture(texture4, shadow_uv).x;
 
     float bias = 0.000f;
-    float shadow = light_position.z / light_position.w - bias <= closest_depth ? 1.0 : 0.0;
+    float shadow = light_position.z - bias <= closest_depth ? 1.0 : 0.0;
     return shadow;
 }
 
@@ -215,5 +215,8 @@ void main()
         }
     }
 //    FragColor = vec4(1.0f, 0.f, 0.f, 1.f);
-    //FragColor = vec4(world_normal.xyz, 1.f);
+//    vec2 shadow_uv = light_position.xy * 0.5 + 0.5;
+////    shadow_uv.y = 1.0 - shadow_uv.y;
+//    float closest_depth = texture(texture4, shadow_uv).x;
+//    FragColor = vec4(closest_depth, 0, 0, 1.f);
 } 

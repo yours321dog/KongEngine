@@ -454,22 +454,109 @@ namespace kong
             const io::path& name,
             COpenGLDriver* driver,
             bool useStencil)
-            : COpenGLTexture(name, driver), depth_render_buffer_(0),
-            stencil_render_buffer_(0), use_stencil_(useStencil)
+            : COpenGLTexture(name, driver), DepthRenderBuffer(0),
+            StencilRenderBuffer(0), UseStencil(useStencil)
         {
+#ifdef _DEBUG
+            //setDebugName("COpenGLTextureFBO_Depth");
+#endif
+
+            image_size_ = size;
+            texture_size_ = size;
+            internal_format_ = GL_RGBA;
+            pixel_format_ = GL_RGBA;
+            pixel_format_ = GL_UNSIGNED_BYTE;
+            has_mip_maps_ = false;
+
+            if (useStencil)
+            {
+                glGenTextures(1, &DepthRenderBuffer);
+                glBindTexture(GL_TEXTURE_2D, DepthRenderBuffer);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+                {
+                    // generate depth texture
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, image_size_.width_,
+                        image_size_.height_, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+
+                    //// generate stencil texture
+                    //glGenTextures(1, &StencilRenderBuffer);
+                    //glBindTexture(GL_TEXTURE_2D, StencilRenderBuffer);
+                    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                    //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                    //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+                    //glTexImage2D(GL_TEXTURE_2D, 0, GL_STENCIL_INDEX, image_size_.width_,
+                    //    image_size_.height_, 0, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, 0);
+                }
+            }
+            else
+            {
+                // generate depth buffer
+                glGenRenderbuffers(1, &DepthRenderBuffer);
+                glBindRenderbuffer(GL_RENDERBUFFER, DepthRenderBuffer);
+                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, image_size_.width_, image_size_.height_);
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, DepthRenderBuffer);
+            }
+
+            texture_name_ = DepthRenderBuffer;
         }
 
 
         //! destructor
         COpenGLFBODepthTexture::~COpenGLFBODepthTexture()
         {
+            if (DepthRenderBuffer && UseStencil)
+                glDeleteTextures(1, &DepthRenderBuffer);
+            else
+                glDeleteRenderbuffers(1, &DepthRenderBuffer);
+            if (StencilRenderBuffer && StencilRenderBuffer != DepthRenderBuffer)
+                glDeleteTextures(1, &StencilRenderBuffer);
         }
 
 
         //combine depth texture and rtt
         bool COpenGLFBODepthTexture::attach(ITexture* renderTex)
         {
-            return false;
+            if (!renderTex)
+                return false;
+            video::COpenGLFBOTexture* rtt = static_cast<video::COpenGLFBOTexture*>(renderTex);
+            rtt->bindRTT();
+            if (UseStencil)
+            {
+                // attach stencil texture to stencil buffer
+                //glFramebufferTexture2D(GL_FRAMEBUFFER,
+                //    GL_STENCIL_ATTACHMENT,
+                //    GL_TEXTURE_2D,
+                //    StencilRenderBuffer,
+                //    0);
+
+                // attach depth texture to depth buffer
+                glFramebufferTexture2D(GL_FRAMEBUFFER,
+                    GL_DEPTH_ATTACHMENT,
+                    GL_TEXTURE_2D,
+                    DepthRenderBuffer,
+                    0);
+            }
+            else
+            {
+                // attach depth renderbuffer to depth buffer
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER_EXT,
+                    GL_DEPTH_ATTACHMENT_EXT,
+                    GL_RENDERBUFFER_EXT,
+                    DepthRenderBuffer);
+            }
+            // check the status
+            if (!checkFBOStatus(driver_))
+            {
+                os::Printer::log("FBO incomplete");
+                return false;
+            }
+            rtt->depth_texture_ = this;
+            //grab(); // grab the depth buffer, not the RTT
+            rtt->unbindRTT();
+            return true;
         }
 
 

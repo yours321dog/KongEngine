@@ -27,7 +27,7 @@ namespace kong
         COpenGLDriver::COpenGLDriver(const SKongCreationParameters& params, io::IFileSystem* io, CKongDeviceWin32* device)
             : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device),
               params_(params), io_(io), max_texture_units_(0), max_supported_textures_(0), max_support_lights_(0),
-              shadow_depth_texture_(nullptr), rendering_mode_(ERM_MESH), color_format_(ECF_A8R8G8B8),
+              shadow_color_texture_(nullptr), shadow_depth_texture_(nullptr), rendering_mode_(ERM_MESH), color_format_(ECF_A8R8G8B8),
               shadow_enable_(false)
         {
             // create manipulator
@@ -861,9 +861,11 @@ namespace kong
         {
             shadow_enable_ = flag;
 
-            if (shadow_depth_texture_ == nullptr)
+            if (shadow_color_texture_ == nullptr)
             {
-                shadow_depth_texture_ = new COpenGLFBOTexture(core::Dimension2d<u32>(1024, 1024), io::path(), this, true);
+                shadow_color_texture_ = new COpenGLFBOTexture(core::Dimension2d<u32>(1024, 1024), io::path(), this, false);
+                shadow_depth_texture_ = new COpenGLFBODepthTexture(core::Dimension2d<u32>(1024, 1024), io::path(), this, true);
+                shadow_depth_texture_->attach(shadow_color_texture_);
             }
         }
 

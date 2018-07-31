@@ -192,9 +192,9 @@ namespace kong
             bool attach(ITexture*);
 
         protected:
-            GLuint depth_render_buffer_;
-            GLuint stencil_render_buffer_;
-            bool use_stencil_;
+            GLuint DepthRenderBuffer;
+            GLuint StencilRenderBuffer;
+            bool UseStencil;
         };
 
 

@@ -23,6 +23,7 @@ namespace kong
     namespace video
     {
         class COpenGLFBOTexture;
+        class COpenGLFBODepthTexture;
 
         class COpenGLDriver : public IVideoDriver
         {
@@ -312,7 +313,8 @@ namespace kong
             s32 max_support_lights_;
 
             //! shadow depth texture
-            COpenGLFBOTexture *shadow_depth_texture_;
+            COpenGLFBOTexture *shadow_color_texture_;
+            COpenGLFBODepthTexture *shadow_depth_texture_;
 
             //! mesh manipulator
             scene::IMeshManipulator* mesh_manipulator_;

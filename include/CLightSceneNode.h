@@ -67,6 +67,9 @@ namespace kong
             //! Render shadows
             void RenderShadow() override;
 
+            //! Recalcute Light bounding box
+            void RecalculateLightBoundingBox(core::aabbox3df &box) override;
+
         private:
             void DoLightRecalc();
             void DoCameraRecalc();
@@ -78,6 +81,9 @@ namespace kong
             bool light_is_on_;
 
             ICameraSceneNode *camera_;
+
+            // light frustum bounding box
+            core::aabbox3df light_bounding_box_;
         };
     }
 }

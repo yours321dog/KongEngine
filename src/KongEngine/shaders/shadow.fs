@@ -1,5 +1,6 @@
 #version 330 core
 out vec4 FragColor;
+//layout(location = 0) out float fragmentdepth;
 
 struct Light
 {
@@ -25,4 +26,6 @@ void main()
 //    FragColor = vec4(light_position.z, 0.0, 0.0, 1.0);
 //    FragColor = vec4(vec3(0.5), 1.0);
     FragColor = vec4(light_position.z / light_position.w, 0.0, 0.0, 1.0);
+    gl_FragDepth = light_position.z;
+//    fragmentdepth = 0.5;
 }

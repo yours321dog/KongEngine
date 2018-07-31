@@ -66,6 +66,9 @@ namespace kong
 
             //! Render shadows
             virtual void RenderShadow() = 0;
+
+            //! Recalcute Light bounding box
+            virtual void RecalculateLightBoundingBox(core::aabbox3df &box) = 0;
         };
     }
 }
