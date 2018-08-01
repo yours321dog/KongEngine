@@ -478,7 +478,7 @@ namespace kong
 
                 {
                     // generate depth texture
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, image_size_.width_,
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, image_size_.width_,
                         image_size_.height_, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 
                     //// generate stencil texture
@@ -515,6 +515,16 @@ namespace kong
                 glDeleteTextures(1, &StencilRenderBuffer);
         }
 
+        //! Bind Render Target Texture
+        void COpenGLFBODepthTexture::bindRTT()
+        {
+        }
+
+
+        //! Unbind Render Target Texture
+        void COpenGLFBODepthTexture::unbindRTT()
+        {
+        }
 
         //combine depth texture and rtt
         bool COpenGLFBODepthTexture::attach(ITexture* renderTex)
@@ -559,18 +569,124 @@ namespace kong
             return true;
         }
 
+        
 
-        //! Bind Render Target Texture
-        void COpenGLFBODepthTexture::bindRTT()
+        COpenGLFBODeferredTexture::COpenGLFBODeferredTexture(const core::Dimension2d<u32>& size, const io::path& name, COpenGLDriver* driver)
+            : COpenGLTexture(name, driver)
         {
+            image_size_ = size;
+            texture_size_ = size;
+
+            internal_format_ = GL_RGBA;
+            pixel_format_ = GL_RGBA;
+            pixel_format_ = GL_UNSIGNED_BYTE;
+            has_mip_maps_ = false;
+
+            // generate frame buffer
+            glGenFramebuffers(1, &color_frame_buffer_);
+            COpenGLFBODeferredTexture::bindRTT();
+
+            // position texture
+            //glGenTextures(1, &texture_names_[EGBT_POSTION]);
+            //glBindTexture(GL_TEXTURE_2D, texture_names_[EGBT_POSTION]);
+            ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering_type);
+            ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering_type);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, image_size_.width_, image_size_.height_, 0, GL_RGBA, GL_FLOAT, 0);
+            //glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + EGBT_POSTION, texture_names_[EGBT_POSTION], 0);
+            //attachments_[EGBT_POSTION] = GL_COLOR_ATTACHMENT0 + EGBT_POSTION;
+            BindFramebufferTexture(EGBT_POSTION, GL_RGBA32F, GL_RGBA, GL_FLOAT);
+
+            // normal texture
+            //glGenTextures(1, &texture_names_[EGBT_NORMAL]);
+            //glBindTexture(GL_TEXTURE_2D, texture_names_[EGBT_NORMAL]);
+            ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering_type);
+            ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering_type);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, image_size_.width_, image_size_.height_, 0, GL_RGBA, GL_FLOAT, 0);
+            //glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, texture_names_[EGBT_NORMAL], 0);
+            //attachments_[1] = GL_COLOR_ATTACHMENT1;
+            BindFramebufferTexture(EGBT_NORMAL, GL_RGBA32F, GL_RGBA, GL_FLOAT);
+
+            // diffuse color texture
+            //glGenTextures(1, &texture_names_[EGBT_DIFFUSE]);
+            //glBindTexture(GL_TEXTURE_2D, texture_names_[EGBT_DIFFUSE]);
+            ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering_type);
+            ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering_type);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_size_.width_, image_size_.height_, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            //glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, texture_names_[EGBT_DIFFUSE], 0);
+            //attachments_[2] = GL_COLOR_ATTACHMENT2;
+            BindFramebufferTexture(EGBT_DIFFUSE, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+
+            // depth buffer
+            glGenTextures(1, &depth_texture_name_);
+            glBindTexture(GL_TEXTURE_2D, depth_texture_name_);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, image_size_.width_, image_size_.height_, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_texture_name_, 0);
+
+            COpenGLFBODeferredTexture::unbindRTT();
         }
 
-
-        //! Unbind Render Target Texture
-        void COpenGLFBODepthTexture::unbindRTT()
+        COpenGLFBODeferredTexture::~COpenGLFBODeferredTexture()
         {
+            glDeleteTextures(EGBT_COUNT, texture_names_);
+            glDeleteTextures(1, &depth_texture_name_);
         }
 
+        bool COpenGLFBODeferredTexture::isFrameBufferObject() const
+        {
+            return true;
+        }
+
+        void COpenGLFBODeferredTexture::bindRTT()
+        {
+            if (color_frame_buffer_ != 0)
+                glBindFramebuffer(GL_FRAMEBUFFER, color_frame_buffer_);
+            glDrawBuffers(EGBT_COUNT, attachments_);
+        }
+
+        void COpenGLFBODeferredTexture::unbindRTT()
+        {
+            if (color_frame_buffer_ != 0)
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
+
+        GLuint COpenGLFBODeferredTexture::GetTextureName(u32 idx)
+        {
+            if (idx < EGBT_COUNT)
+            {
+                return texture_names_[idx];
+            }
+            return texture_names_[0];
+        }
+
+        void COpenGLFBODeferredTexture::BindFramebufferTexture(u32 idx, GLint internal_format, GLenum pixel_format, GLenum pixel_type)
+        {
+            glGenTextures(1, &texture_names_[idx]);
+            glBindTexture(GL_TEXTURE_2D, texture_names_[idx]);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering_type);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering_type);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexImage2D(GL_TEXTURE_2D, 0, internal_format, image_size_.width_, image_size_.height_, 0, pixel_format, pixel_type, 0);
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + idx, texture_names_[idx], 0);
+            attachments_[idx] = GL_COLOR_ATTACHMENT0 + idx;
+        }
 
         bool checkFBOStatus(COpenGLDriver* Driver)
         {

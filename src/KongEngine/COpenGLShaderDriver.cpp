@@ -288,7 +288,7 @@ namespace kong
 
         void COpenGLShaderDriver::BeginShadowRender()
         {
-            glViewport(0, 0, 1024, 1024);
+            glViewport(0, 0, shadow_texture_size_.width_, shadow_texture_size_.height_);
 
             shader_helper_ = shadow_shader_helper_;
             shader_helper_->Use();
@@ -298,8 +298,8 @@ namespace kong
             }
 
             ClearBuffers(color_buffer_clear_, z_buffer_clear_, false, color_clear_);
-            glEnable(GL_CULL_FACE); // enables face culling    
-            glCullFace(GL_FRONT); // tells OpenGL to cull back faces (the sane default setting)
+            //glEnable(GL_CULL_FACE); // enables face culling    
+            //glCullFace(GL_FRONT); // tells OpenGL to cull back faces (the sane default setting)
         }
 
         void COpenGLShaderDriver::EndShadowRender()
@@ -310,8 +310,8 @@ namespace kong
             shader_helper_->Use();
             shadow_color_texture_->unbindRTT();
 
-            glCullFace(GL_BACK); // tells OpenGL to cull back faces (the sane default setting)
-            glDisable(GL_CULL_FACE); // enables face culling    
+            //glCullFace(GL_BACK); // tells OpenGL to cull back faces (the sane default setting)
+            //glDisable(GL_CULL_FACE); // enables face culling    
 
             DeleteAllDynamicLights();
 
@@ -320,7 +320,13 @@ namespace kong
             shader_helper_->SetInt(GetUniformName(SL_TEXTURE0 + 4), 4);
             glActiveTexture(GL_TEXTURE0 + 4);
             glBindTexture(GL_TEXTURE_2D, dynamic_cast<const COpenGLTexture*>(shadow_depth_texture_)->GetOpenGLTextureName());
-            shader_helper_->SetBool("shadow_on", true);
+            //shader_helper_->SetBool("shadow_on", true);
+        }
+
+        void COpenGLShaderDriver::EnableShadow(bool flag)
+        {
+            COpenGLDriver::EnableShadow(flag);
+            base_shader_helper_->SetBool("shadow_on", flag);
         }
 
         void COpenGLShaderDriver::DrawNormalMeshBuffer(const scene::IMeshBuffer* mesh_buffer)

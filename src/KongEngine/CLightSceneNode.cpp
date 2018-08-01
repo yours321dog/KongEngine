@@ -162,14 +162,6 @@ namespace kong
             corners[7] = core::vector3df(box.MaxEdge.x_, box.MaxEdge.y_, box.MaxEdge.z_);
 
             core::Matrixf view_transform = camera_->GetViewTransform();
-            //corners[0] = view_transform.Apply(corners[0]);
-            //corners[1] = view_transform.Apply(corners[1]);
-            //corners[2] = view_transform.Apply(corners[2]);
-            //corners[3] = view_transform.Apply(corners[3]);
-            //corners[4] = view_transform.Apply(corners[4]);
-            //corners[5] = view_transform.Apply(corners[5]);
-            //corners[6] = view_transform.Apply(corners[6]);
-            //corners[7] = view_transform.Apply(corners[7]);
 
             for (u32 i = 0; i < 8; ++i)
             {
@@ -195,6 +187,10 @@ namespace kong
                     + camera_->to_ * (light_box.MinEdge.z_ - 1);
                 camera_->SetEye(new_eye);
                 camera_->LookAt(new_eye + camera_->to_);
+            }
+            else
+            {
+                
             }
         }
 
@@ -228,14 +224,14 @@ namespace kong
             if (camera_ == nullptr)
                 return;
 
-            camera_->LookAt(light_data_.position_ + light_data_.direction_);
+            camera_->LookAt(light_data_.direction_);
             camera_->SetUp(light_data_.direction_ + core::vector3df(0.f, 1.f, 0.f));
             core::vector3df light_direction = light_data_.direction_;
             light_direction.Normalize();
             switch (light_data_.type_)
             {
             case video::ELT_DIRECTIONAL:
-                camera_->SetEye(light_direction * -10.f);
+                camera_->SetEye(light_direction * -1.f);
                 break;
             case video::ELT_SPOT:
             case video::ELT_POINT:
@@ -259,7 +255,7 @@ namespace kong
                 camera_ = new CPerspectiveCameraSceneNode(this, scene_manager_, -1, light_data_.outer_cone_ * 2, 1.f, 0.1, 20);
             }
 
-            camera_->LookAt(light_data_.position_ + light_data_.direction_);
+            camera_->LookAt(light_data_.direction_);
             camera_->SetUp(light_data_.direction_ + core::vector3df(0.f, 1.f, 0.f));
             core::vector3df light_direction = light_data_.direction_;
             light_direction.Normalize();

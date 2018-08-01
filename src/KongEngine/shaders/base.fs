@@ -67,14 +67,38 @@ uniform Material material;
 uniform sampler2D texture4;
 uniform bool shadow_on;
 
+// shadow PCF
+vec2 poisson_dick[4] = vec2[](
+  vec2( -0.94201624, -0.39906216 ),
+  vec2( 0.94558609, -0.76890725 ),
+  vec2( -0.094184101, -0.92938870 ),
+  vec2( 0.34495938, 0.29387760 )
+);
+
 float CaluateShadowFactor()
 {
-    vec2 shadow_uv = light_position.xy * 0.5 + 0.5;
+    vec2 shadow_uv = light_position.xy / light_position.w * 0.5 + 0.5;
 //    shadow_uv.y = 1.0 - shadow_uv.y;
     float closest_depth = texture(texture4, shadow_uv).x;
 
-    float bias = 0.000f;
-    float shadow = light_position.z - bias <= closest_depth ? 1.0 : 0.0;
+    float bias = 0.0005f;
+    float shadow = 0.2f;
+    float light_depth = light_position.z / light_position.w;
+    if (light_position.z / light_position.w - bias <= closest_depth)
+    {
+        shadow = 1.0f;
+    }
+    else
+    {
+        for (int i=0;i<4;i++)
+        {
+            if ( texture(texture4, shadow_uv + poisson_dick[i] / 700.0f ).x  >= light_depth - bias )
+            {
+                shadow += 0.2f;
+            }
+        }
+    }
+
     return shadow;
 }
 

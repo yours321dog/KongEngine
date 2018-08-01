@@ -277,6 +277,82 @@ namespace kong
         {
         }
 
+        void CSceneManager::DrawAllDeferred()
+        {
+            if (driver_ == nullptr)
+            {
+                return;
+            }
+
+            driver_->SetMaterial(video::SMaterial());
+            driver_->SetTransform(video::ETS_PROJECTION, core::identity_matrix);
+            driver_->SetTransform(video::ETS_VIEW, core::identity_matrix);
+            driver_->SetTransform(video::ETS_WORLD, core::identity_matrix);
+
+            // do animations and other stuff.
+            OnAnimate(0);
+
+            /*!
+            First Scene Node for prerendering should be the active camera
+            consistent Camera is needed for culling
+            */
+            cam_world_pos_.Set(0, 0, 0);
+            if (active_camera_ != nullptr)
+            {
+                active_camera_->Render();
+                cam_world_pos_ = active_camera_->GetAbsolutePosition();
+            }
+
+            // let all nodes register themselves
+            OnRegisterSceneNode();
+
+            // render first pass
+            driver_->RenderFirstPass();
+            // render default objects
+            {
+                for (u32 i = 0; i < solid_node_list_.Size(); ++i)
+                {
+                    solid_node_list_[i].node_->Render();
+                }
+
+                solid_node_list_.Resize(0);
+            }
+
+            // render second pass
+            driver_->RenderSecondPass();
+
+            //render lights scenes
+            {
+                //    // Sort the lights by distance from the camera
+                //core::vector3df cam_world_pos(0, 0, 0);
+                //if (active_camera_ != nullptr)
+                //    cam_world_pos = active_camera_->GetAbsolutePosition();
+
+                driver_->DeleteAllDynamicLights();
+
+                //Driver->setAmbientLight(AmbientLight);
+
+                u32 max_lights = light_list_.Size();
+
+                max_lights = core::min_(driver_->GetMaximalDynamicLightAmount(), max_lights);
+
+                for (u32 i = 0; i< max_lights; ++i)
+                    light_list_[i]->Render();
+
+                light_list_.Resize(0);
+            }
+
+            // render default objects
+            {
+                for (u32 i = 0; i < solid_node_list_.Size(); ++i)
+                {
+                    solid_node_list_[i].node_->Render();
+                }
+
+                solid_node_list_.Resize(0);
+            }
+        }
+
         void CSceneManager::RemoveAll()
         {
             ISceneNode::RemoveAll();

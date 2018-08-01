@@ -9,6 +9,7 @@
 #include "IImage.h"
 
 #include "KongCompileConfig.h"
+#include "EGBufferType.h"
 #ifdef _KONG_COMPILE_WITH_OPENGL_
 
 #if defined(_KONG_OPENGL_USE_EXTPOINTER_)
@@ -43,7 +44,6 @@ namespace kong
 {
     namespace video
     {
-
         class COpenGLDriver;
         //! OpenGL texture.
         class COpenGLTexture : public ITexture
@@ -197,6 +197,36 @@ namespace kong
             bool UseStencil;
         };
 
+        class COpenGLFBODeferredTexture : public COpenGLTexture
+        {
+        public:
+
+            //! FrameBufferObject constructor
+            COpenGLFBODeferredTexture(const core::Dimension2d<u32>& size, const io::path& name,
+                COpenGLDriver* driver = nullptr);
+
+            //! destructor
+            virtual ~COpenGLFBODeferredTexture();
+
+            //! Is it a FrameBufferObject?
+            bool isFrameBufferObject() const override;
+
+            //! Bind RenderTargetTexture
+            void bindRTT() override;
+
+            //! Unbind RenderTargetTexture
+            void unbindRTT() override;
+
+            GLuint GetTextureName(u32 idx);
+        private:
+            void BindFramebufferTexture(u32 idx, GLint internal_format, GLenum pixel_format_, GLenum pixel_type_);
+
+            GLuint texture_names_[EGBT_COUNT];
+            GLuint color_frame_buffer_;
+            GLuint depth_buffer_;
+            GLuint depth_texture_name_;
+            GLuint attachments_[EGBT_COUNT];
+        };
 
     } // end namespace video
 } // end namespace irr

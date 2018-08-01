@@ -349,6 +349,16 @@ namespace kong
             //! Gets the area of the current viewport.
             /** \return Rectangle of the current viewport. */
             virtual const core::rect<s32>& getViewPort() const = 0;
+
+            //! Render first pass
+            /** if you want to use deferred rendering , you need to use
+             *  this method to run the first pass. */
+            virtual void RenderFirstPass() = 0;
+
+            //! Render second pass
+            /** if you want to use deferred rendering , you need to use
+            *  this method to run the second pass. */
+            virtual void RenderSecondPass() = 0;
         };
     }
 }

@@ -316,7 +316,8 @@ void TestWindow()
         node->SetRotation(node_rot);
 
         //driver->Draw3DLine(Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
-        smr->DrawAll();
+        //smr->DrawAll();
+        smr->DrawAllDeferred();
 
         driver->EndScene();
     }
@@ -337,13 +338,13 @@ void TestObjLoad()
     IVideoDriver *driver = device->GetVideoDriver();
     ISceneManager *smr = device->GetSceneManager();
 
-    smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.f, 0.4f, -0.9f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
+    smr->AddPerspectiveCameraSceneNode(nullptr, Vector3Df(0.0f, 0.4f, -0.9f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
     //smr->AddOrthogonalCameraSceneNode(nullptr, Vector3Df(0.f, 0.f, -1.f), Vector3Df(0.f, 1.f, 0.f), Vector3Df(0.f, 0.f, 0.f));
     //IMesh * mesh = smr->getMesh("../../materials/honoka_noel.obj");
-    IMesh * mesh = smr->getMesh("../../materials/honoka_noel/source/Honoka_noel_.obj");
+    //IMesh * mesh = smr->getMesh("../../materials/honoka_noel/source/Honoka_noel_.obj");
     //IMesh * mesh = smr->getMesh("../../materials/misaki_dress_sr/misaki.obj");
     //IMesh * mesh = smr->getMesh("../../materials/misaki_pinchos/Normal/Ponytail/misaki.obj");
-    //IMesh * mesh = smr->getMesh("../../materials/Misaki_Pemole/Models/Hairstyle A/misaki.obj");
+    IMesh * mesh = smr->getMesh("../../materials/Misaki_Pemole/Models/Hairstyle A/misaki.obj");
     //IMesh * mesh = smr->getMesh("../../materials/saber_q.obj");
     //ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(0.0003f, 0.0003f, 0.0003f));
     ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
@@ -354,7 +355,7 @@ void TestObjLoad()
     //node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
     //node->EnableDrawBoundingBox(true);
 
-    ILightSceneNode *light_node = smr->AddLightSceneNode(nullptr, Vector3Df(0.f, 0.f, -2.f));
+    ILightSceneNode *light_node = smr->AddLightSceneNode(nullptr, Vector3Df(0.f, 0.0f, -6.f));
     SLight light_data = light_node->GetLightData();
     light_data.ambient_color_ = SColorf(0.4f, 0.4f, 0.4f, 1.f);
     light_data.diffuse_color_ = SColorf(0.8f, 0.8f, 0.8f, 1.f);
@@ -438,8 +439,8 @@ void TestObjLoad()
 
         if (receiver.IsKeyRelease(kong::KEY_KEY_1))
         {
+            shadow_on = !shadow_on;
             smr->EnableShadow(shadow_on);
-            shadow_on = ~shadow_on;
         }
 
         node->SetPosition(node_pos);

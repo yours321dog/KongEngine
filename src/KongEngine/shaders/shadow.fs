@@ -26,6 +26,6 @@ void main()
 //    FragColor = vec4(light_position.z, 0.0, 0.0, 1.0);
 //    FragColor = vec4(vec3(0.5), 1.0);
     FragColor = vec4(light_position.z / light_position.w, 0.0, 0.0, 1.0);
-    gl_FragDepth = light_position.z;
+    gl_FragDepth = light_position.z / light_position.w;
 //    fragmentdepth = 0.5;
 }

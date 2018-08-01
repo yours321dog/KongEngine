@@ -28,7 +28,7 @@ namespace kong
             : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device),
               params_(params), io_(io), max_texture_units_(0), max_supported_textures_(0), max_support_lights_(0),
               shadow_color_texture_(nullptr), shadow_depth_texture_(nullptr), rendering_mode_(ERM_MESH), color_format_(ECF_A8R8G8B8),
-              shadow_enable_(false)
+              shadow_enable_(false), color_buffer_clear_(true), z_buffer_clear_(true), shadow_texture_size_(2048, 2048)
         {
             // create manipulator
             mesh_manipulator_ = new scene::CMeshManipulator();
@@ -863,8 +863,8 @@ namespace kong
 
             if (shadow_color_texture_ == nullptr)
             {
-                shadow_color_texture_ = new COpenGLFBOTexture(core::Dimension2d<u32>(1024, 1024), io::path(), this, false);
-                shadow_depth_texture_ = new COpenGLFBODepthTexture(core::Dimension2d<u32>(1024, 1024), io::path(), this, true);
+                shadow_color_texture_ = new COpenGLFBOTexture(shadow_texture_size_, io::path(), this, false);
+                shadow_depth_texture_ = new COpenGLFBODepthTexture(shadow_texture_size_, io::path(), this, true);
                 shadow_depth_texture_->attach(shadow_color_texture_);
             }
         }
@@ -896,6 +896,14 @@ namespace kong
         const core::rect<s32>& COpenGLDriver::getViewPort() const
         {
             return view_port_;
+        }
+
+        void COpenGLDriver::RenderFirstPass()
+        {
+        }
+
+        void COpenGLDriver::RenderSecondPass()
+        {
         }
 
         void COpenGLDriver::UpdateMaxSupportLights()

@@ -104,6 +104,9 @@ namespace kong
             //! renders the node.
             virtual void Render();
 
+            //! Draws all the scene nodes with deferred render.
+            virtual void DrawAllDeferred();
+
             //! Removes all children of this scene node
             virtual void RemoveAll();
 

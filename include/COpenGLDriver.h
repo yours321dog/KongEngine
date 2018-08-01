@@ -155,6 +155,12 @@ namespace kong
             //! Gets the area of the current viewport.
             const core::rect<s32>& getViewPort() const override;
 
+            //! Render first pass for deferred render
+            void RenderFirstPass() override;
+
+            //! Render second pass for deferred render
+            void RenderSecondPass() override;
+
         protected:
             virtual void UpdateMaxSupportLights();
 
@@ -315,6 +321,7 @@ namespace kong
             //! shadow depth texture
             COpenGLFBOTexture *shadow_color_texture_;
             COpenGLFBODepthTexture *shadow_depth_texture_;
+            core::Dimension2d<u32> shadow_texture_size_;
 
             //! mesh manipulator
             scene::IMeshManipulator* mesh_manipulator_;

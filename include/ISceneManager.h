@@ -501,6 +501,13 @@ namespace kong
             by existing scene node animators, culling of scene nodes is done, etc. */
             virtual void DrawAll() = 0;
 
+            //! Draws all the scene nodes with deferred render.
+            /** This can only be invoked between
+            IVideoDriver::beginScene() and IVideoDriver::endScene(). Please note that
+            the scene is not only drawn when calling this, but also animated
+            by existing scene node animators, culling of scene nodes is done, etc. */
+            virtual void DrawAllDeferred() = 0;
+
             //! Clears the whole scene.
             /** All scene nodes are removed. */
             virtual void Clear() = 0;

@@ -375,6 +375,9 @@
     <ClCompile Include="..\..\include\CPlaneSceneNode.h">
       <Filter>KongEngine\scene\scenenode</Filter>
     </ClCompile>
+    <ClCompile Include="COpenGLDeferredShaderDriver.cpp">
+      <Filter>KongEngine\video\OpenGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\KongCompileConfig.h">
@@ -722,6 +725,12 @@
     <ClInclude Include="..\..\include\DefaultNodeEntry.h">
       <Filter>Include\scene</Filter>
     </ClInclude>
+    <ClInclude Include="COpenGLDeferredShaderDriver.h">
+      <Filter>KongEngine\video\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\EGBufferType.h">
+      <Filter>Include\video</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\base.fs">
@@ -734,6 +743,18 @@
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>
     <None Include="shaders\shadow.vs">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
+    <None Include="shaders\deferred_base.fs">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
+    <None Include="shaders\deferred_base.vs">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
+    <None Include="shaders\deferred_post.fs">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
+    <None Include="shaders\deferred_post.vs">
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>
   </ItemGroup>

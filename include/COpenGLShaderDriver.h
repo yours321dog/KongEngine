@@ -132,6 +132,9 @@ namespace kong
             //! End shadow rendering
             void EndShadowRender() override;
 
+            //! Enable shadows.
+            void EnableShadow(bool flag) override;
+
         protected:
             //! draw a normal mesh buffer depended on its type
             virtual void DrawNormalMeshBuffer(const scene::IMeshBuffer* mesh_buffer);
