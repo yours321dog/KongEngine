@@ -148,7 +148,7 @@ namespace kong
             //driver_light_index_ = driver->AddDynamicLight(light_data_);
         }
 
-        void CLightSceneNode::RecalculateLightBoundingBox(core::aabbox3df &box)
+        void CLightSceneNode::CalculateLightBoundingBox(core::aabbox3df& light_box, const core::aabbox3df box)
         {
             core::vector3df corners[8];
 
@@ -162,18 +162,39 @@ namespace kong
             corners[7] = core::vector3df(box.MaxEdge.x_, box.MaxEdge.y_, box.MaxEdge.z_);
 
             core::Matrixf view_transform = camera_->GetViewTransform();
-            corners[0] = view_transform.Apply(corners[0]);
-            corners[1] = view_transform.Apply(corners[1]);
-            corners[2] = view_transform.Apply(corners[2]);
-            corners[3] = view_transform.Apply(corners[3]);
-            corners[4] = view_transform.Apply(corners[4]);
-            corners[5] = view_transform.Apply(corners[5]);
-            corners[6] = view_transform.Apply(corners[6]);
-            corners[7] = view_transform.Apply(corners[7]);
+            //corners[0] = view_transform.Apply(corners[0]);
+            //corners[1] = view_transform.Apply(corners[1]);
+            //corners[2] = view_transform.Apply(corners[2]);
+            //corners[3] = view_transform.Apply(corners[3]);
+            //corners[4] = view_transform.Apply(corners[4]);
+            //corners[5] = view_transform.Apply(corners[5]);
+            //corners[6] = view_transform.Apply(corners[6]);
+            //corners[7] = view_transform.Apply(corners[7]);
 
             for (u32 i = 0; i < 8; ++i)
             {
-                light_bounding_box_.addInternalPoint(corners[i]);
+                corners[i] = view_transform.Apply(corners[i]);
+                light_box.addInternalPoint(corners[i]);
+            }
+        }
+
+        void CLightSceneNode::ResetCameraTransform(core::Array<DefaultNodeEntry>& solid_nodes)
+        {
+            if (camera_->GetCameraType() == ECT_ORTHOGONAL)
+            {
+                core::aabbox3df light_box(core::vector3df(1e6, 1e6, 1e6));
+                for (u32 i = 0; i < solid_nodes.Size(); ++i)
+                {
+                    CalculateLightBoundingBox(light_box, solid_nodes[i].node_->GetTransformedBoundingBox());
+                }
+                core::vector3df box_center = light_box.getCenter();
+                f32 height = core::max_(light_box.MaxEdge.x_ - light_box.MinEdge.x_, light_box.MaxEdge.y_ - light_box.MinEdge.y_);
+                f32 depth = light_box.MaxEdge.z_ - light_box.MinEdge.z_;
+                dynamic_cast<COrthogonalCameraSceneNode *>(camera_)->SetValues(height, 1.f, 1.f, 1.f + depth);
+                core::vector3df new_eye = camera_->eye_ + camera_->right_ * box_center.x_ + camera_->up_ * box_center.y_
+                    + camera_->to_ * (light_box.MinEdge.z_ - 1);
+                camera_->SetEye(new_eye);
+                camera_->LookAt(new_eye + camera_->to_);
             }
         }
 

@@ -41,7 +41,7 @@ namespace kong
 
         int COrthogonalCameraSceneNode::GetCameraType()
         {
-            return ORTHOGONAL;
+            return ECT_ORTHOGONAL;
         }
     } // end namespace scene
 } //end namespace kong

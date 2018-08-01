@@ -719,6 +719,9 @@
     <ClInclude Include="..\..\include\CImageLoaderTGA.h">
       <Filter>KongEngine\video\Null\Loader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\DefaultNodeEntry.h">
+      <Filter>Include\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\base.fs">

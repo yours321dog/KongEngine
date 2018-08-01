@@ -27,9 +27,11 @@ namespace kong
             //! Constructor with min edge and max edge.
             aabbox3d(const Vector<T>& min, const Vector<T>& max) : MinEdge(min), MaxEdge(max) {}
             //! Constructor with only one point.
-            aabbox3d(const Vector<T>& init) : MinEdge(init), MaxEdge(init) {}
+            aabbox3d(const Vector<T>& init) : MinEdge(init), MaxEdge(init * -1) {}
             //! Constructor with min edge and max edge as single values, not vectors.
             aabbox3d(T minx, T miny, T minz, T maxx, T maxy, T maxz) : MinEdge(minx, miny, minz), MaxEdge(maxx, maxy, maxz) {}
+            //! Copy constructor
+            aabbox3d(const aabbox3d<T> &other) { MinEdge = other.MinEdge; MaxEdge = other.MaxEdge; }
 
             // operators
             //! Equality operator

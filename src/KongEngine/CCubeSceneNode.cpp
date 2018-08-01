@@ -165,6 +165,8 @@ namespace kong
                 buffer->indices_.PushBack(indice);
             }
 
+            buffer->RecalculateBoundingBox();
+
             SMesh *tmp = new SMesh();
             tmp->AddMeshBuffer(buffer);
             mesh_ = tmp;

@@ -13,6 +13,14 @@ namespace kong
 {
     namespace scene
     {
+        // camera type
+        enum CAMERA_TYPE
+        {
+            ECT_ORTHOGONAL,
+            ECT_PERSPECTIVE,
+            ECT_OTHER
+        };
+
         class ICameraSceneNode : public ISceneNode
         {
         public:
@@ -43,12 +51,11 @@ namespace kong
 
             const core::aabbox3d<f32>& GetBoundingBox() const override;
 
-            enum CAMERA_TYPE
-            {
-                ORTHOGONAL,
-                PERSPECTIVE,
-                OTHER
-            };
+            core::Vector3Df eye_;
+            core::Vector3Df up_;
+            core::Vector3Df at_;
+            core::Vector3Df right_;
+            core::Vector3Df to_;
 
         protected:
             core::Matrixf project_;
@@ -57,11 +64,6 @@ namespace kong
 
         private:
             core::Matrixf view_;
-            core::Vector3Df eye_;
-            core::Vector3Df up_;
-            core::Vector3Df at_;
-            core::Vector3Df right_;
-            core::Vector3Df to_;
         };
 
         inline ICameraSceneNode::ICameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id)

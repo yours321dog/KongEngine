@@ -6,6 +6,7 @@
 
 #include "ISceneNode.h"
 #include "SLight.h"
+#include "DefaultNodeEntry.h"
 
 namespace kong
 {
@@ -67,8 +68,8 @@ namespace kong
             //! Render shadows
             virtual void RenderShadow() = 0;
 
-            //! Recalcute Light bounding box
-            virtual void RecalculateLightBoundingBox(core::aabbox3df &box) = 0;
+            //! Reset camera transform
+            virtual void ResetCameraTransform(core::Array<DefaultNodeEntry>& solid_nodes) = 0;
         };
     }
 }

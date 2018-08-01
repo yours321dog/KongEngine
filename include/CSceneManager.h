@@ -8,6 +8,7 @@
 #include "ISceneNode.h"
 #include "ICameraSceneNode.h"
 #include "IVideoDriver.h"
+#include "DefaultNodeEntry.h"
 
 namespace kong
 {
@@ -121,29 +122,6 @@ namespace kong
             virtual const core::aabbox3d<f32>& GetBoundingBox() const;
 
         private:
-            struct DefaultNodeEntry
-            {
-                DefaultNodeEntry(ISceneNode* n = nullptr) :
-                    node_(n), texture_value_(nullptr)
-                {
-                    //if (n->GetMaterialCount())
-                    //    TextureValue = (n->GetMaterial(0).GetTexture(0));
-                }
-
-                ~DefaultNodeEntry()
-                {
-                    //delete node_;
-                }
-
-                bool operator < (const DefaultNodeEntry& other) const
-                {
-                    return (texture_value_ < other.texture_value_);
-                }
-
-                ISceneNode* node_;
-            private:
-                void* texture_value_;
-            };
 
             //! video driver
             video::IVideoDriver* driver_;

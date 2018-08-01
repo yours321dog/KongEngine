@@ -322,7 +322,8 @@ namespace kong
                 driver_->BeginShadowRender();
 
                 // render lights
-                static_cast<ILightSceneNode *>(light_list_[0])->RenderShadow();
+                dynamic_cast<ILightSceneNode *>(light_list_[0])->ResetCameraTransform(solid_node_list_);
+                dynamic_cast<ILightSceneNode *>(light_list_[0])->RenderShadow();
 
                 // render default objects
                 {

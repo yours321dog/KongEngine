@@ -45,7 +45,7 @@ namespace kong
 
         int CPerspectiveCameraSceneNode::GetCameraType()
         {
-            return PERSPECTIVE;
+            return ECT_PERSPECTIVE;
         }
 
         //void CPerspectiveCameraSceneNode::Render()

@@ -67,13 +67,16 @@ namespace kong
             //! Render shadows
             void RenderShadow() override;
 
-            //! Recalcute Light bounding box
-            void RecalculateLightBoundingBox(core::aabbox3df &box) override;
+            //! Reset camera transform
+            void ResetCameraTransform(core::Array<DefaultNodeEntry>& solid_nodes) override;
 
         private:
             void DoLightRecalc();
             void DoCameraRecalc();
             void ResetCamera(bool delete_camera = false);
+
+            //! Recalcute Light bounding box
+            void CalculateLightBoundingBox(core:: aabbox3df& light_box, const core::aabbox3df box);
 
             video::SLight light_data_;
             core::aabbox3d<f32> box_;
@@ -81,9 +84,6 @@ namespace kong
             bool light_is_on_;
 
             ICameraSceneNode *camera_;
-
-            // light frustum bounding box
-            core::aabbox3df light_bounding_box_;
         };
     }
 }

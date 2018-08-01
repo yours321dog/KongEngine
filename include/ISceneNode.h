@@ -394,7 +394,7 @@ namespace kong
 
             //! Get the axis aligned, transformed and animated absolute bounding box of this node.
             /** \return The transformed bounding box. */
-            virtual const core::aabbox3d<f32> getTransformedBoundingBox() const
+            virtual core::aabbox3d<f32> GetTransformedBoundingBox() const
             {
                 core::aabbox3d<f32> box = GetBoundingBox();
                 absolute_tranform_.TransformBoxEx(box);
@@ -432,7 +432,7 @@ namespace kong
             //! Rebuild the boundingbox
             virtual void RebuildBoundingBoxMesh() const
             {
-                bounding_box_mesh_.RebuildBoundingBoxMesh(getTransformedBoundingBox());
+                bounding_box_mesh_.RebuildBoundingBoxMesh(GetTransformedBoundingBox());
             }
 
         protected:
