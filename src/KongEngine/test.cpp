@@ -350,8 +350,8 @@ void TestObjLoad()
     ISceneNode *node = smr->AddMeshSceneNode(mesh, nullptr, -1, Vector3Df(0.0f, 0.0f, -0.0f), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     node->NormalizeVertice();
     f32 distance = 1.f;
-    ISceneNode *bottom_plane_node = smr->AddPlaneSceneNode(distance * 5.f, nullptr, -1, Vector3Df(0.0f, 0.f, distance), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
-    ISceneNode *back_plane_node = smr->AddPlaneSceneNode(distance * 5.f, nullptr, -1, Vector3Df(0.0f, -0.5f, 0.0f), Vector3Df(-PI / 2, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
+    //ISceneNode *bottom_plane_node = smr->AddPlaneSceneNode(distance * 5.f, nullptr, -1, Vector3Df(0.0f, 0.f, distance), Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
+    //ISceneNode *back_plane_node = smr->AddPlaneSceneNode(distance * 5.f, nullptr, -1, Vector3Df(0.0f, -0.5f, 0.0f), Vector3Df(-PI / 2, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
     //node->SetMaterialTexture(0, driver->GetTexture("../../materials/saber1.jpg"));
     //node->EnableDrawBoundingBox(true);
 
@@ -447,7 +447,8 @@ void TestObjLoad()
         node->SetRotation(node_rot);
 
         //driver->Draw3DLine(Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
-        smr->DrawAll();
+        //smr->DrawAll();
+        smr->DrawAllDeferred();
 
         driver->EndScene();
     }

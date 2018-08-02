@@ -25,27 +25,37 @@ namespace kong
 
         void COpenGLShaderHelper::SetBool(const std::string& name, bool value) const
         {
-            glUniform1i(glGetUniformLocation(id_, name.c_str()), static_cast<s32>(value));
+            const GLint location = glGetUniformLocation(id_, name.c_str());
+            if (location >= 0)
+                glUniform1i(location, (value));
         }
 
         void COpenGLShaderHelper::SetInt(const std::string& name, s32 value) const
         {
-            glUniform1i(glGetUniformLocation(id_, name.c_str()), value);
+            const GLint location = glGetUniformLocation(id_, name.c_str());
+            if (location >= 0)
+                glUniform1i(location, value);
         }
 
         void COpenGLShaderHelper::SetFloat(const std::string& name, f32 value) const
         {
-            glUniform1f(glGetUniformLocation(id_, name.c_str()), value);
+            const GLint location = glGetUniformLocation(id_, name.c_str());
+            if (location >= 0)
+                glUniform1f(location, value);
         }
 
         void COpenGLShaderHelper::SetMatrix4(const std::string& name, const core::Matrixf& mat) const
         {
-            glUniformMatrix4fv(glGetUniformLocation(id_, name.c_str()), 1, GL_FALSE, mat.Pointer());
+            const GLint location = glGetUniformLocation(id_, name.c_str());
+            if (location >= 0)
+                glUniformMatrix4fv(location, 1, GL_FALSE, mat.Pointer());
         }
 
         void COpenGLShaderHelper::SetVec4(const std::string& name, const f32* vec4) const
         {
-            glUniform4fv(glGetUniformLocation(id_, name.c_str()), 1, vec4);
+            const GLint location = glGetUniformLocation(id_, name.c_str());
+            if (location >= 0)
+                glUniform4fv(location, 1, vec4);
         }
 
         void COpenGLShaderHelper::InitShader(const io::SPath& vertex_path, const io::SPath& fragment_path)

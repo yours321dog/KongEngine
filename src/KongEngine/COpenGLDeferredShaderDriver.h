@@ -32,7 +32,8 @@ namespace kong
             void EnablePostRenderTexture(u32 idx) const;
 
         protected:
-            IShaderHelper *deferred_shader_helper_;
+            IShaderHelper *deferred_post_shader_helper_;
+            IShaderHelper *deferred_base_shader_helper_;
 
             // render textures
             COpenGLFBODeferredTexture *frame_buffers_;

@@ -25,6 +25,8 @@ namespace kong
         class COpenGLFBOTexture;
         class COpenGLFBODepthTexture;
 
+        void CheckErrorCode();
+
         class COpenGLDriver : public IVideoDriver
         {
         public:
@@ -160,6 +162,8 @@ namespace kong
 
             //! Render second pass for deferred render
             void RenderSecondPass() override;
+
+            void CheckError() override;
 
         protected:
             virtual void UpdateMaxSupportLights();
@@ -342,6 +346,9 @@ namespace kong
             bool color_buffer_clear_;
             bool z_buffer_clear_;
             SColor color_clear_;
+
+            // render material texture or not
+            bool render_material_texture_on_;
 
             // viewport
             core::rect<s32> view_port_;

@@ -283,14 +283,33 @@ namespace kong
             {
                 return;
             }
-
+#ifdef _DEBUG
+            driver_->CheckError();
+#endif
             driver_->SetMaterial(video::SMaterial());
+
+            driver_->CheckError();
+
             driver_->SetTransform(video::ETS_PROJECTION, core::identity_matrix);
             driver_->SetTransform(video::ETS_VIEW, core::identity_matrix);
             driver_->SetTransform(video::ETS_WORLD, core::identity_matrix);
-
+#ifdef _DEBUG
+            driver_->CheckError();
+#endif
             // do animations and other stuff.
             OnAnimate(0);
+
+
+            // let all nodes register themselves
+            OnRegisterSceneNode();
+
+            // render first pass
+            driver_->RenderFirstPass();
+
+
+#ifdef _DEBUG
+            driver_->CheckError();
+#endif
 
             /*!
             First Scene Node for prerendering should be the active camera
@@ -303,11 +322,6 @@ namespace kong
                 cam_world_pos_ = active_camera_->GetAbsolutePosition();
             }
 
-            // let all nodes register themselves
-            OnRegisterSceneNode();
-
-            // render first pass
-            driver_->RenderFirstPass();
             // render default objects
             {
                 for (u32 i = 0; i < solid_node_list_.Size(); ++i)
@@ -315,7 +329,7 @@ namespace kong
                     solid_node_list_[i].node_->Render();
                 }
 
-                solid_node_list_.Resize(0);
+                //solid_node_list_.Resize(0);
             }
 
             // render second pass

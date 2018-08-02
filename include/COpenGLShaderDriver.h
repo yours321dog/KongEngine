@@ -25,6 +25,10 @@ namespace kong
             SL_LIGHT1,
             SL_LIGHT2,
             SL_LIGHT3,
+            SL_DEFERRED_PASS_0,
+            SL_DEFERRED_PASS_1,
+            SL_DEFERRED_PASS_2,
+            SL_DEFERRED_PASS_3,
             SL_COUNT
         };
 
@@ -65,6 +69,10 @@ namespace kong
             "light1",
             "light2",
             "light3",
+            "position_tex",
+            "normal_tex",
+            "diffuse_tex",
+            "texture3",
             nullptr
         };
 

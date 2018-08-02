@@ -179,9 +179,15 @@ namespace kong
 
             if (driver != nullptr)
             {
+#ifdef _DEBUG
+                driver->CheckError();
+#endif
                 driver->SetTransform(video::ETS_PROJECTION, project_);
                 driver->SetTransform(video::ETS_VIEW, view_);
                 driver->SetActiveCameraPosition(GetAbsolutePosition());
+#ifdef _DEBUG
+                driver->CheckError();
+#endif
             }
         }
 

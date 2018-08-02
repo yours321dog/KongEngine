@@ -60,14 +60,26 @@ namespace kong
             //    }
             //    printf("\n");
             //}
+#ifdef _DEBUG
+            driver->CheckError();
+#endif
+
             driver->SetRenderingMode(rendering_mode_);
             driver->SetTransform(video::ETS_WORLD, absolute_tranform_);
+
+#ifdef _DEBUG
+            driver->CheckError();
+#endif
 
             for (u32 i = 0; i < mesh_->GetMeshBufferCount(); i++)
             {
                 driver->SetMaterial(mesh_->GetMeshBuffer(i)->GetMaterial());
                 driver->DrawMeshBuffer(mesh_->GetMeshBuffer(i));
             }
+
+#ifdef _DEBUG
+            driver->CheckError();
+#endif
 
             if (draw_bounding_box_)
             {
@@ -86,6 +98,10 @@ namespace kong
                 driver->SetMaterial(bounding_box_mesh_.GetBoundingBoxMesh()->GetMeshBuffer(0)->GetMaterial());
                 driver->DrawMeshBuffer(bounding_box_mesh_.GetBoundingBoxMesh()->GetMeshBuffer(0));
             }
+
+#ifdef _DEBUG
+            driver->CheckError();
+#endif
         }
 
         const core::aabbox3d<f32>& CMeshSceneNode::GetBoundingBox() const

@@ -4,6 +4,7 @@
 #include "KongCompileConfig.h"
 #include <GL/glew.h>
 #include "os.h"
+#include <iostream>
 
 #ifdef _KONG_COMPILE_WITH_OPENGL_
 
@@ -19,6 +20,15 @@ namespace kong
 {
     namespace video
     {
+
+        void CheckErrorCode()
+        {
+            // check OpenGL error
+            GLenum err;
+            while ((err = glGetError()) != GL_NO_ERROR) {
+                std::cerr << "OpenGL error: " << err << std::endl;
+            }
+        }
 
         //! constructor for usual textures
         COpenGLTexture::COpenGLTexture(IImage* origImage, const io::path& name, void* mipmapData, COpenGLDriver* driver)
@@ -582,9 +592,20 @@ namespace kong
             pixel_format_ = GL_UNSIGNED_BYTE;
             has_mip_maps_ = false;
 
+            CheckErrorCode();
+
             // generate frame buffer
             glGenFramebuffers(1, &color_frame_buffer_);
-            COpenGLFBODeferredTexture::bindRTT();
+
+            CheckErrorCode();
+
+            glBindFramebuffer(GL_FRAMEBUFFER, color_frame_buffer_);
+
+            // check OpenGL error
+            GLenum err;
+            while ((err = glGetError()) != GL_NO_ERROR) {
+                std::cerr << "OpenGL error: " << err << std::endl;
+            }
 
             // position texture
             //glGenTextures(1, &texture_names_[EGBT_POSTION]);
@@ -598,7 +619,8 @@ namespace kong
             //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, image_size_.width_, image_size_.height_, 0, GL_RGBA, GL_FLOAT, 0);
             //glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + EGBT_POSTION, texture_names_[EGBT_POSTION], 0);
             //attachments_[EGBT_POSTION] = GL_COLOR_ATTACHMENT0 + EGBT_POSTION;
-            BindFramebufferTexture(EGBT_POSTION, GL_RGBA32F, GL_RGBA, GL_FLOAT);
+            //BindFramebufferTexture(EGBT_POSTION, GL_RGB32F, GL_RGB, GL_FLOAT);
+            BindFramebufferTexture(EGBT_POSTION, GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT);
 
             // normal texture
             //glGenTextures(1, &texture_names_[EGBT_NORMAL]);
@@ -612,7 +634,8 @@ namespace kong
             //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, image_size_.width_, image_size_.height_, 0, GL_RGBA, GL_FLOAT, 0);
             //glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, texture_names_[EGBT_NORMAL], 0);
             //attachments_[1] = GL_COLOR_ATTACHMENT1;
-            BindFramebufferTexture(EGBT_NORMAL, GL_RGBA32F, GL_RGBA, GL_FLOAT);
+            //BindFramebufferTexture(EGBT_NORMAL, GL_RGB32F, GL_RGB, GL_FLOAT);
+            BindFramebufferTexture(EGBT_NORMAL, GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT);
 
             // diffuse color texture
             //glGenTextures(1, &texture_names_[EGBT_DIFFUSE]);
@@ -637,7 +660,10 @@ namespace kong
             glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, image_size_.width_, image_size_.height_, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_texture_name_, 0);
 
+            CheckErrorCode();
+
             COpenGLFBODeferredTexture::unbindRTT();
+            CheckErrorCode();
         }
 
         COpenGLFBODeferredTexture::~COpenGLFBODeferredTexture()
@@ -653,9 +679,12 @@ namespace kong
 
         void COpenGLFBODeferredTexture::bindRTT()
         {
+            CheckErrorCode();
             if (color_frame_buffer_ != 0)
                 glBindFramebuffer(GL_FRAMEBUFFER, color_frame_buffer_);
             glDrawBuffers(EGBT_COUNT, attachments_);
+
+            CheckErrorCode();
         }
 
         void COpenGLFBODeferredTexture::unbindRTT()
@@ -686,6 +715,12 @@ namespace kong
             glTexImage2D(GL_TEXTURE_2D, 0, internal_format, image_size_.width_, image_size_.height_, 0, pixel_format, pixel_type, 0);
             glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + idx, texture_names_[idx], 0);
             attachments_[idx] = GL_COLOR_ATTACHMENT0 + idx;
+
+            // check OpenGL error
+            GLenum err;
+            while ((err = glGetError()) != GL_NO_ERROR) {
+                std::cerr << "idx : " << idx << ", OpenGL error: " << err << std::endl;
+            }
         }
 
         bool checkFBOStatus(COpenGLDriver* Driver)

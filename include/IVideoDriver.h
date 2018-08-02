@@ -359,6 +359,8 @@ namespace kong
             /** if you want to use deferred rendering , you need to use
             *  this method to run the second pass. */
             virtual void RenderSecondPass() = 0;
+
+            virtual void CheckError() = 0;
         };
     }
 }

@@ -15,6 +15,9 @@ uniform mat4 world_transform;
 uniform mat4 view_transform;
 uniform mat4 project_transform;
 
+// normal mapping flag
+uniform bool normal_mapping_on;
+
 out vec4 outClr;
 out vec2 outTexcoord;
 out vec3 outBC;
@@ -23,11 +26,6 @@ out vec4 world_position;
 out vec4 world_normal;
 out vec4 world_tangent;
 out vec4 world_bitangent;
-
-out vec4 light_position;
-
-// normal mapping flag
-uniform bool normal_mapping_on;
 
 void main()
 {

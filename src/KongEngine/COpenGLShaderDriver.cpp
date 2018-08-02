@@ -56,11 +56,17 @@ namespace kong
             shader_helper_->SetBool("light_on", false);
             shader_helper_->SetBool("light0_on", false);
 
+            shadow_shader_helper_->Use();
+            shadow_shader_helper_->SetBool("test_on", false);
+
             return true;
         }
 
         void COpenGLShaderDriver::SetMaterial(const SMaterial& material)
         {
+#ifdef _DEBUG
+            CheckError();
+#endif
             COpenGLDriver::SetMaterial(material);
             GLfloat data[4];
             data[0] = material.ambient_color_.GetRed() / 255.f;
@@ -68,6 +74,9 @@ namespace kong
             data[2] = material.ambient_color_.GetBlue() / 255.f;
             data[3] = material.ambient_color_.GetAlpha() / 255.f;
             SetMaterialUniform(SL_MAT_AMBIENT, data);
+#ifdef _DEBUG
+            CheckError();
+#endif
 
             data[0] = material.diffuse_color_.GetRed() / 255.f;
             data[1] = material.diffuse_color_.GetGreen() / 255.f;
@@ -87,7 +96,15 @@ namespace kong
             data[3] = material.emissive_color_.GetAlpha() / 255.f;
             SetMaterialUniform(SL_MAT_EMISSIVE, data);
 
+#ifdef _DEBUG
+            CheckError();
+#endif
+
             SetMaterialUniform(SL_MAT_SHININESS, material.shininess_);
+
+#ifdef _DEBUG
+            CheckError();
+#endif
 
             if (material.MaterialType == EMT_NORMAL_MAP_SOLID || material.MaterialType == EMT_PARALLAX_MAP_SOLID
                 || material.MaterialType == EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR || material.MaterialType == EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR)
@@ -98,6 +115,9 @@ namespace kong
             {
                 shader_helper_->SetBool("normal_mapping_on", false);
             }
+#ifdef _DEBUG
+            CheckError();
+#endif
         }
 
         void COpenGLShaderDriver::SetTransform(u32 state, const core::Matrixf& mat)
@@ -148,6 +168,9 @@ namespace kong
 
         bool COpenGLShaderDriver::SetActiveTexture(u32 stage, const video::ITexture* texture)
         {
+            if (!render_material_texture_on_)
+                return false;
+
             if (current_texture_[stage] == texture)
                 return true;
 

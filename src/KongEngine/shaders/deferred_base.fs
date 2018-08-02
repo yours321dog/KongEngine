@@ -1,6 +1,6 @@
 #version 330 core
-layout (location = 0) out vec3 gPosition;
-layout (location = 1) out vec3 gNormal;
+layout (location = 0) out vec4 gPosition;
+layout (location = 1) out vec4 gNormal;
 layout (location = 2) out vec4 gDiffuse;
 
 in vec4 outClr;
@@ -40,8 +40,6 @@ uniform bool normal_mapping_on;
 // wireframe control flags
 uniform int wireframe_on;
 
-uniform vec4 cam_position;
-
 uniform Material material;
 
 vec3 CalculateNormal()
@@ -55,7 +53,7 @@ vec3 CalculateNormal()
         mat3 TBN = mat3(T, B, N);
 
 //        mat3 TBN = transpose(mat3(world_tangent.xyz, world_bitangent.xyz, normal_direction));
-        normal_direction = TBD * normalize(texture(texture1, outTexcoord).rgb * 2.0 - 1.0);
+        normal_direction = TBN * normalize(texture(texture1, outTexcoord).rgb * 2.0 - 1.0);
     }
 
     return normal_direction;
@@ -81,24 +79,30 @@ float EdgeFactor(){
 
 void main()
 {
-    // wireframe mode
-    if (wireframe_on == ERM_WIREFRAME)
-    {
-        gDiffuse = mix(vec4(0.5, 0.5, 0.5, 1.0), vec4(0.0), EdgeFactor());
-    }
-    else // mesh mode
-    {
-        if (texture0_on)
-        {
-            float mipmap_level = MipMapLevel(outTexcoord * textureSize(texture0, 0));
-            gDiffuse = textureLod(texture0, outTexcoord, mipmap_level);
-            //FragColor = texture(texture0, outTexcoord);
-        }
-        else
-        {
-            gDiffuse = material.diffuse;
-        }
-    }
+//    // wireframe mode
+//    if (wireframe_on == ERM_WIREFRAME)
+//    {
+//        gDiffuse = mix(vec4(0.5, 0.5, 0.5, 1.0), vec4(0.0), EdgeFactor());
+//    }
+//    else // mesh mode
+//    {
+//        if (texture0_on)
+//        {
+//            float mipmap_level = MipMapLevel(outTexcoord * textureSize(texture0, 0));
+//            gDiffuse = textureLod(texture0, outTexcoord, mipmap_level);
+//            //FragColor = texture(texture0, outTexcoord);
+//        }
+//        else
+//        {
+//            gDiffuse = material.diffuse;
+//        }
+//    }
+//
+//    gPosition = world_position.xyz;
+//    gNormal = vec3(0.5, 0.2, 0.7);
 
-    gPosition = world_position.xyz;
+    gNormal = vec4(0.5, 0.0, 0.0, 1.0);
+    gDiffuse = vec4(0.0, 0.5, 0.0, 1.0);
+//    gPosition = vec4(0.0, 0.0, 0.5, 1.0);
+    gPosition = world_position;
 } 

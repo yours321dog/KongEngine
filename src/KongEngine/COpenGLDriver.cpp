@@ -28,7 +28,7 @@ namespace kong
             : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device),
               params_(params), io_(io), max_texture_units_(0), max_supported_textures_(0), max_support_lights_(0),
               shadow_color_texture_(nullptr), shadow_depth_texture_(nullptr), rendering_mode_(ERM_MESH), color_format_(ECF_A8R8G8B8),
-              shadow_enable_(false), color_buffer_clear_(true), z_buffer_clear_(true), shadow_texture_size_(2048, 2048)
+              shadow_enable_(false), color_buffer_clear_(true), z_buffer_clear_(true), shadow_texture_size_(2048, 2048), render_material_texture_on_(true)
         {
             // create manipulator
             mesh_manipulator_ = new scene::CMeshManipulator();
@@ -191,6 +191,7 @@ namespace kong
             color_buffer_clear_ = back_buffer;
             z_buffer_clear_ = z_buffer;
             color_clear_ = color;
+            render_material_texture_on_ = true;
             return true;
         }
 
@@ -904,6 +905,11 @@ namespace kong
 
         void COpenGLDriver::RenderSecondPass()
         {
+        }
+
+        void COpenGLDriver::CheckError()
+        {
+            CheckErrorCode();
         }
 
         void COpenGLDriver::UpdateMaxSupportLights()
