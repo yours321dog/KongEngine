@@ -26,6 +26,8 @@ namespace kong
             void SetInt(const std::string &name, s32 value) const override;
             void SetFloat(const std::string &name, f32 value) const override;
             void SetMatrix4(const std::string &name, const core::Matrixf &mat) const override;
+            void SetVec2(const std::string &name, const f32 *vec4) const override;
+            void SetVec2i(const std::string &name, const s32 *vec2) const override;
             void SetVec4(const std::string &name, const f32 *vec4) const override;
 
         private:

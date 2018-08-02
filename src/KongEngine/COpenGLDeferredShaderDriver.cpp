@@ -83,6 +83,9 @@ namespace kong
             {
                 EnablePostRenderTexture(i);
             }
+
+            const f32 data[2] = { params_.window_size_.width_, params_.window_size_.height_ };
+            deferred_post_shader_helper_->SetVec2("window_size", data);
             CheckErrorCode();
         }
 

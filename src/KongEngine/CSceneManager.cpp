@@ -337,6 +337,13 @@ namespace kong
 
             //render lights scenes
             {
+                // set camera again
+                if (active_camera_ != nullptr)
+                {
+                    active_camera_->Render();
+                    cam_world_pos_ = active_camera_->GetAbsolutePosition();
+                }
+
                 //    // Sort the lights by distance from the camera
                 //core::vector3df cam_world_pos(0, 0, 0);
                 //if (active_camera_ != nullptr)

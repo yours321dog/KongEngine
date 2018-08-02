@@ -79,30 +79,30 @@ float EdgeFactor(){
 
 void main()
 {
-//    // wireframe mode
-//    if (wireframe_on == ERM_WIREFRAME)
-//    {
-//        gDiffuse = mix(vec4(0.5, 0.5, 0.5, 1.0), vec4(0.0), EdgeFactor());
-//    }
-//    else // mesh mode
-//    {
-//        if (texture0_on)
-//        {
-//            float mipmap_level = MipMapLevel(outTexcoord * textureSize(texture0, 0));
-//            gDiffuse = textureLod(texture0, outTexcoord, mipmap_level);
-//            //FragColor = texture(texture0, outTexcoord);
-//        }
-//        else
-//        {
-//            gDiffuse = material.diffuse;
-//        }
-//    }
-//
-//    gPosition = world_position.xyz;
-//    gNormal = vec3(0.5, 0.2, 0.7);
+    // wireframe mode
+    if (wireframe_on == ERM_WIREFRAME)
+    {
+        gDiffuse = mix(vec4(0.5, 0.5, 0.5, 1.0), vec4(0.0), EdgeFactor());
+    }
+    else // mesh mode
+    {
+        if (texture0_on)
+        {
+            float mipmap_level = MipMapLevel(outTexcoord * textureSize(texture0, 0));
+            gDiffuse = textureLod(texture0, outTexcoord, mipmap_level);
+            //FragColor = texture(texture0, outTexcoord);
+        }
+        else
+        {
+            gDiffuse = material.diffuse;
+        }
+    }
 
-    gNormal = vec4(0.5, 0.0, 0.0, 1.0);
-    gDiffuse = vec4(0.0, 0.5, 0.0, 1.0);
-//    gPosition = vec4(0.0, 0.0, 0.5, 1.0);
     gPosition = world_position;
+    gNormal = vec4(CalculateNormal(), 1.0);
+
+//    gNormal = vec4(0.5, 0.0, 0.0, 1.0);
+//    gDiffuse = vec4(0.0, 0.5, 0.0, 1.0);
+//    gPosition = vec4(0.0, 0.0, 0.5, 1.0);
+//    gPosition = world_position;
 } 

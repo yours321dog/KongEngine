@@ -51,6 +51,20 @@ namespace kong
                 glUniformMatrix4fv(location, 1, GL_FALSE, mat.Pointer());
         }
 
+        void COpenGLShaderHelper::SetVec2(const std::string& name, const f32* vec2) const
+        {
+            const GLint location = glGetUniformLocation(id_, name.c_str());
+            if (location >= 0)
+                glUniform2fv(location, 1, vec2);
+        }
+
+        void COpenGLShaderHelper::SetVec2i(const std::string& name, const s32* vec2) const
+        {
+            const GLint location = glGetUniformLocation(id_, name.c_str());
+            if (location >= 0)
+                glUniform2iv(location, 1, vec2);
+        }
+
         void COpenGLShaderHelper::SetVec4(const std::string& name, const f32* vec4) const
         {
             const GLint location = glGetUniformLocation(id_, name.c_str());
