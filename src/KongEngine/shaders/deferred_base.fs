@@ -100,6 +100,7 @@ void main()
 
     gPosition = world_position;
     gNormal = vec4(CalculateNormal(), 1.0);
+//    gNormal = CalculateNormal();
 
 //    gNormal = vec4(0.5, 0.0, 0.0, 1.0);
 //    gDiffuse = vec4(0.0, 0.5, 0.0, 1.0);

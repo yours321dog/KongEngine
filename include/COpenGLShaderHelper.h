@@ -20,6 +20,10 @@ namespace kong
 
             // activate the shader
             void Use() override;
+
+            ~COpenGLShaderHelper();
+
+            u32 GetID() override;
             
             // uniform set functions
             void SetBool(const std::string &name, bool value) const override;

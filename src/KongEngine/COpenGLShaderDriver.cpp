@@ -394,7 +394,7 @@ namespace kong
             shader_helper_->Use();
             glBindVertexArray(vao_);
             glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_SHORT, nullptr);
-            glBindVertexArray(0);
+            //glBindVertexArray(0);
         }
 
         void COpenGLShaderDriver::DrawTangentMeshBuffer(const scene::IMeshBuffer* mesh_buffer)
@@ -406,7 +406,7 @@ namespace kong
 
             glBindVertexArray(vao_);
             glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(S3DVertexTangents)* vertice_count, vertices, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(S3DVertexTangents) * vertice_count, vertices, GL_STATIC_DRAW);
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16)* indices_count, indices, GL_STATIC_DRAW);

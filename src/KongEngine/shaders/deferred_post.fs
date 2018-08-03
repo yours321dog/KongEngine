@@ -2,10 +2,12 @@
 out vec4 FragColor;
 //layout(location = 0) out float fragmentdepth;
 
+in vec2 tex_uv;
+
 uniform sampler2D position_tex;
 uniform sampler2D normal_tex;
 uniform sampler2D diffuse_tex;
-uniform sampler2D texture3;
+uniform sampler2D shadow_tex;
 
 uniform bool test_on;
 
@@ -42,15 +44,67 @@ uniform int lights_num;
 
 uniform vec4 cam_position;
 
+// shadow control flag
+uniform bool shadow_on;
+
+// light camera transform
+uniform mat4 light_view_transform;
+uniform mat4 light_projection_transform;
+
+// shadow PCF
+vec2 poisson_dick[4] = vec2[](
+  vec2( -0.94201624, -0.39906216 ),
+  vec2( 0.94558609, -0.76890725 ),
+  vec2( -0.094184101, -0.92938870 ),
+  vec2( 0.34495938, 0.29387760 )
+);
+
+float CalculateShadowFactor()
+{
+    if (!shadow_on)
+        return 1.f;
+
+    vec2 texture_uv =  tex_uv;
+    vec4 world_position = texture(position_tex, texture_uv);
+    vec4 lightspace_position = light_projection_transform * light_view_transform * world_position;
+
+    vec2 shadow_uv = lightspace_position.xy / lightspace_position.w * 0.5 + 0.5;
+
+//    shadow_uv.y = 1.0 - shadow_uv.y;
+    float closest_depth = texture(shadow_tex, shadow_uv).x;
+
+    float bias = 0.0005f;
+    float shadow = 0.2f;
+    float light_depth = lightspace_position.z / lightspace_position.w;
+    if (lightspace_position.z / lightspace_position.w - bias <= closest_depth)
+    {
+        shadow = 1.0f;
+    }
+    else
+    {
+        for (int i=0;i<4;i++)
+        {
+            if ( texture(shadow_tex, shadow_uv + poisson_dick[i] / 700.0f ).x  >= light_depth - bias )
+            {
+                shadow += 0.2f;
+            }
+        }
+    }
+
+    return shadow;
+}
+
 vec4 CalculateLight()
 {
     int max_lights = min(NR_LIGHTS, lights_num);
-    vec2 texture_uv =  gl_FragCoord.xy / window_size;
+    vec2 texture_uv = tex_uv;
     vec4 res_light = vec4(0, 0, 0, 0);
 
     vec4 world_position = texture(position_tex, texture_uv);
     vec4 world_normal = texture(normal_tex, texture_uv);
     vec4 diffuse_color = texture(diffuse_tex, texture_uv);
+
+    float shadow_factor = CalculateShadowFactor();
 
     for (int i = 0; i < max_lights; i++)
     {
@@ -112,7 +166,7 @@ vec4 CalculateLight()
         }
 
 
-        res_light += res_ambient / max_lights + light_attenuation * (res_diffuse + res_specular);
+        res_light += res_ambient / max_lights + shadow_factor * light_attenuation * (res_diffuse + res_specular);
     }
 
     res_light *= diffuse_color;
@@ -128,6 +182,7 @@ void main()
 //    FragColor = vec4(vec3(0.5), 1.0);
     
     FragColor = CalculateLight();
+//    FragColor = vec4(0.5, 0.0, 0.0, 1.0);
 
 //    if (test_on)
 //        FragColor = texture(diffuse_tex, gl_FragCoord.xy / window_size);

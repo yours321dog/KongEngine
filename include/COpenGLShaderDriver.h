@@ -28,7 +28,7 @@ namespace kong
             SL_DEFERRED_PASS_0,
             SL_DEFERRED_PASS_1,
             SL_DEFERRED_PASS_2,
-            SL_DEFERRED_PASS_3,
+            SL_DEFERRED_SHADOW,
             SL_COUNT
         };
 
@@ -72,7 +72,7 @@ namespace kong
             "position_tex",
             "normal_tex",
             "diffuse_tex",
-            "texture3",
+            "shadow_tex",
             nullptr
         };
 

@@ -23,6 +23,16 @@ namespace kong
             glUseProgram(id_);
         }
 
+        COpenGLShaderHelper::~COpenGLShaderHelper()
+        {
+            glDeleteProgram(id_);
+        }
+
+        u32 COpenGLShaderHelper::GetID()
+        {
+            return id_;
+        }
+
         void COpenGLShaderHelper::SetBool(const std::string& name, bool value) const
         {
             //const GLint location = glGetUniformLocation(id_, name.c_str());

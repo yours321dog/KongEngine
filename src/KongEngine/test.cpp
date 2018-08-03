@@ -316,8 +316,8 @@ void TestWindow()
         node->SetRotation(node_rot);
 
         //driver->Draw3DLine(Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
-        //smr->DrawAll();
-        smr->DrawAllDeferred();
+        smr->DrawAll();
+        //smr->DrawAllDeferred();
 
         driver->EndScene();
     }
@@ -447,8 +447,8 @@ void TestObjLoad()
         node->SetRotation(node_rot);
 
         //driver->Draw3DLine(Vector3Df(0.f, 0.f, 0.f), Vector3Df(1.f, 1.f, 1.f));
-        smr->DrawAll();
-        //smr->DrawAllDeferred();
+        //smr->DrawAll();
+        smr->DrawAllDeferred();
 
         driver->EndScene();
     }

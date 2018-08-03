@@ -20,6 +20,9 @@ namespace kong
 
             virtual ~COpenGLDeferredShaderDriver();
 
+            //! Applications must call this method before performing any rendering.
+            bool BeginScene(bool back_buffer = true, bool z_buffer = true, SColor color = SColor(255, 0, 0, 0)) override;
+
             bool InitDriver(CKongDeviceWin32 *device) override;
 
             //! Render first pass for deferred render
@@ -36,9 +39,20 @@ namespace kong
             //! Set main light, used for shadow rendering
             void SetMainLight(const SLight& light) override;
 
+            //! Enable shadows.
+            void EnableShadow(bool flag) override;
+
+            //! End shadow rendering
+            void EndShadowRender() override;
+
+            // draw a space fill quad
+            void DrawSpaceFillQuad() override;
+
         protected:
             void SetLightUniform(s32 light_idx, s32 light_val_type, const void *val) const override;
             void SetLightUniform(s32 light_idx, s32 light_val_type, f32 val) const override;
+
+
 
             IShaderHelper *deferred_post_shader_helper_;
             IShaderHelper *deferred_base_shader_helper_;

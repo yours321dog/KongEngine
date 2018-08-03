@@ -367,6 +367,9 @@ namespace kong
             virtual void RenderSecondPass() = 0;
 
             virtual void CheckError() = 0;
+
+            // draw a space fill quad
+            virtual void DrawSpaceFillQuad() = 0;
         };
     }
 }

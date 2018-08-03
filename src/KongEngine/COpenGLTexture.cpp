@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include "os.h"
 #include <iostream>
+#include <cassert>
 
 #ifdef _KONG_COMPILE_WITH_OPENGL_
 
@@ -28,6 +29,8 @@ namespace kong
             while ((err = glGetError()) != GL_NO_ERROR) {
                 std::cerr << "OpenGL error: " << err << std::endl;
             }
+
+            //assert(err == GL_NO_ERROR);
         }
 
         //! constructor for usual textures
@@ -592,12 +595,8 @@ namespace kong
             pixel_format_ = GL_UNSIGNED_BYTE;
             has_mip_maps_ = false;
 
-            CheckErrorCode();
-
             // generate frame buffer
             glGenFramebuffers(1, &color_frame_buffer_);
-
-            CheckErrorCode();
 
             glBindFramebuffer(GL_FRAMEBUFFER, color_frame_buffer_);
 
@@ -620,7 +619,7 @@ namespace kong
             //glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + EGBT_POSTION, texture_names_[EGBT_POSTION], 0);
             //attachments_[EGBT_POSTION] = GL_COLOR_ATTACHMENT0 + EGBT_POSTION;
             //BindFramebufferTexture(EGBT_POSTION, GL_RGB32F, GL_RGB, GL_FLOAT);
-            BindFramebufferTexture(EGBT_POSTION, GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT);
+            BindFramebufferTexture(EGBT_POSTION, GL_RGB16F, GL_RGB, GL_HALF_FLOAT);
 
             // normal texture
             //glGenTextures(1, &texture_names_[EGBT_NORMAL]);
@@ -635,7 +634,7 @@ namespace kong
             //glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, texture_names_[EGBT_NORMAL], 0);
             //attachments_[1] = GL_COLOR_ATTACHMENT1;
             //BindFramebufferTexture(EGBT_NORMAL, GL_RGB32F, GL_RGB, GL_FLOAT);
-            BindFramebufferTexture(EGBT_NORMAL, GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT);
+            BindFramebufferTexture(EGBT_NORMAL, GL_RGB16F, GL_RGB, GL_HALF_FLOAT);
 
             // diffuse color texture
             //glGenTextures(1, &texture_names_[EGBT_DIFFUSE]);
@@ -651,25 +650,31 @@ namespace kong
             //attachments_[2] = GL_COLOR_ATTACHMENT2;
             BindFramebufferTexture(EGBT_DIFFUSE, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
 
-            // depth buffer
-            glGenTextures(1, &depth_texture_name_);
-            glBindTexture(GL_TEXTURE_2D, depth_texture_name_);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, image_size_.width_, image_size_.height_, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_texture_name_, 0);
+            glGenRenderbuffers(1, &depth_texture_name_);
+            glBindRenderbuffer(GL_RENDERBUFFER, depth_texture_name_);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, image_size_.width_, image_size_.height_);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_texture_name_);
 
-            CheckErrorCode();
+            //// depth buffer
+            //glGenTextures(1, &depth_texture_name_);
+            //glBindTexture(GL_TEXTURE_2D, depth_texture_name_);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            //glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, image_size_.width_, image_size_.height_, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+            //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_texture_name_, 0);
+
+#ifdef _DEBUG
+            checkFBOStatus(driver);
+#endif
 
             COpenGLFBODeferredTexture::unbindRTT();
-            CheckErrorCode();
         }
 
         COpenGLFBODeferredTexture::~COpenGLFBODeferredTexture()
         {
             glDeleteTextures(EGBT_COUNT, texture_names_);
-            glDeleteTextures(1, &depth_texture_name_);
+            glDeleteRenderbuffers(1, &depth_texture_name_);
         }
 
         bool COpenGLFBODeferredTexture::isFrameBufferObject() const
@@ -679,12 +684,10 @@ namespace kong
 
         void COpenGLFBODeferredTexture::bindRTT()
         {
-            CheckErrorCode();
             if (color_frame_buffer_ != 0)
                 glBindFramebuffer(GL_FRAMEBUFFER, color_frame_buffer_);
             glDrawBuffers(EGBT_COUNT, attachments_);
 
-            CheckErrorCode();
         }
 
         void COpenGLFBODeferredTexture::unbindRTT()
@@ -726,7 +729,7 @@ namespace kong
         bool checkFBOStatus(COpenGLDriver* Driver)
         {
 #ifdef GL_EXT_framebuffer_object
-            GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER_EXT);
+            GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
             switch (status)
             {

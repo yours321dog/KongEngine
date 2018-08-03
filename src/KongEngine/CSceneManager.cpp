@@ -283,19 +283,11 @@ namespace kong
             {
                 return;
             }
-#ifdef _DEBUG
-            driver_->CheckError();
-#endif
             driver_->SetMaterial(video::SMaterial());
-
-            driver_->CheckError();
-
             driver_->SetTransform(video::ETS_PROJECTION, core::identity_matrix);
             driver_->SetTransform(video::ETS_VIEW, core::identity_matrix);
             driver_->SetTransform(video::ETS_WORLD, core::identity_matrix);
-#ifdef _DEBUG
-            driver_->CheckError();
-#endif
+
             // do animations and other stuff.
             OnAnimate(0);
 
@@ -303,48 +295,74 @@ namespace kong
             // let all nodes register themselves
             OnRegisterSceneNode();
 
-            // render first pass
-            driver_->RenderFirstPass();
-
-
-#ifdef _DEBUG
-            driver_->CheckError();
-#endif
-
-            /*!
-            First Scene Node for prerendering should be the active camera
-            consistent Camera is needed for culling
-            */
-            cam_world_pos_.Set(0, 0, 0);
-            if (active_camera_ != nullptr)
+            // render shadow pass
+            if (shadow_enable_)
             {
-                active_camera_->Render();
-                cam_world_pos_ = active_camera_->GetAbsolutePosition();
-            }
+                driver_->BeginShadowRender();
 
-            // render default objects
-            {
-                for (u32 i = 0; i < solid_node_list_.Size(); ++i)
+                // set light transform used for shadow
+                u32 max_lights = light_list_.Size();
+                max_lights = core::min_(driver_->GetMaximalDynamicLightAmount(), max_lights);
+
+                for (u32 i = 0; i < max_lights; ++i)
                 {
-                    solid_node_list_[i].node_->Render();
+                    if (dynamic_cast<ILightSceneNode *>(light_list_[i])->GetLightIndex() == main_light_index_)
+                    {
+                        dynamic_cast<ILightSceneNode *>(light_list_[i])->ResetCameraTransform(solid_node_list_);
+                        dynamic_cast<ILightSceneNode *>(light_list_[i])->RenderShadow();
+                    }
                 }
 
-                //solid_node_list_.Resize(0);
+                // render default objects
+                {
+                    for (u32 i = 0; i < solid_node_list_.Size(); ++i)
+                    {
+                        solid_node_list_[i].node_->Render();
+                    }
+
+                    //solid_node_list_.Resize(0);
+                }
+                driver_->EndShadowRender();
             }
 
-            // render second pass
-            driver_->RenderSecondPass();
-
-            //render lights scenes
+            // render first pass
+            driver_->RenderFirstPass();
             {
-                // set camera again
+
+                /*!
+                First Scene Node for prerendering should be the active camera
+                consistent Camera is needed for culling
+                */
+                cam_world_pos_.Set(0, 0, 0);
                 if (active_camera_ != nullptr)
                 {
                     active_camera_->Render();
                     cam_world_pos_ = active_camera_->GetAbsolutePosition();
                 }
 
-                //    // Sort the lights by distance from the camera
+                // render default objects
+                {
+                    for (u32 i = 0; i < solid_node_list_.Size(); ++i)
+                    {
+                        solid_node_list_[i].node_->Render();
+                    }
+
+                    //solid_node_list_.Resize(0);
+                }
+            }
+
+            // render second pass
+            driver_->RenderSecondPass();
+
+            // set camera again
+            if (active_camera_ != nullptr)
+            {
+                active_camera_->Render();
+                cam_world_pos_ = active_camera_->GetAbsolutePosition();
+            }
+
+            //render lights scenes
+            {
                 //core::vector3df cam_world_pos(0, 0, 0);
                 //if (active_camera_ != nullptr)
                 //    cam_world_pos = active_camera_->GetAbsolutePosition();
@@ -357,8 +375,12 @@ namespace kong
 
                 max_lights = core::min_(driver_->GetMaximalDynamicLightAmount(), max_lights);
 
-                for (u32 i = 0; i< max_lights; ++i)
+                for (u32 i = 0; i < max_lights; ++i)
+                {
                     light_list_[i]->Render();
+                    if (dynamic_cast<ILightSceneNode *>(light_list_[i])->GetLightIndex() == main_light_index_)
+                        dynamic_cast<ILightSceneNode *>(light_list_[i])->RenderShadow();
+                }
                 driver_->ActivateDynamicLights();
 
                 light_list_.Resize(0);
@@ -366,13 +388,17 @@ namespace kong
 
             // render default objects
             {
-                for (u32 i = 0; i < solid_node_list_.Size(); ++i)
+                for (u32 i = 2; i < solid_node_list_.Size(); ++i)
                 {
-                    solid_node_list_[i].node_->Render();
+                    //solid_node_list_[i].node_->Render();
                 }
+
+                //solid_node_list_[1].node_->Render();
 
                 solid_node_list_.Resize(0);
             }
+
+            driver_->DrawSpaceFillQuad();
         }
 
         void CSceneManager::RemoveAll()

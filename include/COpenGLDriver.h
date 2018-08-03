@@ -170,6 +170,9 @@ namespace kong
 
             void CheckError() override;
 
+            // draw a space fill quad
+            void DrawSpaceFillQuad() override;
+
         protected:
             virtual void UpdateMaxSupportLights();
 

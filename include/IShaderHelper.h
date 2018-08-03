@@ -20,6 +20,8 @@ namespace kong
             // activate the shader
             virtual void Use() = 0;
 
+            virtual u32 GetID() = 0;
+
             // uniform set functions
             virtual void SetBool(const std::string &name, bool value) const = 0;
             virtual void SetInt(const std::string &name, s32 value) const = 0;

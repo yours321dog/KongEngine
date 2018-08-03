@@ -920,6 +920,10 @@ namespace kong
             CheckErrorCode();
         }
 
+        void COpenGLDriver::DrawSpaceFillQuad()
+        {
+        }
+
         void COpenGLDriver::UpdateMaxSupportLights()
         {
             max_support_lights_ = 8;

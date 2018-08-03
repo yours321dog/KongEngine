@@ -23,6 +23,18 @@ namespace kong
             delete frame_buffers_;
         }
 
+        bool COpenGLDeferredShaderDriver::BeginScene(bool back_buffer, bool z_buffer, SColor color)
+        {
+            if (!COpenGLDriver::BeginScene())
+            {
+                return false;
+            }
+
+            shader_helper_ = deferred_base_shader_helper_;
+            shader_helper_->Use();
+            return true;
+        }
+
         bool COpenGLDeferredShaderDriver::InitDriver(CKongDeviceWin32* device)
         {
             if (!COpenGLShaderDriver::InitDriver(device))
@@ -42,33 +54,28 @@ namespace kong
             shader_helper_->SetBool("texture1_on", false);
             shader_helper_->SetBool("normal_mapping_on", false);
 
-#ifdef _DEBUG 
-            CheckErrorCode();
-#endif
-
             return true;
         }
 
         void COpenGLDeferredShaderDriver::RenderFirstPass()
         {
-            CheckErrorCode();
             shader_helper_ = deferred_base_shader_helper_;
             shader_helper_->Use();
-            CheckErrorCode();
 
             if (frame_buffers_ != nullptr && frame_buffers_->isFrameBufferObject())
             {
                 frame_buffers_->bindRTT();
             }
-            CheckErrorCode();
 
             ClearBuffers(color_buffer_clear_, z_buffer_clear_, false, color_clear_);
             render_material_texture_on_ = true;
+
+            shader_helper_->SetBool("shadow_on", shadow_enable_);
+
         }
 
         void COpenGLDeferredShaderDriver::RenderSecondPass()
         {
-            CheckErrorCode();
             frame_buffers_->unbindRTT();
             shader_helper_ = deferred_post_shader_helper_;
             shader_helper_->Use();
@@ -84,14 +91,19 @@ namespace kong
                 EnablePostRenderTexture(i);
             }
 
+            // shadow texture
+            shader_helper_->SetInt(GetUniformName(SL_DEFERRED_SHADOW), SL_DEFERRED_SHADOW - SL_DEFERRED_PASS_0);
+            glActiveTexture(GL_TEXTURE0 + SL_DEFERRED_SHADOW - SL_DEFERRED_PASS_0);
+            glBindTexture(GL_TEXTURE_2D, dynamic_cast<const COpenGLTexture*>(shadow_depth_texture_)->GetOpenGLTextureName());
+
             const f32 data[2] = { params_.window_size_.width_, params_.window_size_.height_ };
             deferred_post_shader_helper_->SetVec2("window_size", data);
-            CheckErrorCode();
+            shader_helper_->SetBool("shadow_on", shadow_enable_);
         }
 
         void COpenGLDeferredShaderDriver::EnablePostRenderTexture(u32 idx) const
         {
-            deferred_post_shader_helper_->SetInt(GetUniformName(SL_DEFERRED_PASS_0 + idx), idx);
+            deferred_post_shader_helper_->SetInt(gbuffer_type_name[idx], idx);
             glActiveTexture(GL_TEXTURE0 + idx);
             glBindTexture(GL_TEXTURE_2D, frame_buffers_->GetTextureName(idx));
         }
@@ -104,6 +116,20 @@ namespace kong
         void COpenGLDeferredShaderDriver::SetMainLight(const SLight& light)
         {
             
+        }
+
+        void COpenGLDeferredShaderDriver::EnableShadow(bool flag)
+        {
+            COpenGLDriver::EnableShadow(flag);
+        }
+
+        void COpenGLDeferredShaderDriver::EndShadowRender()
+        {            
+            shadow_color_texture_->unbindRTT();
+
+            DeleteAllDynamicLights();
+
+            glViewport(0, 0, params_.window_size_.width_, params_.window_size_.height_);
         }
 
         void COpenGLDeferredShaderDriver::SetLightUniform(s32 light_idx, s32 light_val_type, const void* val) const
@@ -139,6 +165,46 @@ namespace kong
             core::stringc str = core::stringc("lights[") + core::stringc(light_idx) + "]." + light_uniform_name[light_val_type];
 
             shader_helper_->SetFloat(str.c_str(), val);
+        }
+
+;
+
+        void COpenGLDeferredShaderDriver::DrawSpaceFillQuad()
+        {
+            u16 indices[6] = {
+                0, 1, 2,
+                0, 2, 3
+            };
+
+            f32 points[12] = {
+                -1.f, -1.0, 1.0,
+                1.0, -1.0, 1.0,
+                1.0, 1.0, 1.0,
+                -1.0, 1.0, 1.0
+            };
+
+            SMaterial mat_default;
+            SetMaterial(mat_default);
+
+            shader_helper_->Use();
+
+            glBindVertexArray(vao_);
+            glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(f32) * 12, points, GL_STATIC_DRAW);
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16) * 6, indices, GL_STATIC_DRAW);
+
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(f32) * 3, nullptr);
+
+            glEnableVertexAttribArray(0);
+
+            //glBindVertexArray(vao_);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
+
+            //glBindVertexArray(0);
+
+            CheckErrorCode();
         }
     } // end namespace video
 } // end namespace kong
