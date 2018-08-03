@@ -49,15 +49,15 @@ namespace kong
                 return false;
             }
 
+            shadow_shader_helper_->Use();
+            shadow_shader_helper_->SetBool("test_on", false);
+
             shader_helper_->Use();
             shader_helper_->SetBool("texture0_on", false);
             shader_helper_->SetBool("texture1_on", false);
             shader_helper_->SetBool("normal_mapping_on", false);
             shader_helper_->SetBool("light_on", false);
             shader_helper_->SetBool("light0_on", false);
-
-            shadow_shader_helper_->Use();
-            shadow_shader_helper_->SetBool("test_on", false);
 
             return true;
         }
@@ -68,6 +68,9 @@ namespace kong
             CheckError();
 #endif
             COpenGLDriver::SetMaterial(material);
+#ifdef _DEBUG
+            CheckError();
+#endif
             GLfloat data[4];
             data[0] = material.ambient_color_.GetRed() / 255.f;
             data[1] = material.ambient_color_.GetGreen() / 255.f;
@@ -348,8 +351,14 @@ namespace kong
 
         void COpenGLShaderDriver::EnableShadow(bool flag)
         {
+#ifdef _DEBUG
+            CheckError();
+#endif
             COpenGLDriver::EnableShadow(flag);
             base_shader_helper_->SetBool("shadow_on", flag);
+#ifdef _DEBUG
+            CheckError();
+#endif
         }
 
         void COpenGLShaderDriver::DrawNormalMeshBuffer(const scene::IMeshBuffer* mesh_buffer)

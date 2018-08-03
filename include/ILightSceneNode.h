@@ -70,6 +70,9 @@ namespace kong
 
             //! Reset camera transform
             virtual void ResetCameraTransform(core::Array<DefaultNodeEntry>& solid_nodes) = 0;
+
+            //! Get main light index
+            virtual s32 GetLightIndex() const = 0;
         };
     }
 }

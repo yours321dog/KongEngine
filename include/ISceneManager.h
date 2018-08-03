@@ -531,6 +531,10 @@ namespace kong
             /** \return Pointer to the mesh manipulator
             This pointer should not be dropped. See IReferenceCounted::drop() for more information. */
             virtual IMeshManipulator* GetMeshManipulator() = 0;
+
+            //! Set main light for shadow rendering
+            /** \param light_node: main light for shadow rendering*/
+            virtual void SetMainLight(const ILightSceneNode *light_node) = 0;
         };
     }
 }

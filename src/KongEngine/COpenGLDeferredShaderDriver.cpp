@@ -12,7 +12,7 @@ namespace kong
     {
         COpenGLDeferredShaderDriver::COpenGLDeferredShaderDriver(const SKongCreationParameters& params, io::IFileSystem* file_system, CKongDeviceWin32* device)
             : COpenGLShaderDriver(params, file_system, device), deferred_post_shader_helper_(nullptr),
-              deferred_base_shader_helper_(nullptr), frame_buffers_(nullptr)
+              deferred_base_shader_helper_(nullptr), frame_buffers_(nullptr), nr_lights_(32)
         {
         }
 
@@ -94,6 +94,51 @@ namespace kong
             deferred_post_shader_helper_->SetInt(GetUniformName(SL_DEFERRED_PASS_0 + idx), idx);
             glActiveTexture(GL_TEXTURE0 + idx);
             glBindTexture(GL_TEXTURE_2D, frame_buffers_->GetTextureName(idx));
+        }
+
+        void COpenGLDeferredShaderDriver::ActivateDynamicLights()
+        {
+            shader_helper_->SetInt("lights_num", GetDynamicLightCount());
+        }
+
+        void COpenGLDeferredShaderDriver::SetMainLight(const SLight& light)
+        {
+            
+        }
+
+        void COpenGLDeferredShaderDriver::SetLightUniform(s32 light_idx, s32 light_val_type, const void* val) const
+        {
+            light_idx -= SL_LIGHT0;
+            if (light_idx < 0 || light_idx >= nr_lights_)
+                return;
+            core::stringc str = core::stringc("lights[") + core::stringc(light_idx) + "]." + light_uniform_name[light_val_type];
+            //os::Printer::print(str.c_str());
+
+            switch (light_val_type)
+            {
+            case SL_LIGHT_POSITION:
+            case SL_LIGHT_DIRECTION:
+            case SL_LIGHT_AMBIENT:
+            case SL_LIGHT_DIFFUSE:
+            case SL_LIGHT_SPECULAR:
+            case SL_LIGHT_ATTENUATION:
+                shader_helper_->SetVec4(str.c_str(), static_cast<const f32 *>(val));
+                break;
+            case SL_LIGHT_EXPONENT:
+            case SL_LIGHT_CUTOFF:
+                shader_helper_->SetFloat(str.c_str(), *static_cast<const f32 *>(val));
+            default: break;
+            }
+        }
+
+        void COpenGLDeferredShaderDriver::SetLightUniform(s32 light_idx, s32 light_val_type, f32 val) const
+        {
+            light_idx -= SL_LIGHT0;
+            if (light_idx < 0 || light_idx >= nr_lights_)
+                return;
+            core::stringc str = core::stringc("lights[") + core::stringc(light_idx) + "]." + light_uniform_name[light_val_type];
+
+            shader_helper_->SetFloat(str.c_str(), val);
         }
     } // end namespace video
 } // end namespace kong

@@ -305,6 +305,12 @@ namespace kong
             //! \return An index to the light, or -1 if an error occurs
             virtual s32 AddDynamicLight(const SLight& light) = 0;
 
+            //! activate dynamic lights, returning an index to the light
+            virtual void ActivateDynamicLights() = 0;
+
+            //! Set main light, used for shadow rendering
+            virtual void SetMainLight(const SLight& light) = 0;
+
             //! Returns the maximal amount of dynamic lights the device can handle
             /** \return Maximal amount of dynamic lights. */
             virtual u32 GetMaximalDynamicLightAmount() const = 0;

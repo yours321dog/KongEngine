@@ -13,6 +13,7 @@ namespace kong
         class CPerspectiveCameraSceneNode : public ICameraSceneNode
         {
         public:
+
             CPerspectiveCameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id,
                 f32 fovy = 90.f, f32 aspect = 1.33f, f32 zn = 0.1f, f32 zf = 50.f);
             CPerspectiveCameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id,

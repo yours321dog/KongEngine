@@ -816,6 +816,10 @@ namespace kong
             return lights_.Size() - 1;
         }
 
+        void COpenGLDriver::ActivateDynamicLights()
+        {
+        }
+
         u32 COpenGLDriver::GetMaximalDynamicLightAmount() const
         {
             return max_support_lights_;
@@ -832,6 +836,10 @@ namespace kong
                 return lights_[idx];
             else
                 return *(static_cast<SLight*>(nullptr));
+        }
+
+        void COpenGLDriver::SetMainLight(const SLight& light)
+        {
         }
 
         void COpenGLDriver::SetActiveCameraPosition(core::Vector3Df position) const

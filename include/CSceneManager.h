@@ -124,6 +124,9 @@ namespace kong
             //! returns the axis aligned bounding box of this node
             virtual const core::aabbox3d<f32>& GetBoundingBox() const;
 
+            //! Set main light for shadow rendering
+            void SetMainLight(const ILightSceneNode *light_node) override;
+
         private:
 
             //! video driver
@@ -146,6 +149,10 @@ namespace kong
 
             // ! Render shadow
             bool shadow_enable_;
+
+            //! light index number
+            s32 light_index_num_;
+            s32 main_light_index_;
         };
     }
 }

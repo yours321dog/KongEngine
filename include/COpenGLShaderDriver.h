@@ -154,8 +154,8 @@ namespace kong
 
             void SetMaterialUniform(s32 material_val_type, const void *val) const;
             void SetMaterialUniform(s32 material_val_type, f32 val) const;
-            void SetLightUniform(s32 light_idx, s32 light_val_type, const void *val) const;
-            void SetLightUniform(s32 light_idx, s32 light_val_type, f32 val) const;
+            virtual void SetLightUniform(s32 light_idx, s32 light_val_type, const void *val) const;
+            virtual void SetLightUniform(s32 light_idx, s32 light_val_type, f32 val) const;
             void Enable(s32 idx) const;
             void Disable(s32 idx) const;
             const c8 *GetUniformName(s32 idx) const;

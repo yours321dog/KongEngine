@@ -184,6 +184,7 @@ vec4 CalculateLight(Light light, bool light_n_on)
         if (shadow_on)
         {
             shadow_factor_val = CaluateShadowFactor();
+//            shadow_factor_val = 0.0f;
         }
 
         return res_ambient + shadow_factor_val * light_attenuation * (res_diffuse + res_specular);

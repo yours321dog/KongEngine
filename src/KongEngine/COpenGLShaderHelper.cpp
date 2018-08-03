@@ -25,9 +25,10 @@ namespace kong
 
         void COpenGLShaderHelper::SetBool(const std::string& name, bool value) const
         {
-            const GLint location = glGetUniformLocation(id_, name.c_str());
-            if (location >= 0)
-                glUniform1i(location, (value));
+            //const GLint location = glGetUniformLocation(id_, name.c_str());
+            //if (location >= 0)
+            //    glUniform1i(location, static_cast<s32>(value));
+            glUniform1i(glGetUniformLocation(id_, name.c_str()), static_cast<s32>(value));
         }
 
         void COpenGLShaderHelper::SetInt(const std::string& name, s32 value) const

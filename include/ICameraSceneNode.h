@@ -24,6 +24,9 @@ namespace kong
         class ICameraSceneNode : public ISceneNode
         {
         public:
+            //! Returns type of the scene node
+            ESCENE_NODE_TYPE GetType() const override { return ESNT_CAMERA; }
+
             ICameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id = -1);
             ICameraSceneNode(ISceneNode *parent, ISceneManager * mgr, s32 id, const core::Vector3Df& eye, const core::Vector3Df& up,
                 const core::Vector3Df& at, f32 zn = 1.f, f32 zf = 100.f);

@@ -11,8 +11,8 @@ namespace kong
     namespace scene
     {
         CLightSceneNode::CLightSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id,
-            const core::vector3df& position, video::SColorf& color, f32 radius)
-            : ILightSceneNode(parent, mgr, id, position), driver_light_index_(-1), light_is_on_(true), camera_(nullptr)
+            const core::vector3df& position, video::SColorf& color, f32 radius, s32 main_light_index)
+            : ILightSceneNode(parent, mgr, id, position), driver_light_index_(-1), light_is_on_(true), main_light_index_(main_light_index), camera_(nullptr)
         {
             light_data_.diffuse_color_ = color;
             // set some useful specular color
@@ -142,8 +142,11 @@ namespace kong
             if (!driver)
                 return;
 
-            driver->SetTransform(video::ETS_VIEW, camera_->GetViewTransform());
-            driver->SetTransform(video::ETS_PROJECTION, camera_->GetProjectTransform());
+            //driver->SetTransform(video::ETS_VIEW, camera_->GetViewTransform());
+            //driver->SetTransform(video::ETS_PROJECTION, camera_->GetProjectTransform());
+
+            driver->SetTransform(video::ETS_LIGHT_VIEW, camera_->GetViewTransform());
+            driver->SetTransform(video::ETS_LIGHT_PROJECTION, camera_->GetProjectTransform());
 
             //driver_light_index_ = driver->AddDynamicLight(light_data_);
         }
@@ -192,6 +195,11 @@ namespace kong
             {
                 
             }
+        }
+
+        s32 CLightSceneNode::GetLightIndex() const
+        {
+            return main_light_index_;
         }
 
         void CLightSceneNode::DoLightRecalc()

@@ -303,7 +303,7 @@ namespace kong
     void CKongDeviceWin32::CreateVideo()
     {
         //video_driver_ = video::CreateOpenGLDriver(create_params_, file_system_, this);
-        //video_driver_ = video::CreateOpenGLShaderDriver(create_params_, file_system_, this);
-        video_driver_ = video::CreateOpenGLDeferredShaderDriver(create_params_, file_system_, this);
+        video_driver_ = video::CreateOpenGLShaderDriver(create_params_, file_system_, this);
+        //video_driver_ = video::CreateOpenGLDeferredShaderDriver(create_params_, file_system_, this);
     }
 }

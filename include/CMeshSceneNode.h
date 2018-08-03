@@ -40,6 +40,9 @@ namespace kong
             //! normalize vertices to (1, 1, 1)
             void NormalizeVerticeToCube();
 
+            //! Returns type of the scene node
+            ESCENE_NODE_TYPE GetType() const override { return ESNT_MESH; }
+
         protected:
             void CopyMaterials();
 

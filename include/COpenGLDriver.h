@@ -124,6 +124,8 @@ namespace kong
             //! adds a dynamic light, returning an index to the light
             s32 AddDynamicLight(const SLight& light) override;
 
+            void ActivateDynamicLights() override;
+
             //! Returns the maximal amount of dynamic lights the device can handle
             u32 GetMaximalDynamicLightAmount() const override;
 
@@ -132,6 +134,9 @@ namespace kong
 
             //! Returns light data which was previously set by IVideoDriver::addDynamicLight().
             const SLight& GetDynamicLight(u32 idx) const override;
+
+            //! Set main light, used for shadow rendering
+            void SetMainLight(const SLight& light) override;
 
             //! Set active camera position
             void SetActiveCameraPosition(core::Vector3Df position) const override;

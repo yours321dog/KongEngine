@@ -31,12 +31,22 @@ namespace kong
             //! Enable deferred post render texture
             void EnablePostRenderTexture(u32 idx) const;
 
+            void ActivateDynamicLights() override;
+
+            //! Set main light, used for shadow rendering
+            void SetMainLight(const SLight& light) override;
+
         protected:
+            void SetLightUniform(s32 light_idx, s32 light_val_type, const void *val) const override;
+            void SetLightUniform(s32 light_idx, s32 light_val_type, f32 val) const override;
+
             IShaderHelper *deferred_post_shader_helper_;
             IShaderHelper *deferred_base_shader_helper_;
 
             // render textures
             COpenGLFBODeferredTexture *frame_buffers_;
+
+            u32 nr_lights_;
         };
     } // end namespace video
 } // end namespace video

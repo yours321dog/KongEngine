@@ -16,7 +16,7 @@ namespace kong
         public:
             //! constructor
             CLightSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id,
-                const core::vector3df& position, video::SColorf& color, f32 radius);
+                const core::vector3df& position, video::SColorf& color, f32 radius, s32 main_light_index);
 
             virtual ~CLightSceneNode();
 
@@ -70,6 +70,9 @@ namespace kong
             //! Reset camera transform
             void ResetCameraTransform(core::Array<DefaultNodeEntry>& solid_nodes) override;
 
+            //! Get main light index
+            s32 GetLightIndex() const override;
+
         private:
             void DoLightRecalc();
             void DoCameraRecalc();
@@ -83,6 +86,7 @@ namespace kong
             s32 driver_light_index_;
             bool light_is_on_;
 
+            s32 main_light_index_;
             ICameraSceneNode *camera_;
         };
     }

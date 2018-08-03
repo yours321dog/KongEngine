@@ -20,7 +20,7 @@ namespace kong
     {
         CSceneManager::CSceneManager(video::IVideoDriver* driver, io::IFileSystem *fs)
             : ISceneNode(nullptr, nullptr), driver_(driver), shadow_color_(150, 0, 0, 0),
-            ambient_light_(0, 0, 0, 0), active_camera_(nullptr), file_system_(fs), shadow_enable_(false)
+            ambient_light_(0, 0, 0, 0), active_camera_(nullptr), file_system_(fs), shadow_enable_(false), light_index_num_(0), main_light_index_(0)
         {
 #ifdef _KONG_COMPILE_WITH_OBJ_LOADER_
             MeshLoaderList.PushBack(new COBJMeshFileLoader(this, fs));
@@ -232,7 +232,7 @@ namespace kong
                 parent = this;
             }
 
-            ILightSceneNode* node = new CLightSceneNode(parent, this, id, position, color, radius);
+            ILightSceneNode* node = new CLightSceneNode(parent, this, id, position, color, radius, light_index_num_++);
 
             return node;
         }
@@ -359,6 +359,7 @@ namespace kong
 
                 for (u32 i = 0; i< max_lights; ++i)
                     light_list_[i]->Render();
+                driver_->ActivateDynamicLights();
 
                 light_list_.Resize(0);
             }
@@ -450,9 +451,11 @@ namespace kong
 
                 max_lights = core::min_(driver_->GetMaximalDynamicLightAmount(), max_lights);
 
-                for (u32 i = 0; i< max_lights; ++i)
+                s32 idx_main_light = main_light_index_ < max_lights ? main_light_index_ : 0;
+                for (u32 i = 0; i < max_lights; ++i)
+                {
                     light_list_[i]->Render();
-
+                }
                 light_list_.Resize(0);
             }
 
@@ -597,6 +600,11 @@ namespace kong
 
             // should never be used.
             return *(static_cast<core::aabbox3d<f32>*>(nullptr));
+        }
+
+        void CSceneManager::SetMainLight(const ILightSceneNode* light_node)
+        {
+            main_light_index_ = light_node->GetLightIndex();
         }
 
         ISceneManager* CreateSceneManager(video::IVideoDriver* driver,
