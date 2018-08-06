@@ -173,6 +173,9 @@ namespace kong
             // draw a space fill quad
             void DrawSpaceFillQuad() override;
 
+            // Render fxaa pass
+            void RenderFxaaPass() override;
+
         protected:
             virtual void UpdateMaxSupportLights();
 
@@ -334,6 +337,9 @@ namespace kong
             COpenGLFBOTexture *shadow_color_texture_;
             COpenGLFBODepthTexture *shadow_depth_texture_;
             core::Dimension2d<u32> shadow_texture_size_;
+
+            //! fxaa texture
+            COpenGLFBOTexture *fxaa_src_texture_;
 
             //! mesh manipulator
             scene::IMeshManipulator* mesh_manipulator_;

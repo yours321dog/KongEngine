@@ -353,52 +353,59 @@ namespace kong
 
             // render second pass
             driver_->RenderSecondPass();
-
-            // set camera again
-            if (active_camera_ != nullptr)
             {
-                active_camera_->Render();
-                cam_world_pos_ = active_camera_->GetAbsolutePosition();
-            }
-
-            //render lights scenes
-            {
-                //core::vector3df cam_world_pos(0, 0, 0);
-                //if (active_camera_ != nullptr)
-                //    cam_world_pos = active_camera_->GetAbsolutePosition();
-
-                driver_->DeleteAllDynamicLights();
-
-                //Driver->setAmbientLight(AmbientLight);
-
-                u32 max_lights = light_list_.Size();
-
-                max_lights = core::min_(driver_->GetMaximalDynamicLightAmount(), max_lights);
-
-                for (u32 i = 0; i < max_lights; ++i)
+                // set camera again
+                if (active_camera_ != nullptr)
                 {
-                    light_list_[i]->Render();
-                    if (dynamic_cast<ILightSceneNode *>(light_list_[i])->GetLightIndex() == main_light_index_)
-                        dynamic_cast<ILightSceneNode *>(light_list_[i])->RenderShadow();
-                }
-                driver_->ActivateDynamicLights();
-
-                light_list_.Resize(0);
-            }
-
-            // render default objects
-            {
-                for (u32 i = 2; i < solid_node_list_.Size(); ++i)
-                {
-                    //solid_node_list_[i].node_->Render();
+                    active_camera_->Render();
+                    cam_world_pos_ = active_camera_->GetAbsolutePosition();
                 }
 
-                //solid_node_list_[1].node_->Render();
+                //render lights scenes
+                {
+                    //core::vector3df cam_world_pos(0, 0, 0);
+                    //if (active_camera_ != nullptr)
+                    //    cam_world_pos = active_camera_->GetAbsolutePosition();
 
+                    driver_->DeleteAllDynamicLights();
+
+                    //Driver->setAmbientLight(AmbientLight);
+
+                    u32 max_lights = light_list_.Size();
+
+                    max_lights = core::min_(driver_->GetMaximalDynamicLightAmount(), max_lights);
+
+                    for (u32 i = 0; i < max_lights; ++i)
+                    {
+                        light_list_[i]->Render();
+                        if (dynamic_cast<ILightSceneNode *>(light_list_[i])->GetLightIndex() == main_light_index_)
+                            dynamic_cast<ILightSceneNode *>(light_list_[i])->RenderShadow();
+                    }
+                    driver_->ActivateDynamicLights();
+
+                    light_list_.Resize(0);
+                }
+
+                // render default objects
                 solid_node_list_.Resize(0);
+                //{
+                //    for (u32 i = 2; i < solid_node_list_.Size(); ++i)
+                //    {
+                //        //solid_node_list_[i].node_->Render();
+                //    }
+
+                //    //solid_node_list_[1].node_->Render();
+
+                //    solid_node_list_.Resize(0);
+                //}
+
+                driver_->DrawSpaceFillQuad();
             }
 
-            driver_->DrawSpaceFillQuad();
+            driver_->RenderFxaaPass();
+            {
+                driver_->DrawSpaceFillQuad();
+            }
         }
 
         void CSceneManager::RemoveAll()

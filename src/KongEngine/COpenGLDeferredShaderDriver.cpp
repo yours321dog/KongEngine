@@ -71,12 +71,20 @@ namespace kong
             render_material_texture_on_ = true;
 
             shader_helper_->SetBool("shadow_on", shadow_enable_);
-
         }
 
         void COpenGLDeferredShaderDriver::RenderSecondPass()
         {
-            frame_buffers_->unbindRTT();
+            //frame_buffers_->unbindRTT();
+            /*if (shadow_color_texture_ != nullptr && shadow_color_texture_->isFrameBufferObject())
+            {
+                shadow_color_texture_->bindRTT();
+            }*/
+            if (fxaa_src_texture_ != nullptr && fxaa_src_texture_->isFrameBufferObject())
+            {
+                fxaa_src_texture_->bindRTT();
+            }
+            ClearBuffers(color_buffer_clear_, z_buffer_clear_, false, color_clear_);
             shader_helper_ = deferred_post_shader_helper_;
             shader_helper_->Use();
 
@@ -183,7 +191,7 @@ namespace kong
                 -1.0, 1.0, 1.0
             };
 
-            SMaterial mat_default;
+            const SMaterial mat_default;
             SetMaterial(mat_default);
 
             shader_helper_->Use();
@@ -205,6 +213,25 @@ namespace kong
             //glBindVertexArray(0);
 
             CheckErrorCode();
+        }
+
+        void COpenGLDeferredShaderDriver::RenderFxaaPass()
+        {
+            //shadow_color_texture_->unbindRTT();
+            fxaa_src_texture_->unbindRTT();
+            //ClearBuffers(color_buffer_clear_, z_buffer_clear_, false, color_clear_);
+            shader_helper_ = fxaa_shader_helper_;
+            shader_helper_->Use();
+
+            render_material_texture_on_ = false;
+
+            // result texture
+            shader_helper_->SetInt("buf0", 0);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, dynamic_cast<const COpenGLTexture*>(fxaa_src_texture_)->GetOpenGLTextureName());
+
+            const f32 data[2] = { params_.window_size_.width_, params_.window_size_.height_ };
+            fxaa_shader_helper_->SetVec2("window_size", data);
         }
     } // end namespace video
 } // end namespace kong

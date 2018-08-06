@@ -17,7 +17,7 @@ namespace kong
         COpenGLShaderDriver::COpenGLShaderDriver(const SKongCreationParameters& params, io::IFileSystem* file_system, CKongDeviceWin32* device,
             io::SPath vertex_path, io::SPath fragment_path)
             : COpenGLDriver(params, file_system, device), shader_helper_(nullptr), shadow_shader_helper_(nullptr),
-              base_shader_helper_(nullptr), vao_(0), vbo_(0), ebo_(0),
+            base_shader_helper_(nullptr), fxaa_shader_helper_(nullptr), vao_(0), vbo_(0), ebo_(0),
               vertex_path_(vertex_path), fragment_path_(fragment_path)
         {
         }
@@ -26,6 +26,7 @@ namespace kong
         {
             delete shadow_shader_helper_;
             delete base_shader_helper_;
+            delete fxaa_shader_helper_;
         }
 
         bool COpenGLShaderDriver::InitDriver(CKongDeviceWin32* device)
@@ -39,6 +40,7 @@ namespace kong
             //shader_helper_ = new COpenGLShaderHelper(io_, io::SPath("./shaders/shadow.vs"), io::SPath("./shaders/shadow.fs"));
             base_shader_helper_ = shader_helper_;
             shadow_shader_helper_ = new COpenGLShaderHelper(io_, io::SPath("./shaders/shadow.vs"), io::SPath("./shaders/shadow.fs"));
+            fxaa_shader_helper_ = new COpenGLShaderHelper(io_, io::SPath("./shaders/fxaa.vs"), io::SPath("./shaders/fxaa.fs"));
 
             glGenVertexArrays(1, &vao_);
             glGenBuffers(1, &vbo_);

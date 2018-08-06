@@ -757,5 +757,11 @@
     <None Include="shaders\deferred_post.vs">
       <Filter>KongEngine\video\OpenGL\shaders</Filter>
     </None>
+    <None Include="shaders\fxaa.vs">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
+    <None Include="shaders\fxaa.fs">
+      <Filter>KongEngine\video\OpenGL\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -370,6 +370,9 @@ namespace kong
 
             // draw a space fill quad
             virtual void DrawSpaceFillQuad() = 0;
+
+            // Render fxaa pass
+            virtual void RenderFxaaPass() = 0;
         };
     }
 }

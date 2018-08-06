@@ -27,7 +27,7 @@ namespace kong
         COpenGLDriver::COpenGLDriver(const SKongCreationParameters& params, io::IFileSystem* io, CKongDeviceWin32* device)
             : hdc_(nullptr), window_(static_cast<HWND>(params.window_id_)), hrc_(nullptr), device_(device),
               params_(params), io_(io), max_texture_units_(0), max_supported_textures_(0), max_support_lights_(0),
-              shadow_color_texture_(nullptr), shadow_depth_texture_(nullptr), rendering_mode_(ERM_MESH), color_format_(ECF_A8R8G8B8),
+              shadow_color_texture_(nullptr), shadow_depth_texture_(nullptr), fxaa_src_texture_(nullptr), rendering_mode_(ERM_MESH), color_format_(ECF_A8R8G8B8),
               shadow_enable_(false), color_buffer_clear_(true), z_buffer_clear_(true), shadow_texture_size_(2048, 2048), render_material_texture_on_(true)
         {
             // create manipulator
@@ -48,7 +48,9 @@ namespace kong
         COpenGLDriver::~COpenGLDriver()
         {
             delete mesh_manipulator_;
+            delete fxaa_src_texture_;
             delete shadow_depth_texture_;
+            delete shadow_color_texture_;
         }
 
         bool COpenGLDriver::InitDriver(CKongDeviceWin32* device)
@@ -169,6 +171,9 @@ namespace kong
                 else
                     color_format_ = ECF_R5G6B5;
             }
+
+            // used for fxaa
+            fxaa_src_texture_ = new COpenGLFBOTexture(params_.window_size_, io::SPath(), this, false);
 
             return true;
         }
@@ -921,6 +926,10 @@ namespace kong
         }
 
         void COpenGLDriver::DrawSpaceFillQuad()
+        {
+        }
+
+        void COpenGLDriver::RenderFxaaPass()
         {
         }
 

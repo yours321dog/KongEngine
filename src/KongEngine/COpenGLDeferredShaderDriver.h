@@ -48,6 +48,9 @@ namespace kong
             // draw a space fill quad
             void DrawSpaceFillQuad() override;
 
+            // Render fxaa pass
+            void RenderFxaaPass() override;
+
         protected:
             void SetLightUniform(s32 light_idx, s32 light_val_type, const void *val) const override;
             void SetLightUniform(s32 light_idx, s32 light_val_type, f32 val) const override;

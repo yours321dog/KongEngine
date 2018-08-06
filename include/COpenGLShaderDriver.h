@@ -163,6 +163,7 @@ namespace kong
             IShaderHelper *shader_helper_;
             IShaderHelper *shadow_shader_helper_;
             IShaderHelper *base_shader_helper_;
+            IShaderHelper *fxaa_shader_helper_;
 
             u32 vao_;
             u32 vbo_;

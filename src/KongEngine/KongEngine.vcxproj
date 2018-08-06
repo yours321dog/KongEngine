@@ -308,6 +308,8 @@
     <None Include="shaders\deferred_base.vs" />
     <None Include="shaders\deferred_post.fs" />
     <None Include="shaders\deferred_post.vs" />
+    <None Include="shaders\fxaa.fs" />
+    <None Include="shaders\fxaa.vs" />
     <None Include="shaders\shadow.fs" />
     <None Include="shaders\shadow.vs" />
   </ItemGroup>
